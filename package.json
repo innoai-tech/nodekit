@@ -1,0 +1,40 @@
+{
+  "name": "@innoai-tech/nodekit",
+  "type": "module",
+  "version": "1.0.0",
+  "private": "true",
+  "engines": {
+    "node": ">= 16"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.18.5",
+    "@babel/plugin-transform-runtime": "^7.18.5",
+    "@babel/preset-env": "^7.18.2",
+    "@babel/preset-react": "^7.17.12",
+    "@babel/preset-typescript": "^7.17.12",
+    "@babel/runtime": "^7.18.3",
+    "@babel/runtime-corejs3": "*",
+    "@babel/types": "^7.18.4",
+    "@innoai-tech/monobundle": "workspace:*",
+    "@innoai-tech/tsconfig": "workspace:*",
+    "@types/babel__core": "^7.1.19",
+    "@types/babel__preset-env": "^7.9.2",
+    "@types/jest": "^28.1.3",
+    "@types/node": "^18.0.0",
+    "@types/react": "^18.0.14",
+    "babel-jest": "^28.1.1",
+    "del": "^6.1.1",
+    "esbuild": "^0.14.47",
+    "jest": "^28.1.1",
+    "prettier": "^2.7.1",
+    "react": "^18.2.0",
+    "rxjs": "^7.5.5",
+    "ts-node": "^10.8.1",
+    "typescript": "^4.7.4"
+  },
+  "prettier": {
+    "trailingComma": "all",
+    "arrowParens": "always",
+    "printWidth": 120
+  }
+}
