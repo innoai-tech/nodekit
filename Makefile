@@ -1,6 +1,13 @@
 export GIT_SHA ?= $(shell git rev-parse HEAD)
 export GIT_REF ?= HEAD
 
+go.run:
+	go run ./cmd/webappserve -b=/example --root=./cmd/webappserve/example/base
+
+go.run.2:
+	go run ./cmd/webappserve --root=./cmd/webappserve/example/normal
+
+
 go.test:
 	go test -v -race ./pkg/...
 

@@ -7,7 +7,7 @@ Simple webapp serve
 ## `APP_ROOT`
 
 ```
-app/
+/app/
     __built__/
         xxx.js
     sw.js
@@ -15,9 +15,15 @@ app/
     index.html
 ```
 
-## `ENV` 
+## `ENV`
 
 be used to replace `__ENV__` in `index.html`
+
+## `APP_BASE_HREF`
+
+can replace `__APP_BASE_HREF__` in `index.html` if exists
+
+in html could use `base` tag: https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/base
 
 ## `APP_CONFIG` or `APP_CONFIG__*`
 
