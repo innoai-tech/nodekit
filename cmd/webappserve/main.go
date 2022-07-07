@@ -22,6 +22,8 @@ import (
 	"github.com/innoai-tech/nodekit/pkg/version"
 	"github.com/rs/cors"
 	"github.com/spf13/cobra"
+
+	_ "github.com/innoai-tech/nodekit/cmd/webappserve/etc"
 )
 
 var serverOpt = &WebappServerOpt{}
