@@ -1,0 +1,61 @@
+{
+  "name": "@innoai-tech/config",
+  "version": "0.3.0",
+  "monobundle": {
+    "env": "browser",
+    "build": {
+      "clean": true
+    },
+    "exports": {
+      ".": "./src/index.ts",
+      "./loader": "./src/loader/index.ts",
+      "./vite-plugin-inject-config": "./src/vite-plugin-inject-config/index.ts"
+    }
+  },
+  "dependencies": {
+    "@babel/runtime-corejs3": "*",
+    "@innoai-tech/lodash": "workspace:^*",
+    "esbuild": "^0.15.1",
+    "vite": "^3.0.6"
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
+    "access": "public"
+  },
+  "bin": {},
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./index.d.ts",
+        "default": "./index.mjs"
+      }
+    },
+    "./loader": {
+      "import": {
+        "types": "./loader.d.ts",
+        "default": "./loader.mjs"
+      }
+    },
+    "./vite-plugin-inject-config": {
+      "import": {
+        "types": "./vite-plugin-inject-config.d.ts",
+        "default": "./vite-plugin-inject-config.mjs"
+      }
+    }
+  },
+  "files": [
+    "*.mjs",
+    "*.d.ts"
+  ],
+  "scripts": {
+    "build": "node ../../nodedevpkg/monobundle/monobundle.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@github.com:innoai-tech/nodekit.git",
+    "directory": "nodepkg/config"
+  },
+  "type": "module",
+  "types": "./index.d.ts"
+}

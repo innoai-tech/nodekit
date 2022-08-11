@@ -1,0 +1,46 @@
+{
+  "name": "@innoai-tech/reactutil",
+  "monobundle": {
+    "exports": {
+      ".": "./src/index.ts"
+    }
+  },
+  "version": "0.3.0",
+  "license": "MIT",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
+    "access": "public"
+  },
+  "peerDependencies": {
+    "rxjs": "7.x",
+    "react": "18.x",
+    "@babel/runtime-corejs3": "*"
+  },
+  "dependencies": {
+    "@innoai-tech/fetcher": "workspace:*",
+    "@innoai-tech/lodash": "workspace:*"
+  },
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./index.d.ts",
+        "default": "./index.mjs"
+      }
+    }
+  },
+  "files": [
+    "*.mjs",
+    "*.d.ts"
+  ],
+  "scripts": {
+    "build": "node ../../nodedevpkg/monobundle/monobundle.mjs"
+  },
+  "bin": {},
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@github.com:innoai-tech/nodekit.git",
+    "directory": "nodepkg/reactutil"
+  },
+  "type": "module",
+  "types": "./index.d.ts"
+}

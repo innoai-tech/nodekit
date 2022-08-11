@@ -1,4 +1,5 @@
 *.log
 build/
+dist/
 .next/
 .turbo/

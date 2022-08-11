@@ -1,32 +1,37 @@
 export GIT_SHA ?= $(shell git rev-parse HEAD)
 export GIT_REF ?= HEAD
 
-go.run:
-	go run ./cmd/webappserve -b=/example --root=./cmd/webappserve/example/base
+ship:
+	dagger do go ship pushx
 
-go.run.2:
-	go run ./cmd/webappserve --root=./cmd/webappserve/example/normal
+serve:
+	go run ./cmd/webappserve serve --help
+	go run ./cmd/webappserve serve --root=./cmd/webappserve/example/normal
 
-go.test:
-	go test -v -race ./pkg/...
+serve.base.href:
+	go run ./cmd/webappserve serve --base-href=/example --root=./cmd/webappserve/example/base
 
-go.tidy:
+tidy:
 	go mod tidy
 
-node.dep:
-	pnpm install
-
-node.upgrade:
+up:
 	pnpm up -r --latest
 
-node.fmt:
-	./node_modules/.bin/prettier --write "nodepkg/{,**/}{,**/}*.{ts,tsx,json,md}"
+dep:
+	pnpm install
 
-node.test:
-	./node_modules/.bin/jest @innoai-tech
+fmt:
+	./node_modules/.bin/prettier --write "@innoai-tech/{,**/}{,**/}*.{ts,tsx,json,md}"
 
-node.build: node.dep
-	pnpx turbo run build
+test:
+	./node_modules/.bin/vitest
 
-node.pub: node.build
+bd:
+	pnpx turbo run build --filter=monobundle
+	pnpx turbo run build --filter=!monobundle
+
+bd.force:
+	pnpx turbo run build --force
+
+pub: bd
 	pnpm -r publish --no-git-checks

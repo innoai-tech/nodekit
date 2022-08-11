@@ -6,6 +6,10 @@
       "dependsOn": [
         "^build"
       ],
+      "inputs": [
+        "src/*",
+        "packages.json"
+      ],
       "outputs": [
         "*.d.ts",
         "*.mjs"

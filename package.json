@@ -4,7 +4,8 @@
   "version": "1.0.0",
   "private": true,
   "engines": {
-    "node": ">= 16"
+    "node": ">= 18",
+    "pnpm": ">= 7"
   },
   "devDependencies": {
     "@babel/core": "^7.18.10",
@@ -18,20 +19,17 @@
     "@innoai-tech/monobundle": "workspace:*",
     "@innoai-tech/tsconfig": "workspace:*",
     "@types/babel__core": "^7.1.19",
-    "@types/babel__preset-env": "^7.9.2",
-    "@types/jest": "^28.1.6",
-    "@types/node": "^18.7.1",
+    "@types/node": "^18.7.2",
     "@types/react": "^18.0.17",
-    "babel-jest": "^28.1.3",
     "del": "^7.0.0",
     "esbuild": "^0.15.1",
-    "jest": "^28.1.3",
     "prettier": "^2.7.1",
     "react": "^18.2.0",
     "rxjs": "^7.5.6",
     "ts-node": "^10.9.1",
     "turbo": "^1.4.3",
-    "typescript": "^4.7.4"
+    "typescript": "^4.7.4",
+    "vitest": "^0.21.1"
   },
   "prettier": {
     "trailingComma": "all",

@@ -1,0 +1,44 @@
+{
+  "name": "@innoai-tech/fetcher",
+  "version": "0.2.0",
+  "monobundle": {
+    "exports": {
+      ".": "./src/index.ts"
+    }
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
+    "access": "public"
+  },
+  "peerDependencies": {
+    "rxjs": "7.x",
+    "@babel/runtime-corejs3": "*"
+  },
+  "dependencies": {
+    "@innoai-tech/lodash": "workspace:*"
+  },
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./index.d.ts",
+        "default": "./index.mjs"
+      }
+    }
+  },
+  "files": [
+    "*.mjs",
+    "*.d.ts"
+  ],
+  "scripts": {
+    "build": "node ../../nodedevpkg/monobundle/monobundle.mjs"
+  },
+  "bin": {},
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@github.com:innoai-tech/nodekit.git",
+    "directory": "nodepkg/fetcher"
+  },
+  "type": "module",
+  "types": "./index.d.ts"
+}
