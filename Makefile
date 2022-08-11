@@ -1,6 +1,9 @@
 export GIT_SHA ?= $(shell git rev-parse HEAD)
 export GIT_REF ?= HEAD
 
+ship:
+	dagger do go ship pushx
+
 go.run:
 	go run ./cmd/webappserve -b=/example --root=./cmd/webappserve/example/base
 
@@ -23,7 +26,7 @@ node.fmt:
 	./node_modules/.bin/prettier --write "nodepkg/{,**/}{,**/}*.{ts,tsx,json,md}"
 
 node.test:
-	./node_modules/.bin/jest @innoai-tech
+	./node_modules/.bin/vitest
 
 node.build: node.dep
 	pnpx turbo run build

@@ -9,7 +9,6 @@ import (
 )
 
 dagger.#Plan
-
 client: env: {
 	VERSION: string | *"dev"
 	GIT_SHA: string | *""
@@ -22,29 +21,25 @@ client: env: {
 	GH_USERNAME: string | *""
 	GH_PASSWORD: dagger.#Secret
 
-	CONTAINER_REGISTRY_PULL_PROXY: string | *""
 	LINUX_MIRROR:                  string | *""
+	CONTAINER_REGISTRY_PULL_PROXY: string | *""
 }
 
-helper: {
-	auths: "ghcr.io": {
-		username: client.env.GH_USERNAME
-		secret:   client.env.GH_PASSWORD
-	}
+actions: version: tool.#ResolveVersion & {
+	ref:     "\(client.env.GIT_REF)"
+	version: "\(client.env.VERSION)"
+}
+
+actions: go: golang.#Project & {
 	mirror: {
 		linux: client.env.LINUX_MIRROR
 		pull:  client.env.CONTAINER_REGISTRY_PULL_PROXY
 	}
-}
 
-actions: version: tool.#ResolveVersion & {
-	"ref":     "\(client.env.GIT_REF)"
-	"version": "\(client.env.VERSION)"
-}
-
-actions: go: golang.#Project & {
-	auths:  helper.auths
-	mirror: helper.mirror
+	auths: "ghcr.io": {
+		username: client.env.GH_USERNAME
+		secret:   client.env.GH_PASSWORD
+	}
 
 	source: {
 		path: "."
@@ -56,7 +51,7 @@ actions: go: golang.#Project & {
 		]
 	}
 
-	version:  "\(actions.version.output)"
+	version:  actions.version.output
 	revision: client.env.GIT_SHA
 
 	goos: ["linux", "darwin"]
@@ -81,10 +76,7 @@ actions: go: golang.#Project & {
 
 	ship: {
 		name: "\(strings.Replace(actions.go.module, "github.com/", "ghcr.io/", -1))/\(go.binary)"
-		tag:  "\(actions.version.output)"
-
 		from: "gcr.io/distroless/static-debian11:debug"
-
 		config: {
 			env: {
 				APP_ROOT: "/app"
