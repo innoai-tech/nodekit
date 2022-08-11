@@ -49,7 +49,7 @@
     "*.d.ts"
   ],
   "scripts": {
-    "prepublishOnly": "../../node_modules/.bin/monobundle"
+    "build": "../../node_modules/.bin/monobundle"
   },
   "bin": {
     "monobundle": "./monobundle.mjs"

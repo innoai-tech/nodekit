@@ -7,7 +7,6 @@ go.run:
 go.run.2:
 	go run ./cmd/webappserve --root=./cmd/webappserve/example/normal
 
-
 go.test:
 	go test -v -race ./pkg/...
 
@@ -27,7 +26,7 @@ node.test:
 	./node_modules/.bin/jest @innoai-tech
 
 node.build: node.dep
-	pnpm -r --filter=!monobundle exec ../../node_modules/.bin/monobundle
+	pnpx turbo run build
 
-node.pub:
+node.pub: node.build
 	pnpm -r publish --no-git-checks
