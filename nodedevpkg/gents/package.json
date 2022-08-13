@@ -1,0 +1,46 @@
+{
+  "name": "@innoai-tech/gents",
+  "version": "0.0.0",
+  "dependencies": {
+    "node-fetch": "^3.2.10",
+    "@innoai-tech/lodash": "workspace:*"
+  },
+  "devDependencies": {
+    "@innoai-tech/fetcher": "workspace:*"
+  },
+  "monobundle": {
+    "build": {
+      "clean": true
+    },
+    "exports": {
+      ".": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "build": "node ../../nodedevpkg/monobundle/monobundle.mjs"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
+    "access": "public"
+  },
+  "type": "module",
+  "bin": {},
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./index.d.ts",
+        "default": "./index.mjs"
+      }
+    }
+  },
+  "types": "./index.d.ts",
+  "files": [
+    "*.mjs",
+    "*.d.ts"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@github.com:innoai-tech/nodekit.git",
+    "directory": "nodedevpkg/gents"
+  }
+}
