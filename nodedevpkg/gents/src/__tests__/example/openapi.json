@@ -7,9 +7,7 @@
   "paths": {
     "/api/kubepkg.innoai.tech": {
       "GET": {
-        "tags": [
-          "httprouter"
-        ],
+        "tags": ["httprouter"],
         "operationId": "OpenAPI",
         "responses": {
           "200": {
@@ -23,9 +21,7 @@
     },
     "/api/kubepkg.innoai.tech/v1/blobs": {
       "PUT": {
-        "tags": [
-          "blob"
-        ],
+        "tags": ["blob"],
         "summary": "上传 blob",
         "operationId": "UploadBlob",
         "parameters": [
@@ -59,9 +55,7 @@
                 }
               }
             },
-            "x-status-returnErrors": [
-              "StatusError{key=\"InvalidContentType\",msg=\"InvalidContentType\",code=400}"
-            ]
+            "x-status-returnErrors": ["StatusError{key=\"InvalidContentType\",msg=\"InvalidContentType\",code=400}"]
           },
           "500": {
             "description": "",
@@ -72,18 +66,14 @@
                 }
               }
             },
-            "x-status-returnErrors": [
-              "StatusError{key=\"RegistryError\",msg=\"RegistryError\",code=500}"
-            ]
+            "x-status-returnErrors": ["StatusError{key=\"RegistryError\",msg=\"RegistryError\",code=500}"]
           }
         }
       }
     },
     "/api/kubepkg.innoai.tech/v1/blobs/{digest}/stat": {
       "GET": {
-        "tags": [
-          "blob"
-        ],
+        "tags": ["blob"],
         "summary": "查询 blob 状态",
         "operationId": "StatBlob",
         "parameters": [
@@ -109,9 +99,7 @@
                 }
               }
             },
-            "x-status-returnErrors": [
-              "StatusError{key=\"InvalidDigest\",msg=\"InvalidDigest\",code=400}"
-            ]
+            "x-status-returnErrors": ["StatusError{key=\"InvalidDigest\",msg=\"InvalidDigest\",code=400}"]
           },
           "404": {
             "description": "",
@@ -122,9 +110,7 @@
                 }
               }
             },
-            "x-status-returnErrors": [
-              "StatusError{key=\"DigestNotFound\",msg=\"DigestNotFound\",code=404}"
-            ]
+            "x-status-returnErrors": ["StatusError{key=\"DigestNotFound\",msg=\"DigestNotFound\",code=404}"]
           },
           "500": {
             "description": "",
@@ -135,18 +121,14 @@
                 }
               }
             },
-            "x-status-returnErrors": [
-              "StatusError{key=\"RegistryError\",msg=\"RegistryError\",code=500}"
-            ]
+            "x-status-returnErrors": ["StatusError{key=\"RegistryError\",msg=\"RegistryError\",code=500}"]
           }
         }
       }
     },
     "/api/kubepkg.innoai.tech/v1/kubepkgs": {
       "GET": {
-        "tags": [
-          "kubepkg"
-        ],
+        "tags": ["kubepkg"],
         "summary": "部署包列表",
         "operationId": "ListKubePkg",
         "responses": {
@@ -172,16 +154,12 @@
                 }
               }
             },
-            "x-status-returnErrors": [
-              "StatusError{key=\"RequestK8sFailed\",msg=\"RequestK8sFailed\",code=500}"
-            ]
+            "x-status-returnErrors": ["StatusError{key=\"RequestK8sFailed\",msg=\"RequestK8sFailed\",code=500}"]
           }
         }
       },
       "PUT": {
-        "tags": [
-          "kubepkg"
-        ],
+        "tags": ["kubepkg"],
         "summary": "部署部署包",
         "operationId": "ApplyKubePkg",
         "requestBody": {
@@ -236,9 +214,7 @@
     },
     "/api/kubepkg.innoai.tech/v1/kubepkgs/{name}": {
       "DELETE": {
-        "tags": [
-          "kubepkg"
-        ],
+        "tags": ["kubepkg"],
         "summary": "删除部署包",
         "operationId": "DelKubePkg",
         "parameters": [
@@ -271,16 +247,12 @@
                 }
               }
             },
-            "x-status-returnErrors": [
-              "StatusError{key=\"RequestK8sFailed\",msg=\"RequestK8sFailed\",code=500}"
-            ]
+            "x-status-returnErrors": ["StatusError{key=\"RequestK8sFailed\",msg=\"RequestK8sFailed\",code=500}"]
           }
         }
       },
       "GET": {
-        "tags": [
-          "kubepkg"
-        ],
+        "tags": ["kubepkg"],
         "summary": "查询部署包",
         "operationId": "GetKubePkg",
         "parameters": [
@@ -320,9 +292,7 @@
                 }
               }
             },
-            "x-status-returnErrors": [
-              "StatusError{key=\"RequestK8sFailed\",msg=\"RequestK8sFailed\",code=500}"
-            ]
+            "x-status-returnErrors": ["StatusError{key=\"RequestK8sFailed\",msg=\"RequestK8sFailed\",code=500}"]
           }
         }
       }
@@ -370,20 +340,12 @@
             ]
           }
         },
-        "required": [
-          "type",
-          "digest",
-          "name",
-          "size"
-        ],
+        "required": ["type", "digest", "name", "size"],
         "x-go-vendor-type": "github.com/octohelm/kubepkg/pkg/apis/kubepkg/v1alpha1.DigestMeta"
       },
       "KubepkgV1Alpha1DigestMetaType": {
         "type": "string",
-        "enum": [
-          "blob",
-          "manifest"
-        ],
+        "enum": ["blob", "manifest"],
         "x-go-vendor-type": "github.com/octohelm/kubepkg/pkg/apis/kubepkg/v1alpha1.DigestMetaType"
       },
       "KubepkgV1Alpha1FileSize": {
@@ -463,9 +425,7 @@
             "x-go-field-name": "Version"
           }
         },
-        "required": [
-          "version"
-        ],
+        "required": ["version"],
         "x-go-vendor-type": "github.com/octohelm/kubepkg/pkg/apis/kubepkg/v1alpha1.KubePkgSpec"
       },
       "KubepkgV1Alpha1KubePkgStatus": {
@@ -718,12 +678,7 @@
             ]
           }
         },
-        "required": [
-          "apiVersion",
-          "kind",
-          "name",
-          "uid"
-        ],
+        "required": ["apiVersion", "kind", "name", "uid"],
         "x-go-vendor-type": "k8s.io/apimachinery/pkg/apis/meta/v1.OwnerReference"
       },
       "MetaV1Time": {
@@ -763,11 +718,7 @@
             "x-go-field-name": "Msg"
           }
         },
-        "required": [
-          "field",
-          "msg",
-          "in"
-        ],
+        "required": ["field", "msg", "in"],
         "x-go-vendor-type": "github.com/octohelm/courier/pkg/statuserror.ErrorField"
       },
       "StatuserrorErrorFields": {
@@ -826,15 +777,7 @@
             "x-go-field-name": "Sources"
           }
         },
-        "required": [
-          "code",
-          "key",
-          "msg",
-          "desc",
-          "canBeTalkError",
-          "sources",
-          "errorFields"
-        ],
+        "required": ["code", "key", "msg", "desc", "canBeTalkError", "sources", "errorFields"],
         "x-go-vendor-type": "github.com/octohelm/courier/pkg/statuserror.StatusErr"
       },
       "TypesUid": {

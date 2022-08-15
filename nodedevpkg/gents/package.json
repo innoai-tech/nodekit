@@ -1,9 +1,12 @@
 {
   "name": "@innoai-tech/gents",
-  "version": "0.0.0",
+  "version": "0.1.1",
   "dependencies": {
     "node-fetch": "^3.2.10",
     "@innoai-tech/lodash": "workspace:*"
+  },
+  "peerDependencies": {
+    "@babel/runtime-corejs3": "*"
   },
   "devDependencies": {
     "@innoai-tech/fetcher": "workspace:*"
@@ -17,14 +20,15 @@
     }
   },
   "scripts": {
-    "build": "node ../../nodedevpkg/monobundle/monobundle.mjs"
+    "build": "monobundle",
+    "test": "vitest --run",
+    "prepublishOnly": "monobundle",
+    "lint": "rome check --apply-suggested ./src && rome format --write ./src"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com",
     "access": "public"
   },
-  "type": "module",
-  "bin": {},
   "exports": {
     ".": {
       "import": {
@@ -33,7 +37,6 @@
       }
     }
   },
-  "types": "./index.d.ts",
   "files": [
     "*.mjs",
     "*.d.ts"
@@ -42,5 +45,7 @@
     "type": "git",
     "url": "ssh://git@github.com:innoai-tech/nodekit.git",
     "directory": "nodedevpkg/gents"
-  }
+  },
+  "type": "module",
+  "types": "./index.d.ts"
 }

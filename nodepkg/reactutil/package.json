@@ -33,9 +33,11 @@
     "*.d.ts"
   ],
   "scripts": {
-    "build": "node ../../nodedevpkg/monobundle/monobundle.mjs"
+    "build": "monobundle",
+    "test": "vitest --run",
+    "prepublishOnly": "monobundle",
+    "lint": "rome check --apply-suggested ./src && rome format --write ./src"
   },
-  "bin": {},
   "repository": {
     "type": "git",
     "url": "ssh://git@github.com:innoai-tech/nodekit.git",

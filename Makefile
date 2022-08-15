@@ -19,19 +19,22 @@ up:
 
 dep:
 	pnpm install
+	pnpm exec turbo run build --filter=monobundle --force
+	pnpm install
 
-fmt:
-	./node_modules/.bin/prettier --write "@innoai-tech/{,**/}{,**/}*.{ts,tsx,json,md}"
+bootstrap:
+	pnpm exec monobundle
+
+ci: lint test
+
+lint:
+	pnpm exec turbo run lint
 
 test:
-	./node_modules/.bin/vitest
+	pnpm exec turbo run test
 
-bd:
-	pnpx turbo run build --filter=monobundle
-	pnpx turbo run build --filter=!monobundle
+build:
+	pnpm exec turbo run build --filter=!monobundle --force
 
-bd.force:
-	pnpx turbo run build --force
-
-pub: bd
+pub:
 	pnpm -r publish --no-git-checks
