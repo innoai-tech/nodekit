@@ -94,4 +94,4 @@ actions: go: golang.#Project & {
 }
 
 client: network: "unix:///var/run/docker.sock": connect: dagger.#Socket
-client: filesystem: "build/output": write: contents: actions.go.archive.output
+client: filesystem: ".build/output": write: contents: actions.go.archive.output

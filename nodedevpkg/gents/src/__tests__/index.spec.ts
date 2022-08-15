@@ -7,16 +7,16 @@ import { generateClient } from "..";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 describe("#generateClient", () => {
-  it("gen", async () => {
-    await generateClient({
-      id: "ExampleClient",
-      uri: `files://${join(__dirname, "example/openapi.json")}`,
-      outDir: __dirname,
-      requestCreator: {
-        expose: "createRequest",
-        importPath: "./client",
-      },
-      force: true,
-    });
-  });
+	it("gen", async () => {
+		await generateClient({
+			id: "example",
+			uri: `files://${join(__dirname, "example/openapi.json")}`,
+			outDir: join(__dirname, "client"),
+			requestCreator: {
+				expose: "createRequest",
+				importPath: "./client",
+			},
+			force: true,
+		});
+	});
 });

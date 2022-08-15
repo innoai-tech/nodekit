@@ -9,11 +9,6 @@ commit-msg = [
 ]
 
 [lint-staged]
-
 "{pkg/,cmd/}{**/}*.go" = [
     "goimports -l -w"
-]
-
-"nodepkg/{**/}*{.ts,.tsx,.mjs,.js,.jsx.json}" = [
-    "pnpx eslint --quiet"
 ]

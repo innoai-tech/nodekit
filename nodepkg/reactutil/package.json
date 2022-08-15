@@ -1,24 +1,23 @@
 {
   "name": "@innoai-tech/reactutil",
+  "version": "0.3.1",
+  "license": "MIT",
   "monobundle": {
     "exports": {
       ".": "./src/index.ts"
     }
   },
-  "version": "0.3.0",
-  "license": "MIT",
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com",
-    "access": "public"
-  },
-  "peerDependencies": {
-    "rxjs": "7.x",
-    "react": "18.x",
-    "@babel/runtime-corejs3": "*"
-  },
   "dependencies": {
     "@innoai-tech/fetcher": "workspace:*",
     "@innoai-tech/lodash": "workspace:*"
+  },
+  "peerDependencies": {
+    "rxjs": "7.x",
+    "react": "18.x"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
+    "access": "public"
   },
   "exports": {
     ".": {
@@ -33,9 +32,11 @@
     "*.d.ts"
   ],
   "scripts": {
-    "build": "node ../../nodedevpkg/monobundle/monobundle.mjs"
+    "build": "monobundle",
+    "test": "vitest --run",
+    "prepublishOnly": "monobundle",
+    "lint": "rome check --apply-suggested ./src && rome format --write ./src"
   },
-  "bin": {},
   "repository": {
     "type": "git",
     "url": "ssh://git@github.com:innoai-tech/nodekit.git",

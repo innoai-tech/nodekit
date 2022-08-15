@@ -1,5 +1,7 @@
 *.log
-build/
+*.iml
+
 dist/
+.build/
 .next/
 .turbo/

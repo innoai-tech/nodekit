@@ -1,11 +1,10 @@
 {
   "name": "@innoai-tech/config",
-  "version": "0.3.0",
+  "version": "0.4.11",
+  "browserslist": [
+    "defaults"
+  ],
   "monobundle": {
-    "env": "browser",
-    "build": {
-      "clean": true
-    },
     "exports": {
       ".": "./src/index.ts",
       "./loader": "./src/loader/index.ts",
@@ -13,17 +12,15 @@
     }
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "*",
     "@innoai-tech/lodash": "workspace:^*",
-    "esbuild": "^0.15.1",
-    "vite": "^3.0.6"
+    "esbuild": "^0.15.5",
+    "vite": "^3.0.8"
   },
   "license": "MIT",
   "publishConfig": {
     "registry": "https://npm.pkg.github.com",
     "access": "public"
   },
-  "bin": {},
   "exports": {
     ".": {
       "import": {
@@ -49,7 +46,10 @@
     "*.d.ts"
   ],
   "scripts": {
-    "build": "node ../../nodedevpkg/monobundle/monobundle.mjs"
+    "build": "monobundle",
+    "test": "vitest --run",
+    "prepublishOnly": "monobundle",
+    "lint": "rome check --apply-suggested ./src && rome format --write ./src"
   },
   "repository": {
     "type": "git",

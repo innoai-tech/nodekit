@@ -1,9 +1,9 @@
 {
-  "name": "@innoai-tech/tsconfig",
-  "version": "0.1.1",
+  "name": "@innoai-tech/devconfig",
+  "version": "0.1.0",
   "type": "module",
   "files": [
-    "tsconfig.json"
+    "*.json"
   ],
   "publishConfig": {
     "registry": "https://npm.pkg.github.com",
@@ -12,6 +12,6 @@
   "repository": {
     "type": "git",
     "url": "ssh://git@github.com:innoai-tech/nodekit.git",
-    "directory": "@innoai-tech/tsconfig"
+    "directory": "@innoai-tech/devconfig"
   }
 }
