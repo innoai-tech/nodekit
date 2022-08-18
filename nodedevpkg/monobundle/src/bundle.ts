@@ -1,4 +1,3 @@
-import json from "@rollup/plugin-json";
 import {nodeResolve} from "@rollup/plugin-node-resolve";
 import {deleteAsync} from "del";
 import {existsSync, readFileSync} from "fs";
@@ -14,7 +13,7 @@ import {join, relative, extname, basename, dirname} from "path";
 import {OutputOptions, rollup, RollupOptions} from "rollup";
 import dts from "rollup-plugin-dts";
 import esbuild from "rollup-plugin-esbuild";
-import {getBuildTargets} from "./getTarget"
+import {getBuildTargets} from "./getTarget";
 import {createAutoExternal} from "./autoExternal";
 import {createLogger} from "./log";
 import {tsc} from "./tsc";
@@ -135,10 +134,9 @@ export const bundle = async ({cwd = process.cwd(), dryRun}: {
         format: "es",
     };
 
+    const browserslist = (pkg as any).browserslist ?? ["defaults"];
 
-    const browserslist = (pkg as any).browserslist ?? ["defaults"]
-
-    const buildTargets = getBuildTargets(browserslist)
+    const buildTargets = getBuildTargets(browserslist);
 
     const resolveRollupOptions: ResolveRollupOptions[] = [
         () =>
@@ -154,7 +152,6 @@ export const bundle = async ({cwd = process.cwd(), dryRun}: {
                     nodeResolve({
                         extensions: [".ts", ".tsx", ".mjs", "", ".js", ".jsx"],
                     }),
-                    json(),
                     esbuild({
                         target: buildTargets,
                         tsconfig: "tsconfig.json",
@@ -225,7 +222,7 @@ export const bundle = async ({cwd = process.cwd(), dryRun}: {
         finalFiles = finalFiles.concat(files.flat());
     }
 
-    logger.success(`bundled`, ...finalFiles);
+    logger.success("bundled", ...finalFiles);
 
     const unused = autoExternal.warningAndGetUnused();
 
@@ -274,8 +271,8 @@ export const bundle = async ({cwd = process.cwd(), dryRun}: {
             ...(pkg["scripts"] as { [k: string]: string }),
             build: options.build.script,
             lint: "rome check --apply-suggested ./src && rome format --write ./src",
-            prepublishOnly: options.build.script,
             test: "vitest --run",
+            prepublishOnly: "pnpm run build",
         },
     };
 

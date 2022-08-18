@@ -19,7 +19,6 @@
   },
   "dependencies": {
     "@innoai-tech/lodash": "workspace:^*",
-    "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^13.3.0",
     "rollup-plugin-esbuild": "^4.9.3",
     "chalk": "^5.0.1",
@@ -33,6 +32,8 @@
     "browserslist": "*"
   },
   "devDependencies": {
+    "@innoai-tech/swc-plugin-access-control-autocomplete": "workspace:^*",
+    "@swc/core": "^1.2.239",
     "@types/js-yaml": "^4.0.5",
     "@types/node": "*",
     "@types/yargs": "^17.0.11",
@@ -54,7 +55,7 @@
   "scripts": {
     "build": "tsx ./src/bin/index.ts",
     "test": "vitest --run",
-    "prepublishOnly": "tsx ./src/bin/index.ts",
+    "prepublishOnly": "pnpm run build",
     "lint": "rome check --apply-suggested ./src && rome format --write ./src"
   },
   "bin": {

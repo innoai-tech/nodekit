@@ -34,7 +34,7 @@
   "scripts": {
     "build": "monobundle",
     "test": "vitest --run",
-    "prepublishOnly": "monobundle",
+    "prepublishOnly": "pnpm run build",
     "lint": "rome check --apply-suggested ./src && rome format --write ./src"
   },
   "repository": {

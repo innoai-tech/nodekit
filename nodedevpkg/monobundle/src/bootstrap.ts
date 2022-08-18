@@ -1,6 +1,7 @@
 import { dirname, join, relative } from "path";
 import { load } from "js-yaml";
 import { globby } from "globby";
+import { existsSync } from "fs";
 import { readFile, writeFile } from "fs/promises";
 
 // create *.iml for each mono package and root package
@@ -13,6 +14,7 @@ export const bootstrap = async (cwd: string) => {
 	const w = load(String(await readFile(join(cwd, "pnpm-workspace.yaml")))) as {
 		packages: string[];
 	};
+
 	const paths = await globby([
 		`${cwd}/package.json`,
 		...w.packages.map((p) => `${p}/package.json`),
@@ -25,6 +27,10 @@ export const bootstrap = async (cwd: string) => {
 
 	for (const p of paths) {
 		const dir = dirname(p);
+
+		const isGoMod = existsSync(join(dir, "go.mod"));
+		const isCueMod = existsSync(join(dir, "cue.mod"));
+
 		const n = (
 			JSON.parse(String(await readFile(p))) as { name: string }
 		).name.replace("/", "__");
@@ -35,6 +41,7 @@ export const bootstrap = async (cwd: string) => {
 			join(dir, `${n}.iml`),
 			`<?xml version="1.0" encoding="UTF-8"?>
 <module type="WEB_MODULE" version="4">
+  ${isGoMod ? `<component name="Go" enabled="true" />` : ""}
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$">
@@ -44,8 +51,12 @@ export const bootstrap = async (cwd: string) => {
       <excludeFolder url="file://$MODULE_DIR$/.build" />
       <excludeFolder url="file://$MODULE_DIR$/dist" />
       <excludeFolder url="file://$MODULE_DIR$/node_modules" />
+      ${
+				isCueMod ? `
       <excludeFolder url="file://$MODULE_DIR$/cue.mod/gen" />
       <excludeFolder url="file://$MODULE_DIR$/cue.mod/pkg" />
+      ` : ""
+			}
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
@@ -59,7 +70,7 @@ export const bootstrap = async (cwd: string) => {
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      ${imls.map(
+${imls.map(
 			(iml) => `<module fileurl="file://${iml}" filepath="${iml}" />`,
 		).join("\n")}
     </modules>
