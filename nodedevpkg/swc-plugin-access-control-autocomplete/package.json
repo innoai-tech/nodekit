@@ -1,11 +1,14 @@
 {
   "name": "@innoai-tech/swc-plugin-access-control-autocomplete",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "devDependencies": {
     "@swc/core": "^1.2.241"
   },
   "license": "MIT",
   "main": "target/wasm32-wasi/release/swc_plugin_access_control_autocomplete.wasm",
+  "files": [
+    "target/wasm32-wasi/release/swc_plugin_access_control_autocomplete.wasm"
+  ],
   "publishConfig": {
     "registry": "https://npm.pkg.github.com",
     "access": "public"
@@ -19,8 +22,8 @@
     "initial": "rustup target add wasm32-wasi",
     "lint": "cargo fmt --all -- --emit files",
     "build": "cargo build --target wasm32-wasi --release",
-    "test:rust": "cargo test",
-    "test:ts": "cargo test",
+    "test:rust": "PRINT_HYGIENE=1 cargo test",
+    "test:ts": "pnpm run build && vitest --run",
     "test": "pnpm run test:rust && pnpm run test:ts",
     "prepublishOnly": "pnpm run build"
   },

@@ -29,7 +29,7 @@ bootstrap:
 ci: lint test
 
 lint:
-	pnpm exec turbo run lint
+	pnpm exec turbo run lint --force
 
 test:
 	pnpm exec turbo run test

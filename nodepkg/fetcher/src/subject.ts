@@ -19,8 +19,8 @@ export class RequestSubject<TInputs, TBody, TError> extends Observable<
 > {
 	requesting$ = new BehaviorSubject<boolean>(false);
 	error$ = new Subject<FetcherErrorResponse<TInputs, TError>>();
-	_success$ = new Subject<FetcherResponse<TInputs, TBody>>();
-	_input$ = new Subject<TInputs>();
+	private _success$ = new Subject<FetcherResponse<TInputs, TBody>>();
+	private _input$ = new Subject<TInputs>();
 
 	constructor(
 		private fetcher: Fetcher,

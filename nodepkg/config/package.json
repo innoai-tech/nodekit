@@ -11,7 +11,7 @@
   "dependencies": {
     "@innoai-tech/lodash": "workspace:*",
     "esbuild": "^0.15.5",
-    "vite": "^3.0.8"
+    "vite": "^3.0.9"
   },
   "browserslist": [
     "defaults"

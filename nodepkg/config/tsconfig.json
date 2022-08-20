@@ -1,6 +1,3 @@
 {
-  "compilerOptions": {
-      "experimentalDecorators": true
-  },
   "extends": "@innoai-tech/devconfig/tsconfig.json"
 }
