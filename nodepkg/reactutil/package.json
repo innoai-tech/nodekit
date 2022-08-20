@@ -1,7 +1,6 @@
 {
   "name": "@innoai-tech/reactutil",
   "version": "0.3.1",
-  "license": "MIT",
   "monobundle": {
     "exports": {
       ".": "./src/index.ts"
@@ -15,10 +14,6 @@
     "rxjs": "7.x",
     "react": "18.x"
   },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com",
-    "access": "public"
-  },
   "exports": {
     ".": {
       "import": {
@@ -31,17 +26,21 @@
     "*.mjs",
     "*.d.ts"
   ],
-  "scripts": {
-    "build": "monobundle",
-    "test": "vitest --run",
-    "prepublishOnly": "pnpm run build",
-    "lint": "rome check --apply-suggested ./src && rome format --write ./src"
+  "license": "MIT",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
+    "access": "public"
   },
   "repository": {
     "type": "git",
     "url": "ssh://git@github.com:innoai-tech/nodekit.git",
     "directory": "nodepkg/reactutil"
   },
-  "type": "module",
-  "types": "./index.d.ts"
+  "scripts": {
+    "build": "monobundle",
+    "test": "vitest --run",
+    "prepublishOnly": "pnpm run build",
+    "lint": "rome check --apply-suggested ./src && rome format --write ./src"
+  },
+  "type": "module"
 }

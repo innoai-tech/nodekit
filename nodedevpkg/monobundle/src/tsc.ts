@@ -5,7 +5,7 @@ export const tsc = async (
 	outDir: string,
 ): Promise<void> => {
 	const ps = spawn("tsc", [
-		"--diagnostics",
+		"--incremental",
 		"--emitDeclarationOnly",
 		"--baseUrl",
 		".",
@@ -17,15 +17,17 @@ export const tsc = async (
 		cwd: projectRoot,
 	});
 
-	// ps.stdout.on("data", (data) => {
-	//   console.log(`${data}`);
-	// });
-
-	ps.stderr?.on("data", (data) => {
-		console.error(`${data}`);
-	});
-
 	return new Promise((resolve, reject) => {
+		ps.stdout.on("data", (data) => {
+			if (data) {
+				reject(`${data}`);
+			}
+		});
+
+		ps.stderr?.on("data", (data) => {
+			console.error(`${data}`);
+		});
+
 		ps.on("close", (code) => {
 			if (code !== 0) {
 				reject();

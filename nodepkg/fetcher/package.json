@@ -6,16 +6,11 @@
       ".": "./src/index.ts"
     }
   },
-  "license": "MIT",
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com",
-    "access": "public"
+  "dependencies": {
+    "@innoai-tech/lodash": "workspace:*"
   },
   "peerDependencies": {
     "rxjs": "7.x"
-  },
-  "dependencies": {
-    "@innoai-tech/lodash": "workspace:*"
   },
   "exports": {
     ".": {
@@ -29,17 +24,21 @@
     "*.mjs",
     "*.d.ts"
   ],
-  "scripts": {
-    "build": "monobundle",
-    "test": "vitest --run",
-    "prepublishOnly": "pnpm run build",
-    "lint": "rome check --apply-suggested ./src && rome format --write ./src"
+  "license": "MIT",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
+    "access": "public"
   },
   "repository": {
     "type": "git",
     "url": "ssh://git@github.com:innoai-tech/nodekit.git",
     "directory": "nodepkg/fetcher"
   },
-  "type": "module",
-  "types": "./index.d.ts"
+  "scripts": {
+    "build": "monobundle",
+    "test": "vitest --run",
+    "prepublishOnly": "pnpm run build",
+    "lint": "rome check --apply-suggested ./src && rome format --write ./src"
+  },
+  "type": "module"
 }

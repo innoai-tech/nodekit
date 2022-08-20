@@ -1,9 +1,6 @@
 {
   "name": "@innoai-tech/config",
   "version": "0.4.11",
-  "browserslist": [
-    "defaults"
-  ],
   "monobundle": {
     "exports": {
       ".": "./src/index.ts",
@@ -16,11 +13,9 @@
     "esbuild": "^0.15.5",
     "vite": "^3.0.8"
   },
-  "license": "MIT",
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com",
-    "access": "public"
-  },
+  "browserslist": [
+    "defaults"
+  ],
   "exports": {
     ".": {
       "import": {
@@ -45,17 +40,21 @@
     "*.mjs",
     "*.d.ts"
   ],
-  "scripts": {
-    "build": "monobundle",
-    "test": "vitest --run",
-    "prepublishOnly": "pnpm run build",
-    "lint": "rome check --apply-suggested ./src && rome format --write ./src"
+  "license": "MIT",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
+    "access": "public"
   },
   "repository": {
     "type": "git",
     "url": "ssh://git@github.com:innoai-tech/nodekit.git",
     "directory": "nodepkg/config"
   },
-  "type": "module",
-  "types": "./index.d.ts"
+  "scripts": {
+    "build": "monobundle",
+    "test": "vitest --run",
+    "prepublishOnly": "pnpm run build",
+    "lint": "rome check --apply-suggested ./src && rome format --write ./src"
+  },
+  "type": "module"
 }

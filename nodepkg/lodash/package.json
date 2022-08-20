@@ -6,7 +6,13 @@
     "lodash": "^4.17.21",
     "lodash-es": "^4.17.21"
   },
-  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./index.mjs",
+      "require": "./index.cjs"
+    }
+  },
+  "license": "MIT",
   "publishConfig": {
     "registry": "https://npm.pkg.github.com",
     "access": "public"
@@ -14,13 +20,9 @@
   "repository": {
     "type": "git",
     "url": "ssh://git@github.com:innoai-tech/nodekit.git",
-    "directory": "@innoai-tech/lodash"
+    "directory": "nodepkg/lodash"
   },
-  "types": "./index.d.ts",
-  "exports": {
-    ".": {
-      "import": "./index.mjs",
-      "require": "./index.cjs"
-    }
-  }
+  "scripts": {},
+  "type": "module",
+  "types": "./index.d.ts"
 }

@@ -1,13 +1,6 @@
 {
   "name": "@innoai-tech/gents",
   "version": "0.1.2",
-  "dependencies": {
-    "node-fetch": "^3.2.10",
-    "@innoai-tech/lodash": "workspace:*"
-  },
-  "devDependencies": {
-    "@innoai-tech/fetcher": "workspace:*"
-  },
   "monobundle": {
     "build": {
       "clean": true
@@ -16,15 +9,12 @@
       ".": "./src/index.ts"
     }
   },
-  "scripts": {
-    "build": "monobundle",
-    "test": "vitest --run",
-    "prepublishOnly": "pnpm run build",
-    "lint": "rome check --apply-suggested ./src && rome format --write ./src"
+  "dependencies": {
+    "node-fetch": "^3.2.10",
+    "@innoai-tech/lodash": "workspace:*"
   },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com",
-    "access": "public"
+  "devDependencies": {
+    "@innoai-tech/fetcher": "workspace:*"
   },
   "exports": {
     ".": {
@@ -38,11 +28,21 @@
     "*.mjs",
     "*.d.ts"
   ],
+  "license": "MIT",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "ssh://git@github.com:innoai-tech/nodekit.git",
     "directory": "nodedevpkg/gents"
   },
-  "type": "module",
-  "types": "./index.d.ts"
+  "scripts": {
+    "build": "monobundle",
+    "test": "vitest --run",
+    "prepublishOnly": "pnpm run build",
+    "lint": "rome check --apply-suggested ./src && rome format --write ./src"
+  },
+  "type": "module"
 }

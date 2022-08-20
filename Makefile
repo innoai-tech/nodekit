@@ -23,6 +23,7 @@ dep:
 	pnpm install
 
 bootstrap:
+	pnpm exec turbo run build --filter=monobundle --force
 	pnpm exec monobundle
 
 ci: lint test

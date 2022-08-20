@@ -1,10 +1,10 @@
 {
   "name": "@innoai-tech/devconfig",
   "version": "0.1.0",
-  "type": "module",
   "files": [
     "*.json"
   ],
+  "license": "MIT",
   "publishConfig": {
     "registry": "https://npm.pkg.github.com",
     "access": "public"
@@ -12,6 +12,8 @@
   "repository": {
     "type": "git",
     "url": "ssh://git@github.com:innoai-tech/nodekit.git",
-    "directory": "@innoai-tech/devconfig"
-  }
+    "directory": "nodedevpkg/devconfig"
+  },
+  "scripts": {},
+  "type": "module"
 }

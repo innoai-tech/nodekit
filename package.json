@@ -7,6 +7,10 @@
     "node": ">= 18",
     "pnpm": ">= 7"
   },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "ssh://git@github.com:innoai-tech/nodekit.git"

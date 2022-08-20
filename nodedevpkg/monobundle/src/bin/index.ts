@@ -11,4 +11,7 @@ import { bundle } from "../bundle";
 		...opt,
 		...(opt._.length > 0 ? { cwd: opt._[0] } : {}),
 	} as any);
-})().catch(console.error);
+})().catch((err) => {
+	console.error(err);
+	process.exit(1);
+});
