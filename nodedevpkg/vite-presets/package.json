@@ -1,21 +1,26 @@
 {
-  "name": "@innoai-tech/gents",
-  "version": "0.2.0",
+  "name": "@innoai-tech/vite-presets",
+  "version": "0.1.2",
   "monobundle": {
-    "build": {
-      "clean": true
-    },
     "exports": {
       ".": "./src/index.ts"
     }
   },
   "dependencies": {
-    "node-fetch": "^3.2.10",
-    "@innoai-tech/lodash": "workspace:*",
-    "@innoai-tech/config": "workspace:*"
+    "@innoai-tech/lodash": "*",
+    "@rollup/pluginutils": "^4.2.1",
+    "@vitejs/plugin-react": "^2.0.1",
+    "load-tsconfig": "^0.2.3"
+  },
+  "peerDependencies": {
+    "@swc/core": "^1.2.241",
+    "vite": "^3.0.9"
   },
   "devDependencies": {
-    "@innoai-tech/fetcher": "workspace:*"
+    "@swc/core": "^1.2.241",
+    "rollup": "^2.78.1",
+    "esbuild": "^0.15.5",
+    "vite": "^3.0.9"
   },
   "exports": {
     ".": {
@@ -37,13 +42,13 @@
   "repository": {
     "type": "git",
     "url": "ssh://git@github.com:innoai-tech/nodekit.git",
-    "directory": "nodedevpkg/gents"
+    "directory": "nodedevpkg/vite-presets"
   },
   "scripts": {
+    "lint": "rome check --apply-suggested ./src && rome format --write ./src",
     "build": "monobundle",
     "test": "vitest --run",
-    "prepublishOnly": "pnpm run build",
-    "lint": "rome check --apply-suggested ./src && rome format --write ./src"
+    "prepublishOnly": "pnpm run build"
   },
   "type": "module"
 }

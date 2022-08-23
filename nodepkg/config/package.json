@@ -1,6 +1,6 @@
 {
   "name": "@innoai-tech/config",
-  "version": "0.4.11",
+  "version": "0.4.12",
   "monobundle": {
     "exports": {
       ".": "./src/index.ts",

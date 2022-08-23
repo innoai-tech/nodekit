@@ -4,11 +4,11 @@
   "devDependencies": {
     "@swc/core": "^1.2.241"
   },
-  "license": "MIT",
-  "main": "target/wasm32-wasi/release/swc_plugin_access_control_autocomplete.wasm",
   "files": [
     "target/wasm32-wasi/release/swc_plugin_access_control_autocomplete.wasm"
   ],
+  "license": "MIT",
+  "main": "target/wasm32-wasi/release/swc_plugin_access_control_autocomplete.wasm",
   "publishConfig": {
     "registry": "https://npm.pkg.github.com",
     "access": "public"
