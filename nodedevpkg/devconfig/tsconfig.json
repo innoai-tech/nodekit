@@ -3,7 +3,11 @@
   "compilerOptions": {
     "baseUrl": ".",
     "outDir": "./dist",
-    "lib": ["es2021", "dom", "webworker"],
+    "lib": [
+      "es2021",
+      "dom",
+      "webworker"
+    ],
     "module": "es2022",
     "target": "es2021",
     "moduleResolution": "node",

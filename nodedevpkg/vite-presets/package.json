@@ -2,6 +2,9 @@
   "name": "@innoai-tech/vite-presets",
   "version": "0.1.2",
   "monobundle": {
+    "pipeline": {
+      "test": false
+    },
     "exports": {
       ".": "./src/index.ts"
     }
@@ -17,9 +20,9 @@
     "vite": "^3.0.9"
   },
   "devDependencies": {
-    "@swc/core": "^1.2.241",
+    "@swc/core": "^1.2.245",
+    "esbuild": "^0.15.6",
     "rollup": "^2.78.1",
-    "esbuild": "^0.15.5",
     "vite": "^3.0.9"
   },
   "exports": {
@@ -47,7 +50,6 @@
   "scripts": {
     "lint": "rome check --apply-suggested ./src && rome format --write ./src",
     "build": "monobundle",
-    "test": "vitest --run",
     "prepublishOnly": "pnpm run build"
   },
   "type": "module"

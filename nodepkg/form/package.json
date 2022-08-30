@@ -1,38 +1,26 @@
 {
-  "name": "@innoai-tech/config",
-  "version": "0.4.12",
+  "name": "@innoai-tech/form",
+  "version": "0.0.1",
   "monobundle": {
     "exports": {
-      ".": "./src/index.ts",
-      "./loader": "./src/loader/index.ts",
-      "./vite-plugin-inject-config": "./src/vite-plugin-inject-config/index.ts"
+      ".": "./src/index.ts"
     }
   },
   "dependencies": {
     "@innoai-tech/lodash": "workspace:*",
-    "esbuild": "^0.15.6",
-    "vite": "^3.0.9"
+    "yup": "^1.0.0-beta.7"
   },
-  "browserslist": [
-    "defaults"
-  ],
+  "devDependencies": {
+    "ajv": "^8.11.0"
+  },
+  "peerDependencies": {
+    "rxjs": "7.x"
+  },
   "exports": {
     ".": {
       "import": {
         "types": "./index.d.ts",
         "default": "./index.mjs"
-      }
-    },
-    "./loader": {
-      "import": {
-        "types": "./loader.d.ts",
-        "default": "./loader.mjs"
-      }
-    },
-    "./vite-plugin-inject-config": {
-      "import": {
-        "types": "./vite-plugin-inject-config.d.ts",
-        "default": "./vite-plugin-inject-config.mjs"
       }
     }
   },
@@ -48,7 +36,7 @@
   "repository": {
     "type": "git",
     "url": "ssh://git@github.com:innoai-tech/nodekit.git",
-    "directory": "nodepkg/config"
+    "directory": "nodepkg/form"
   },
   "scripts": {
     "build": "monobundle",

@@ -35,7 +35,7 @@ ${map(pkgs, (pkg, dir) => {
 
 const defaultScripts = {
     lint: "rome check --apply-suggested ./src && rome format --write ./src",
-    test: "vitest --run",
+    test: "vitest --run --passWithNoTests",
     build: "monobundle",
 };
 
@@ -139,7 +139,7 @@ export const addImiFile = async (monoRoot: string, pkg: any) => {
   </component>
 </module>`,
     );
-}
+};
 
 export const bootstrap = async (projectRoot: string) => {
     if (process.env["CI"] && process.env["CI"] !== "0") {
@@ -174,7 +174,7 @@ export const bootstrap = async (projectRoot: string) => {
             await patchMonoPackage(monoRoot, rpath, packageJSON, packages[""]);
         }
 
-        await addImiFile(monoRoot, packageJSON)
+        await addImiFile(monoRoot, packageJSON);
     }
 
     await patchRootPackage(projectRoot, packages);
