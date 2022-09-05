@@ -1,8 +1,8 @@
 import {Observable, BehaviorSubject, Subject, merge} from "rxjs";
 import {map as rxMap, distinctUntilChanged} from "rxjs/operators";
-import {get, set} from "@innoai-tech/lodash";
-import {Schema, ValidationError} from "yup";
-
+import {get, isEmpty, set} from "@innoai-tech/lodash";
+import type {InferSchema, Schema} from "./Schema";
+import {validateForSchema} from "./validation";
 
 export interface FieldState {
     // focusing
@@ -19,7 +19,7 @@ export interface FieldState {
 
 export class FormSubject<T extends object> extends Observable<T> {
     static of<T extends object>(
-        schema: Schema,
+        schema: InferSchema<T>,
         initials: Partial<T> = {},
     ) {
         return new FormSubject(schema, initials);
@@ -32,7 +32,7 @@ export class FormSubject<T extends object> extends Observable<T> {
     public values$ = new Subject<T>();
 
     constructor(
-        public schema: Schema<any>,
+        public schema: InferSchema<T>,
         private initials: Partial<T> = {},
     ) {
         super((subscriber) => {
@@ -58,23 +58,14 @@ export class FormSubject<T extends object> extends Observable<T> {
     };
 
     submit = () => {
-        try {
-            const values = this.schema.validateSync(this.inputs$.value, {
-                abortEarly: false,
-            });
-            this.values$.next(values);
-        } catch (e) {
-            if (e instanceof ValidationError) {
-                const errors: { [k: string]: string } = {};
-                for (const ee of e.inner) {
-                    if (ee.path) {
-                        errors[ee.path] = ee.message;
-                    }
-                }
-                this.setErrors(errors);
-            }
+        const errors = validateForSchema(this.schema)(this.inputs$.value, {});
+
+        if (isEmpty(errors)) {
+            this.values$.next({...this.inputs$.value as T});
+        } else {
+            this.setErrors(errors)
         }
-    };
+    }
 
     register(keyPath: string) {
         this.fields$.next({
@@ -151,13 +142,13 @@ export class FieldSubject extends Observable<FieldState> {
 
     validate() {
         try {
-            this.schema.validateSyncAt(this.name, this.inputs$.value);
+            // this.schema.validateSyncAt(this.name, this.inputs$.value);
         } catch (e) {
-            if (e instanceof ValidationError) {
-                this.setFieldState({
-                    error: e.message,
-                });
-            }
+            // if (e instanceof ValidationError) {
+            //     this.setFieldState({
+            //         error: e.message,
+            //     });
+            // }
         }
     }
 }

@@ -1,210 +1,197 @@
-import {get, isFunction, isNull, isString, isUndefined, keys, merge, some} from "@innoai-tech/lodash";
-import {Schema, string} from "yup";
+import {
+    every,
+    isArray,
+    isNull,
+    isObject,
+    isString,
+    isUndefined,
+    keys,
+    some,
+    partition,
+    isNumber
+} from "@innoai-tech/lodash";
+import type {Expression, Schema} from "./Schema";
 
-export type ValidateFn = <T extends any>(v: T, parent?: any) => boolean
-export type PatchJSONSchema = (schema: any, parent: any, name?: string) => any
-
-export type TestContext = {
-    type: string,
+export type Context = {
+    schema?: Schema,
+    parent?: any,
+    root?: any
+    path?: string
 }
 
-export interface Validator<TValue extends any> {
-    (v: TValue, parent?: any): boolean;
 
-    displayName: string;
-    formatError: (ctx: TestContext) => string;
-    patchJSONSchema: PatchJSONSchema,
+export type ValidateFn<T extends any> = (v: T, ctx?: Context) => string
+
+export interface Validator<TTarget extends any> {
+    (v: TTarget, ctx?: Context): boolean
+
+    errMsg?: string;
 }
 
-export const need = (...testings: Validator<any>[]) => {
-    return <T extends Schema>(s: T) => {
-        return testings.reduce((s, test) => {
-            return s.test({
-                name: test.displayName,
-                test: (value, {parent}) => {
-                    return test(value, parent);
-                },
-                skipAbsent: test.displayName !== "required",
-                message: test.formatError({
-                    type: s.type,
-                }),
-                params: {
-                    patchJSONSchema: test.patchJSONSchema,
+const validatorCreators: { [k: string]: (schema: Schema, ...args: any[]) => Validator<any> } = {}
+
+export const validateFor = (expr: Expression<any>, schema: Schema) => {
+    const [name, ...args] = expr;
+    if (!isString(name)) {
+        throw new Error(`invalid '${expr}'`)
+    }
+    const createValidate = validatorCreators[name]
+    if (!createValidate) {
+        throw new Error(`unknown '${name}'`)
+    }
+    return createValidate(schema, ...args)
+}
+
+
+export const validateForSchema = (schema: Schema) => {
+    const walkAndValidate = (errors: any, value: any, ctx: Required<Context>) => {
+        if (ctx.schema.type == "object") {
+            if (!isObject(value)) {
+                errors[ctx.path] = "需要 object"
+                return
+            }
+
+            for (const [prop, subSchema] of Object.entries(ctx.schema.properties)) {
+                walkAndValidate(errors, (value as any)[prop], {
+                    ...ctx,
+                    schema: subSchema,
+                    path: ctx.path ? `${ctx.path}.${prop}` : prop,
+                    parent: value,
+                })
+            }
+        }
+
+        if (ctx.schema.need) {
+            const [rulesForRequired, others] = partition(ctx.schema.need, (expr) => expr[0] == "required")
+            const isRequired = rulesForRequired.length > 0
+
+            const checkExists = validateFor(required(), ctx.schema)
+
+            if (checkExists(value, ctx)) {
+                if (others.length > 0) {
+                    const validate = validateFor(allOf(...(others as any)), ctx.schema)
+                    if (!validate(value, ctx)) {
+                        errors[ctx.path] = validate.errMsg
+                    }
                 }
-            });
-        }, s);
-    };
-};
+            } else if (isRequired) {
+                errors[ctx.path] = checkExists.errMsg
+            }
+        }
+    }
 
+    return (value: any, _?: Context) => {
+        const errors = {}
 
-const createTest = <TValue extends any = any, TArgs extends any[] = any[]>(
-    name: string,
-    build: (...args: TArgs) => {
-        validate: ValidateFn,
-        formatError: (ctx: TestContext) => string
-        patchJSONSchema?: PatchJSONSchema,
-    },
+        walkAndValidate(errors, value, {
+            schema: schema!,
+            path: "",
+            root: value,
+            parent: undefined,
+        })
+
+        return errors
+    }
+
+}
+
+export const need = <T extends any = any>(expr: Expression<any>, schema: Schema): ValidateFn<T> => {
+    const fn = validateFor(expr, schema);
+
+    return (value, ctx = {}) => {
+        if (fn(value, ctx)) {
+            return ""
+        }
+        return fn.errMsg || `${name} is not valid`
+    }
+}
+
+export const withErrMsg = <T extends Function>(fn: T, errMsg: string) => {
+    (fn as any).errMsg = errMsg
+    return fn as T & { errMsg: string }
+}
+
+export const register = <TName extends string, TArgs extends any[], TTarget extends any>(
+    name: TName,
+    createValidator: (schema: Schema, ...args: TArgs) => Validator<TTarget>,
 ) => {
-    return (...args: TArgs) => {
-        const fn = build(...args);
-        (fn.validate as any).displayName = name;
-        (fn.validate as any).formatError = fn.formatError;
-        (fn.validate as any).patchJSONSchema = fn.patchJSONSchema;
-        return fn.validate as Validator<TValue>;
-    };
+    validatorCreators[name] = createValidator as any
+    return (...args: TArgs) => [name, ...args] as const
 };
 
-export const required = createTest(
-    "required",
-    () => ({
-        validate: (v) => {
-            if (isUndefined(v) || isNull(v) || isNaN(v as any)) {
-                return false
-            }
-            return !!v
-        },
-        formatError: () => "务必填写",
-        patchJSONSchema: (schema, parent = {}, name) => {
-            parent.required = [
-                ...(parent.required || []),
-                name,
-            ]
-            return schema
-        }
-    }),
-);
-
-export const url = createTest(
-    "url",
-    () => {
-        const s = string().url();
-
-        return ({
-            validate: (v) => s.isValidSync(v),
-            formatError: () => "请输入合法的 URL",
-            patchJSONSchema: (schema = {}) => ({
-                ...schema,
-                format: "url"
-            })
-        })
-    }
-);
-
-export const matches = createTest(
-    "matches",
-    (pattern: RegExp) => {
-        const s = string().matches(pattern);
-
-        return ({
-            validate: (v) => s.isValidSync(v),
-            formatError: () => `务必匹配 ${pattern}`,
-            patchJSONSchema: (schema = {}) => ({
-                ...schema,
-                pattern: pattern.toString()
-            })
-        })
-    }
-)
-
-
-export const oneOf = createTest(
-    "oneOf",
-    (...rules: any[]) => {
-        if (some(rules, isFunction)) {
-            // TODO
+export const required = register("required", () => {
+    return withErrMsg((v: any) => {
+        if (isUndefined(v) || isNull(v)) {
+            return false
         }
 
-        return ({
-            validate: (value, parent) => rules.some((rule) => isFunction(rule) ? rule(value, parent) : rule === value),
-            formatError: () => `务必为 ${rules.join(",")} 之一`,
-            patchJSONSchema: (schema = {}) => ({
-                ...schema,
-                enum: [...rules],
-            })
-        })
-    }
-);
-
-export const allOf = createTest(
-    "allOf",
-    (...rules: Validator<any>[]) => {
-        return ({
-            validate: (value, parent) => rules.every((rule) => isFunction(rule) ? rule(value, parent) : rule === value),
-            formatError: () => {
-                return ""
-            },
-            patchJSONSchema: (schema = {}, parent) => ({
-                ...schema,
-                allOf: rules.map((r) => r.patchJSONSchema ? r.patchJSONSchema({}, parent) : {})
-            })
-        })
-    },
-);
-
-
-export const at = (key: string, test?: Validator<any>): Validator<any> => {
-    const fn = (value: any, parent: any): boolean => {
-        const v = key ? get(parent, key) : value
-        return test ? test(v) : v
-    }
-
-    if (test) {
-        fn.displayName = test.displayName;
-        fn.formatError = test.formatError;
-        fn.patchJSONSchema = (schema: any, parent: any = "") => {
-            const s = get(parent, ["properties", key], {})
-            const o = {
-                required: [key],
-                properties: {} as any,
-            }
-            o.properties[key] = test.patchJSONSchema({
-                type: s.type,
-            }, o, key)
-            return merge(schema, o)
+        if (isString(v) && (v === "")) {
+            return false
         }
-    } else {
-        fn.displayName = "exists";
-        (fn as any).formatError = (_: TestContext) => `需要 ${key} 存在`;
+
+        if (isNumber(v) && isNaN(v as any)) {
+            return false
+        }
+
+        return !!v
+    }, "务必填写");
+})
+
+
+export const oneOf = register("oneOf", (schema: Schema, ...rules: Expression<any>[] | any[]) => {
+    let isEnum = true
+
+    const validates = rules.map((ruleOrValue) => {
+        if (isArray(ruleOrValue) && isString(ruleOrValue[0])) {
+            isEnum = false
+            return validateFor(ruleOrValue as any, schema)
+        }
+        return (value: any) => ruleOrValue === value
+    })
+
+
+    if (isEnum) {
+        return withErrMsg(
+            (value: any) => some(validates, (validate) => validate(value, parent)),
+            `需要是 ${rules.join(",")} 之一`
+        )
     }
 
+    return withErrMsg(
+        (value: any) => some(validates, (validate) => validate(value, parent)),
+        validates.map((fn: any) => fn.errMsg).join(", 或"),
+    )
+})
 
-    return fn
-}
+export const allOf = register("allOf", (schema, ...rules: Expression<any>[]) => {
+    const validates = rules
+        .filter((expr) => isArray(expr))
+        .map((expr) => validateFor(expr as any, schema))
 
-export const min = createTest(
-    "min",
-    (min: number) => {
-        return {
-            validate: (v) => {
-                if (isString(v)) {
-                    return v.length >= min;
-                }
-                return v >= min
-            },
-            formatError: ({type}) => {
-                if (type === "string") {
-                    return `字符长度务必大于 ${min}`;
-                }
-                return `务必大于 ${min}`;
-            },
-            patchJSONSchema: (schema) => {
-                switch (schema.type) {
-                    case "string":
-                        return {
-                            ...schema,
-                            minLength: min
-                        }
-                    case "number":
-                        return {
-                            ...schema,
-                            minimum: min
-                        }
-                }
-                return schema
-            }
-        }
-    },
-);
+    return withErrMsg(
+        (value: any, parent: any) => every(validates, (validate) => validate(value, parent)),
+        validates.map((fn: any) => fn.errMsg).join(", 且"),
+    )
+})
 
+export const matches = register("matches", (_, pattern: RegExp) => {
+    return withErrMsg((v: string) => pattern.test(v), `务必匹配 ${pattern}`)
+})
+
+export const min = register("min", (schema, min: number) => {
+    if (schema.type === "string") {
+        // TODO to use char count
+        return withErrMsg((v: any = "") => v.length >= min, `至少需要 ${min} 个字符`);
+    }
+    return withErrMsg((v: any) => v >= min, `不得小于 ${min}`)
+})
+
+
+export const max = register("max", (schema, min: number) => {
+    if (schema.type === "string") {
+        return withErrMsg((v: any = "") => v.length <= min, `字符长度不得超过 ${min}`);
+    }
+    return withErrMsg((v: any) => v <= min, `不得大于 ${min}`)
+})
 
 export const oneOfEnum = <T extends any>(e: T) => oneOf(...keys(e));
