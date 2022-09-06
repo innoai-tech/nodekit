@@ -1,6 +1,6 @@
 {
   "name": "@innoai-tech/form",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "monobundle": {
     "exports": {
       ".": "./src/index.ts"

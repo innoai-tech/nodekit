@@ -2,7 +2,7 @@ import {Observable, BehaviorSubject, Subject, merge} from "rxjs";
 import {map as rxMap, distinctUntilChanged} from "rxjs/operators";
 import {get, isEmpty, set} from "@innoai-tech/lodash";
 import type {InferSchema, Schema} from "./Schema";
-import {validateForSchema} from "./validation";
+import {validateForSchema} from "./Validation";
 
 export interface FieldState {
     // focusing
@@ -63,9 +63,9 @@ export class FormSubject<T extends object> extends Observable<T> {
         if (isEmpty(errors)) {
             this.values$.next({...this.inputs$.value as T});
         } else {
-            this.setErrors(errors)
+            this.setErrors(errors);
         }
-    }
+    };
 
     register(keyPath: string) {
         this.fields$.next({
@@ -141,14 +141,8 @@ export class FieldSubject extends Observable<FieldState> {
     }
 
     validate() {
-        try {
-            // this.schema.validateSyncAt(this.name, this.inputs$.value);
-        } catch (e) {
-            // if (e instanceof ValidationError) {
-            //     this.setFieldState({
-            //         error: e.message,
-            //     });
-            // }
-        }
+        // TODO fix
+        const errors = validateForSchema(this.schema)(this.inputs$.value);
+        this.setFieldState({error: errors[this.name] || ""});
     }
 }

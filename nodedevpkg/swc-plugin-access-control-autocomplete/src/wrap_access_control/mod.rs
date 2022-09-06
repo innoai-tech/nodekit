@@ -7,8 +7,8 @@ use swc_core::{
     ast::{
         CallExpr, Callee, Expr, Ident, ImportDecl, JSXElementName, JSXOpeningElement, Module,
         ModuleDecl, ModuleItem, Pat, VarDeclarator,
+        ImportNamedSpecifier, ImportSpecifier, ModuleExportName, Str,
     },
-    ast::{ImportNamedSpecifier, ImportSpecifier, ModuleExportName, Str},
     common::util::take::Take,
     common::{Spanned, DUMMY_SP},
     utils::ExprFactory,

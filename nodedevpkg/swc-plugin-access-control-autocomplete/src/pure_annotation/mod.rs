@@ -1,6 +1,6 @@
 use swc_core::{
-    ast::{CallExpr, Callee, Expr},
     common::comments::Comments,
+    ast::{CallExpr, Callee, Expr},
     visit::{as_folder, noop_visit_mut_type, Fold, VisitMut, VisitMutWith},
 };
 
@@ -8,8 +8,8 @@ use swc_core::{
 mod tests;
 
 pub fn pure_annotation<C>(comments: C) -> impl Fold + VisitMut
-where
-    C: Comments + Clone,
+    where
+        C: Comments + Clone,
 {
     as_folder(PureAnnotation {
         comments: Some(comments),
@@ -17,15 +17,15 @@ where
 }
 
 struct PureAnnotation<C: Comments>
-where
-    C: Comments,
+    where
+        C: Comments,
 {
     comments: Option<C>,
 }
 
 impl<C> VisitMut for PureAnnotation<C>
-where
-    C: Comments,
+    where
+        C: Comments,
 {
     noop_visit_mut_type!();
 
