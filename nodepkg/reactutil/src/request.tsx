@@ -50,7 +50,8 @@ export const FetcherProvider = ({ fetcher, children }: {
 
 const useFetcher = () => {
 	return (
-		useContext(FetcherContext).fetcher || createFetcher({
+		useContext(FetcherContext).fetcher ||
+		createFetcher({
 			paramsSerializer,
 			transformRequestBody,
 		})

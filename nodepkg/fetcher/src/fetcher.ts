@@ -42,23 +42,23 @@ export type RequestInterceptor = (
 	requestConfig: RequestConfig<any>,
 ) => RequestConfig<any>;
 
-export const applyRequestInterceptors = (
-	...requestInterceptors: RequestInterceptor[]
-) => (fetcher: Fetcher) => {
-	return {
-		request: <TInputs extends any, TRespData extends any>(
-			requestConfig: RequestConfig<TInputs>,
-		) => {
-			for (const requestInterceptor of requestInterceptors) {
-				requestConfig = requestInterceptor(requestConfig);
-			}
-			return fetcher.request<TInputs, TRespData>(requestConfig);
-		},
-		toHref: (requestConfig: RequestConfig<any>): string => {
-			for (const requestInterceptor of requestInterceptors) {
-				requestConfig = requestInterceptor(requestConfig);
-			}
-			return fetcher.toHref(requestConfig);
-		},
+export const applyRequestInterceptors =
+	(...requestInterceptors: RequestInterceptor[]) =>
+	(fetcher: Fetcher) => {
+		return {
+			request: <TInputs extends any, TRespData extends any>(
+				requestConfig: RequestConfig<TInputs>,
+			) => {
+				for (const requestInterceptor of requestInterceptors) {
+					requestConfig = requestInterceptor(requestConfig);
+				}
+				return fetcher.request<TInputs, TRespData>(requestConfig);
+			},
+			toHref: (requestConfig: RequestConfig<any>): string => {
+				for (const requestInterceptor of requestInterceptors) {
+					requestConfig = requestInterceptor(requestConfig);
+				}
+				return fetcher.toHref(requestConfig);
+			},
+		};
 	};
-};

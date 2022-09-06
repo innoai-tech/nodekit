@@ -2,7 +2,13 @@ import {Observable, BehaviorSubject, Subject, merge} from "rxjs";
 import {map as rxMap, distinctUntilChanged} from "rxjs/operators";
 import {get, isEmpty, set} from "@innoai-tech/lodash";
 import type {InferSchema, Schema} from "./Schema";
-import {validateForSchema} from "./validation";
+import {validateForSchema} from "./Validation";
+import {
+    create,
+    ExpressionFunc,
+    keyPathToSchemaKeyPath,
+    walkExpression,
+} from "./Expression";
 
 export interface FieldState {
     // focusing
@@ -58,63 +64,75 @@ export class FormSubject<T extends object> extends Observable<T> {
     };
 
     submit = () => {
-        const errors = validateForSchema(this.schema)(this.inputs$.value, {});
+        const errors = validateForSchema(this.schema)(this.inputs$.value);
 
         if (isEmpty(errors)) {
-            this.values$.next({...this.inputs$.value as T});
+            this.values$.next({...(this.inputs$.value as T)});
         } else {
-            this.setErrors(errors)
+            this.setErrors(errors);
         }
-    }
+    };
 
-    register(keyPath: string) {
+    register(keyPath: string, watches: string[] = []) {
         this.fields$.next({
             ...this.fields$.value,
             [keyPath]: {},
         });
-        return new FieldSubject(keyPath, this.inputs$, this.fields$, this.schema);
+
+        const schema = get(
+            {rootSchema: this.schema},
+            keyPathToSchemaKeyPath(keyPath),
+            {},
+        );
+
+        walkExpression(schema.need || [], (name, args) => {
+            if (name === "at") {
+                watches = [...watches, args[0]];
+            }
+        });
+
+        // TODO find way to infer type
+        return new FieldSubject(keyPath, this.fields$, this.inputs$, {
+            watches,
+            schema: schema,
+            rootSchema: this.schema,
+        });
     }
 }
 
-export class FieldSubject extends Observable<FieldState> {
-    get value() {
-        return {
-            ...(this.fields$.value[this.name] || {}),
-            value: get(this.inputs$.value, this.name),
-            name: this.name,
-        };
-    }
-
+export class FieldSubject<T extends any = any> extends Observable<FieldState & { name: string; value: T }> {
     constructor(
-        private name: string,
-        private inputs$: BehaviorSubject<any>,
+        protected name: string,
         private fields$: BehaviorSubject<{ [k: string]: FieldState }>,
-        private schema: Schema,
+        private inputs$: BehaviorSubject<object>,
+        private context: {
+            schema: Schema;
+            rootSchema: Schema;
+            watches: string[];
+        },
     ) {
         super((subscriber) => {
-            const fieldValue$ = this.inputs$.pipe(
-                rxMap((values) => get(values, this.name)),
-                distinctUntilChanged(),
-            );
+            const streams = [
+                ...context.watches.map(
+                    (keyPath) =>
+                        this.inputs$.pipe(
+                            rxMap((values) => get(values, keyPath)),
+                            distinctUntilChanged(),
+                        ),
+                ),
+                this.inputs$.pipe(
+                    rxMap((values) => get(values, this.name)),
+                    distinctUntilChanged(),
+                ),
+                this.fields$.pipe(
+                    rxMap((fieldStates) => fieldStates[this.name]),
+                    distinctUntilChanged(),
+                ),
+            ];
 
-            const fieldState$ = this.fields$.pipe(
-                rxMap((fieldStates) => fieldStates[this.name]),
-                distinctUntilChanged(),
-            );
-
-            return merge(fieldValue$, fieldState$)
+            return merge(...streams)
                 .pipe(rxMap(() => this.value))
                 .subscribe(subscriber);
-        });
-    }
-
-    private setFieldState(changed: Partial<FieldState>) {
-        this.fields$.next({
-            ...this.fields$.value,
-            [this.name]: {
-                ...(this.fields$.value[this.name] || {}),
-                ...changed,
-            },
         });
     }
 
@@ -122,7 +140,9 @@ export class FieldSubject extends Observable<FieldState> {
         this.setFieldState({
             dirty: true,
         });
-        this.inputs$.next(set(this.inputs$.value, this.name, value));
+        this.inputs$.next({
+            ...set(this.inputs$.value, this.name, value),
+        });
     }
 
     public focus() {
@@ -140,15 +160,38 @@ export class FieldSubject extends Observable<FieldState> {
         });
     }
 
-    validate() {
-        try {
-            // this.schema.validateSyncAt(this.name, this.inputs$.value);
-        } catch (e) {
-            // if (e instanceof ValidationError) {
-            //     this.setFieldState({
-            //         error: e.message,
-            //     });
-            // }
+    public check(validate?: ExpressionFunc<T, boolean>) {
+        if (validate && !validate(this.value.value)) {
+            this.setFieldState({error: (validate as any).errMsg});
         }
+    }
+
+    private setFieldState(changed: Partial<FieldState>) {
+        this.fields$.next({
+            ...this.fields$.value,
+            [this.name]: {
+                ...(this.fields$.value[this.name] || {}),
+                ...changed,
+            },
+        });
+    }
+
+    public get value() {
+        return ({
+            ...(this.fields$.value[this.name] || ({} as any)),
+            name: this.name,
+            value: get(this.inputs$.value, this.name),
+        });
+    }
+
+    public get validate() {
+        return this.context.schema.need
+            ? create<T, boolean>(this.context.schema.need)({
+                root: this.inputs$.value,
+                path: this.name,
+                schema: this.context.schema,
+                rootSchema: this.context.rootSchema,
+            })
+            : undefined;
     }
 }

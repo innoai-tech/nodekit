@@ -156,7 +156,10 @@ const typeFromObjectJSONSchema = (f: Genfile, schema: any): any => {
 		if (typeof schema.additionalProperties === "boolean") {
 			obj[`+k: ${keyType}`] = Genfile.id("any");
 		} else {
-			obj[`+k: ${keyType}`] = typeFromJSONSchema(f, schema.additionalProperties);
+			obj[`+k: ${keyType}`] = typeFromJSONSchema(
+				f,
+				schema.additionalProperties,
+			);
 		}
 	}
 
@@ -230,8 +233,8 @@ export const typeFromJSONSchema = (f: Genfile, schema: any): any => {
 	if (schema.enum) {
 		return `{
 ${map(schema.enum, (v) => `${dumpValue(Genfile.id(v))} = ${dumpValue(v)}`).join(
-			",\n",
-		)}        
+	",\n",
+)}        
 }`;
 	}
 

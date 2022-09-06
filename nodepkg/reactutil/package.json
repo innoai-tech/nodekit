@@ -1,14 +1,14 @@
 {
   "name": "@innoai-tech/reactutil",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "monobundle": {
     "exports": {
       ".": "./src/index.ts"
     }
   },
   "dependencies": {
-    "@innoai-tech/fetcher": "workspace:*",
-    "@innoai-tech/lodash": "workspace:*"
+    "@innoai-tech/fetcher": "workspace:^*",
+    "@innoai-tech/lodash": "workspace:^*"
   },
   "peerDependencies": {
     "rxjs": "7.x",

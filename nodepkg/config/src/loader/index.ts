@@ -38,10 +38,9 @@ export const loadConfig = async (configFile: string) => {
 
 	const conf = ctx.module.exports as { CONFIG: any };
 
-	return (configCtx: AppContext):
-		& AppContext
-		& AppConfig
-		& AppConfigMetadata => {
+	return (
+		configCtx: AppContext,
+	): AppContext & AppConfig & AppConfigMetadata => {
 		return {
 			...conf.CONFIG,
 			config: mapValues(

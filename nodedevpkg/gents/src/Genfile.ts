@@ -39,25 +39,25 @@ export const dumpValue = (v: any) => {
 export const dumpObj = (obj: { [k: string]: any }): string => {
 	return `{
 ${map(obj, (v, k) => {
-		if (!v) {
-			return null;
+	if (!v) {
+		return null;
+	}
+
+	let key = `"${k}"`;
+
+	switch (k[0]) {
+		case "?": {
+			key = `"${k.slice(1)}"?`;
+			break;
 		}
+		case "+":
+			key = `[${k.slice(1)}]`;
+	}
 
-		let key = `"${k}"`;
-
-		switch (k[0]) {
-			case "?": {
-				key = `"${k.slice(1)}"?`;
-				break;
-			}
-			case "+":
-				key = `[${k.slice(1)}]`;
-		}
-
-		return `${key}: ${dumpValue(v)},`;
-	})
-		.filter((v) => !!v)
-		.join("\n")}
+	return `${key}: ${dumpValue(v)},`;
+})
+	.filter((v) => !!v)
+	.join("\n")}
 }`;
 };
 

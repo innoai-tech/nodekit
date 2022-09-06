@@ -5,12 +5,10 @@ import { join } from "path";
 
 export type HandleConfig =
 	| ((c: UserConfig, ctx: AppConfig & AppContext & AppConfigMetadata) => void)
-	| (
-		(
-			c: UserConfig,
-			ctx: AppConfig & AppContext & AppConfigMetadata,
-		) => Promise<void>
-	);
+	| ((
+		c: UserConfig,
+		ctx: AppConfig & AppContext & AppConfigMetadata,
+	) => Promise<void>);
 
 export const injectWebAppConfig = (onConfig?: HandleConfig): Plugin => {
 	let injectEnabled = false;
@@ -50,9 +48,9 @@ export const injectWebAppConfig = (onConfig?: HandleConfig): Plugin => {
 						tag: "meta",
 						attrs: {
 							name: "webapp:config",
-							content: injectEnabled ? "__APP_CONFIG__" : stringify(
-								conf!.config as any,
-							),
+							content: injectEnabled
+								? "__APP_CONFIG__"
+								: stringify(conf!.config as any),
 						},
 					},
 				],

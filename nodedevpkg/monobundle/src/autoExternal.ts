@@ -90,11 +90,8 @@ export const createAutoExternal = (
 				isResolved: boolean,
 			) => {
 				if (
-					typeof opts.external === "function" && opts.external(
-						id,
-						importer,
-						isResolved,
-					)
+					typeof opts.external === "function" &&
+					opts.external(id, importer, isResolved)
 				) {
 					return true;
 				}
@@ -112,7 +109,8 @@ export const createAutoExternal = (
 					}
 
 					if (
-						parts.length > 2 && existsSync(join(monoRoot, parts[0]!, parts[1]!))
+						parts.length > 2 &&
+						existsSync(join(monoRoot, parts[0]!, parts[1]!))
 					) {
 						if (parts[2] !== "jsx-runtime") {
 							throw new Error(

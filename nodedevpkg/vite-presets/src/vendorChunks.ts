@@ -45,7 +45,10 @@ export const vendorChunks = (vendorGroups: ChunksGroups = {}): Plugin => {
 						.map((p) => vendorPkgName(p))
 						.filter((v) => v && v !== pkgName)
 						.forEach((dep) => {
-							usedBy[dep] = uniq([...(usedBy[dep] || ([] as string[])), pkgName]);
+							usedBy[dep] = uniq([
+								...(usedBy[dep] || ([] as string[])),
+								pkgName,
+							]);
 						});
 
 					return;

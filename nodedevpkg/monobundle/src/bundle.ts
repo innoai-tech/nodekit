@@ -237,15 +237,15 @@ dist/
 		JSON.stringify(
 			{
 				...pkg,
-				dependencies: isEmpty(pkg["dependencies"]) ? undefined : (
-					pkg["dependencies"] as { [k: string]: string }
-				),
-				peerDependencies: isEmpty(pkg["peerDependencies"]) ? undefined : (
-					pkg["peerDependencies"] as { [k: string]: string }
-				),
-				devDependencies: isEmpty(pkg["devDependencies"]) ? undefined : (
-					pkg["devDependencies"] as { [k: string]: string }
-				),
+				dependencies: isEmpty(pkg["dependencies"])
+					? undefined
+					: (pkg["dependencies"] as { [k: string]: string }),
+				peerDependencies: isEmpty(pkg["peerDependencies"])
+					? undefined
+					: (pkg["peerDependencies"] as { [k: string]: string }),
+				devDependencies: isEmpty(pkg["devDependencies"])
+					? undefined
+					: (pkg["devDependencies"] as { [k: string]: string }),
 				files: ["*.mjs", "*.d.ts"],
 				...exports,
 			},

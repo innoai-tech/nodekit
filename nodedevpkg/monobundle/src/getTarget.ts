@@ -1,7 +1,13 @@
 import browserslist from "browserslist";
 
 const SUPPORTED_BUILD_TARGETS = [
-	"es", "node", "chrome", "edge", "firefox", "ios", "safari",
+	"es",
+	"node",
+	"chrome",
+	"edge",
+	"firefox",
+	"ios",
+	"safari",
 ];
 
 export function getBuildTargets(target: string | string[]) {

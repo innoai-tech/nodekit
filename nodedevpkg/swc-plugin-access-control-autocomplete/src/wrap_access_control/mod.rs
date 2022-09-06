@@ -5,10 +5,10 @@ use serde::Deserialize;
 use std::collections::HashMap;
 use swc_core::{
     ast::{
-        CallExpr, Callee, Expr, Ident, ImportDecl, JSXElementName, JSXOpeningElement, Module,
-        ModuleDecl, ModuleItem, Pat, VarDeclarator,
+        CallExpr, Callee, Expr, Ident, ImportDecl, ImportNamedSpecifier, ImportSpecifier,
+        JSXElementName, JSXOpeningElement, Module, ModuleDecl, ModuleExportName, ModuleItem, Pat,
+        Str, VarDeclarator,
     },
-    ast::{ImportNamedSpecifier, ImportSpecifier, ModuleExportName, Str},
     common::util::take::Take,
     common::{Spanned, DUMMY_SP},
     utils::ExprFactory,

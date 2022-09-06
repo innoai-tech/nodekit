@@ -144,12 +144,16 @@ const getRequestTypes = (f: Genfile, method: string, path: string, op: any) => {
 
 	return {
 		requestObject,
-		requestType: emptyType ? "void" : intersectionOf(
-			...[
-				dumpObj(requestParameters),
-				...(anyOfBody.length ? [unionOf(...anyOfBody.map((v) => dumpObj(v)))] : []),
-			],
-		),
+		requestType: emptyType
+			? "void"
+			: intersectionOf(
+					...[
+						dumpObj(requestParameters),
+						...(anyOfBody.length
+							? [unionOf(...anyOfBody.map((v) => dumpObj(v)))]
+							: []),
+					],
+			  ),
 		responseType: typeFromJSONSchema(f, getRespBodySchema(op.responses)),
 		requestUsed,
 		emptyType,

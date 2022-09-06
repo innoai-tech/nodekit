@@ -20,7 +20,10 @@ export const createFetcher = ({
 			const reqInit: RequestInit = {
 				method: requestConfig.method,
 				headers: requestConfig.headers || {},
-				body: transformRequestBody(requestConfig.body, requestConfig.headers || {}),
+				body: transformRequestBody(
+					requestConfig.body,
+					requestConfig.headers || {},
+				),
 			};
 
 			return fetch(
