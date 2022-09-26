@@ -1,4 +1,4 @@
-import { test, expect } from "vitest";
+import { test, describe, expect } from "vitest";
 import { useObservable } from "..";
 import { act, renderHook } from "@testing-library/react";
 import { BehaviorSubject } from "rxjs";
@@ -6,7 +6,7 @@ import { BehaviorSubject } from "rxjs";
 /**
  *  @vitest-environment jsdom
  **/
-test("When render hook with BehaviorSubject, should use default value", () => {
+describe("When render hook with BehaviorSubject, should use default value", () => {
 	const s$ = new BehaviorSubject(1);
 	const { result } = renderHook(() => useObservable(s$));
 	expect(result.current).toBe(1);

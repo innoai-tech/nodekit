@@ -1,17 +1,6 @@
 import {isFunction} from "@innoai-tech/lodash";
-import {
-    BehaviorSubject,
-    from,
-    Observable,
-    of,
-    Subject,
-} from "rxjs";
-import {
-    tap,
-    mergeMap,
-    catchError,
-    ignoreElements,
-} from "rxjs/operators"
+import {BehaviorSubject, from, Observable, of, Subject} from "rxjs";
+import {tap, mergeMap, catchError, ignoreElements} from "rxjs/operators";
 import type {
     Fetcher,
     FetcherErrorResponse,
@@ -19,7 +8,30 @@ import type {
     RequestConfigCreator,
 } from "./fetcher";
 
-export class RequestSubject<TInputs, TBody, TError> extends Observable<FetcherResponse<TInputs, TBody>> {
+
+export interface StandardRespError {
+    code: number;
+    msg: string;
+    desc: string;
+}
+
+export interface RequestSubject<TInputs, TBody, TError> extends Observable<FetcherResponse<TInputs, TBody>> {
+    requesting$: BehaviorSubject<boolean>
+    error$: Subject<FetcherErrorResponse<TInputs, TError>>
+
+    next(inputs: TInputs | ((prevInputs?: TInputs) => TInputs)): void
+
+    toHref(value: TInputs): string
+}
+
+export const createRequestSubject = <TInputs, TBody, TError>(
+    createConfig: RequestConfigCreator<TInputs, TBody>,
+    fetcher: Fetcher
+): RequestSubject<TInputs, TBody, TError> => {
+    return new ReqSubject(createConfig, fetcher)
+}
+
+class ReqSubject<TInputs, TBody, TError> extends Observable<FetcherResponse<TInputs, TBody>> implements RequestSubject<TInputs, TBody, TError> {
     requesting$ = new BehaviorSubject<boolean>(false);
     error$ = new Subject<FetcherErrorResponse<TInputs, TError>>();
 
@@ -27,8 +39,8 @@ export class RequestSubject<TInputs, TBody, TError> extends Observable<FetcherRe
     private _input$ = new Subject<TInputs>();
 
     constructor(
-        private fetcher: Fetcher,
         private createConfig: RequestConfigCreator<TInputs, TBody>,
+        private fetcher: Fetcher,
     ) {
         super((subscriber) => {
             return this._success$.subscribe(subscriber);
@@ -39,11 +51,13 @@ export class RequestSubject<TInputs, TBody, TError> extends Observable<FetcherRe
         mergeMap((input) => {
             this.requesting$.next(true);
 
-            return from(this.fetcher.request<TInputs, TBody>(this.createConfig(input))).pipe(
+            return from(
+                this.fetcher.request<TInputs, TBody>(this.createConfig(input)),
+            ).pipe(
                 tap((resp) => this._success$.next(resp)),
                 catchError((errorResp) => {
                     this.error$.next(errorResp);
-                    return of(errorResp)
+                    return of(errorResp);
                 }),
             );
         }),
@@ -51,13 +65,15 @@ export class RequestSubject<TInputs, TBody, TError> extends Observable<FetcherRe
             this.requesting$.next(false);
         }),
         ignoreElements(),
-    ).subscribe()
+    ).subscribe();
 
-    private _prevInputs?: TInputs
+    private _prevInputs?: TInputs;
 
     next(inputs: TInputs | ((prevInputs?: TInputs) => TInputs)) {
         this._input$.next(
-            this._prevInputs = (isFunction(inputs) ? inputs(this._prevInputs) : inputs),
+            (this._prevInputs = isFunction(inputs)
+                ? inputs(this._prevInputs)
+                : inputs),
         );
     }
 
@@ -66,8 +82,3 @@ export class RequestSubject<TInputs, TBody, TError> extends Observable<FetcherRe
     }
 }
 
-export interface StandardRespError {
-    code: number;
-    msg: string;
-    desc: string;
-}
