@@ -12,6 +12,17 @@
         "Cargo.toml"
       ]
     },
+    "dev": {
+      "dependsOn": [
+        "^build",
+        "build"
+      ],
+      "inputs": [
+        "src/*",
+        "package.json",
+        "Cargo.toml"
+      ]
+    },
     "test": {
       "dependsOn": [
         "^build"

@@ -11,6 +11,9 @@ serve:
 serve.base.href:
 	go run ./cmd/webappserve serve --base-href=/example --root=./cmd/webappserve/example/base
 
+dev:
+	pnpm exec turbo run dev --filter=example
+
 tidy:
 	go mod tidy
 

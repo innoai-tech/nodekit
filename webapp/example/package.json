@@ -1,0 +1,15 @@
+{
+  "name": "@webapp/example",
+  "private": true,
+  "version": "0.0.0",
+  "dependencies": {
+    "fp-ts": "2.x"
+  },
+  "license": "MIT",
+  "scripts": {
+    "build": "vite build --mode=production --config=vite.config.ts",
+    "dev": "vite --config=vite.config.ts",
+    "lint": "rome check --apply-suggested ./src && rome format --write ./src"
+  },
+  "type": "module"
+}
