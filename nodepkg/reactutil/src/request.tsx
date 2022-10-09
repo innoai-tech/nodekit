@@ -49,7 +49,7 @@ export const FetcherProvider = ({fetcher, children}: {
     );
 };
 
-const useFetcher = () => {
+export const useFetcher = () => {
     return (
         useContext(FetcherContext).fetcher ||
         createFetcher({

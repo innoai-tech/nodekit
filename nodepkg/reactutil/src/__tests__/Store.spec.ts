@@ -14,15 +14,18 @@ describe("When render hook with BehaviorSubject, should use default value", () =
         name: string;
     }
 
-    const logonUser$ = store$.domain<LogonUser>("user", {} as any);
+    const defaults = {} as any
+    const logonUser$ = store$.domain<LogonUser>("user", defaults);
 
-    test("when first render, should return undefined.", () => {
+    test("when first render, should return default object.", () => {
         const {result} = renderHook(() => useObservable(logonUser$));
-        expect(result.current).toBe(undefined);
+        expect(result.current).toBe(defaults);
     });
 
     test("when set state, should return updated date.", () => {
-        act(() => logonUser$.next((_) => ({name: "hello"})));
+        act(() => logonUser$.next((_) => ({
+            name: "hello",
+        })));
         const {result, unmount} = renderHook(() => useObservable(logonUser$));
         unmount();
 

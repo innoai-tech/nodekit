@@ -1,6 +1,6 @@
 {
   "name": "@innoai-tech/reactutil",
-  "version": "0.3.11",
+  "version": "0.3.16",
   "monobundle": {
     "exports": {
       ".": "./src/index.ts"

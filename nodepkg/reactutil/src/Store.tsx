@@ -3,59 +3,6 @@ import {createContext, ReactNode, useContext, useEffect, useMemo} from "react";
 import {BehaviorSubject, Observable, Subscription} from "rxjs";
 import {map as rxMap, distinctUntilChanged} from "rxjs/operators";
 
-export interface Persister {
-    hydrate: () => any;
-    connect: (store$: Store) => Subscription;
-}
-
-export class LocalStoragePersister implements Persister {
-    static create(name: string): LocalStoragePersister {
-        return new LocalStoragePersister(name);
-    }
-
-    constructor(private name: string) {
-    }
-
-    private load(key: string, defaults: any = {}) {
-        try {
-            const data = localStorage.getItem(`${this.name}$${key}`);
-            return JSON.parse(data || "");
-        } catch (_) {
-            return defaults;
-        }
-    }
-
-    private save(key: string, data: any) {
-        try {
-            localStorage.setItem(`${this.name}$${key}`, JSON.stringify(data));
-        } catch (_) {
-        }
-    }
-
-    private _state: { [k: string]: any } = {};
-
-    connect(store$: Store) {
-        return store$.subscribe((state) => {
-            const keys = Object.keys(state);
-            for (const k of keys) {
-                if (state[k] !== this._state[k]) {
-                    this.save(k, (this._state[k] = state[k]));
-                }
-            }
-            this.save("_keys", keys);
-        });
-    }
-
-    hydrate() {
-        const keys = this.load("_keys", []);
-        const state: { [k: string]: any } = {};
-        for (const k of keys) {
-            state[k] = this.load(k, {"meta": {}});
-        }
-        return (this._state = state);
-    }
-}
-
 export interface DomainData<T, M extends object> {
     data: T;
     meta: M;
@@ -112,25 +59,23 @@ export class LinkedBehaviorSubject<T> extends Observable<T> {
 
     get value(): T {
         if (isUndefined(this._value)) {
-            this._value = get(this.from$.value, this.keyPath);
+            this._value = this._getOrigin(this.origin$.value);
         }
-        return this._value || this.defaults;
+        return this._value!;
     }
 
-    next(v: T | ((prev: T) => T)) {
-        const action = (state: any) => {
-            this._value = isFunction(v) ? v(this.value) : v;
-            return replace(state, this.keyPath, this._value);
-        }
-        action.keyPath = this.keyPath
-        this.from$.next(action);
-    }
+    _getOrigin: (state: any) => T
+    _replaceOrigin: (state: any, value: T) => any
 
-    constructor(private from$: BehaviorSubject<any>, private keyPath: string[], private defaults: T) {
+    constructor(
+        private origin$: BehaviorSubject<any>,
+        keyPath: string[],
+        defaults: T,
+    ) {
         super((s) => {
-            return this.from$.pipe(
+            return this.origin$.pipe(
                 rxMap((state) => {
-                    const value = get(state, this.keyPath);
+                    const value = this._getOrigin(state);
                     if (value !== this._value) {
                         this._value = value;
                     }
@@ -139,6 +84,13 @@ export class LinkedBehaviorSubject<T> extends Observable<T> {
                 distinctUntilChanged(),
             ).subscribe(s);
         });
+
+        this._getOrigin = (state: any) => get(state, keyPath, defaults)
+        this._replaceOrigin = (state: any, value: T) => replace(state, keyPath, value)
+    }
+
+    next(v: T | ((prev: T) => T)) {
+        this.origin$.next((state: any) => this._replaceOrigin(state, this._value = isFunction(v) ? v(this.value) : v));
     }
 }
 
@@ -175,3 +127,57 @@ export const StoreProvider = ({name, children}: {
         </StoreContext.Provider>
     );
 };
+
+
+export interface Persister {
+    hydrate: () => any;
+    connect: (store$: Store) => Subscription;
+}
+
+export class LocalStoragePersister implements Persister {
+    static create(name: string): LocalStoragePersister {
+        return new LocalStoragePersister(name);
+    }
+
+    constructor(private name: string) {
+    }
+
+    private load(key: string, defaults?: any) {
+        try {
+            const data = localStorage.getItem(`${this.name}$${key}`);
+            return JSON.parse(data || "");
+        } catch (_) {
+            return defaults;
+        }
+    }
+
+    private save(key: string, data: any) {
+        try {
+            localStorage.setItem(`${this.name}$${key}`, JSON.stringify(data));
+        } catch (_) {
+        }
+    }
+
+    private _state: { [k: string]: any } = {};
+
+    connect(store$: Store) {
+        return store$.subscribe((state) => {
+            const keys = Object.keys(state);
+            for (const k of keys) {
+                if (state[k] !== this._state[k]) {
+                    this.save(k, (this._state[k] = state[k]));
+                }
+            }
+            this.save("_keys", keys);
+        });
+    }
+
+    hydrate() {
+        const keys = this.load("_keys", []);
+        const state: { [k: string]: any } = {};
+        for (const k of keys) {
+            state[k] = this.load(k);
+        }
+        return (this._state = state);
+    }
+}
