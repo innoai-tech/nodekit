@@ -16,6 +16,7 @@ export interface StandardRespError {
 }
 
 export interface RequestSubject<TInputs, TBody, TError> extends Observable<FetcherResponse<TInputs, TBody>> {
+    operationID: string
     requesting$: BehaviorSubject<boolean>
     error$: Subject<FetcherErrorResponse<TInputs, TError>>
 
@@ -45,6 +46,10 @@ class ReqSubject<TInputs, TBody, TError> extends Observable<FetcherResponse<TInp
         super((subscriber) => {
             return this._success$.subscribe(subscriber);
         });
+    }
+
+    get operationID() {
+        return this.createConfig.operationID;
     }
 
     unsubscribe = this._input$.pipe(
