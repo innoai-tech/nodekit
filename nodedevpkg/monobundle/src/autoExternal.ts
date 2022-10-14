@@ -8,166 +8,166 @@ import type { InputOptions } from "rollup";
 const builtIns = process.binding("natives");
 
 const isPkgUsed = (pkg: string, id: string) => {
-	return id === pkg || `@types/${id}` === pkg || id.startsWith(`${pkg}/`);
+  return id === pkg || `@types/${id}` === pkg || id.startsWith(`${pkg}/`);
 };
 
 export const createAutoExternal = (
-	monoRoot: string,
-	pkg: any,
-	opts: {
-		logger?: ReturnType<typeof import("./log").createLogger>;
-		sideDeps?: string[];
-	},
+  monoRoot: string,
+  pkg: any,
+  opts: {
+    logger?: ReturnType<typeof import("./log").createLogger>;
+    sideDeps?: string[];
+  }
 ) => {
-	const logger = opts.logger;
-	const sideDeps = opts.sideDeps || [];
+  const logger = opts.logger;
+  const sideDeps = opts.sideDeps || [];
 
-	const isSideDep = (pkgName: string) => {
-		if (sideDeps.length === 0) {
-			return false;
-		}
-		return sideDeps.some(
-			(glob) => pkgName === glob || minimatch(pkgName, glob),
-		);
-	};
+  const isSideDep = (pkgName: string) => {
+    if (sideDeps.length === 0) {
+      return false;
+    }
+    return sideDeps.some(
+      (glob) => pkgName === glob || minimatch(pkgName, glob)
+    );
+  };
 
-	let deps: string[] = [];
+  let deps: string[] = [];
 
-	const usedPkgs: any = {};
+  const usedPkgs: any = {};
 
-	if (pkg.dependencies) {
-		deps = [...deps, ...Object.keys(pkg.dependencies)];
-	}
+  if (pkg.dependencies) {
+    deps = [...deps, ...Object.keys(pkg.dependencies)];
+  }
 
-	if (pkg.peerDependencies) {
-		deps = [...deps, ...Object.keys(pkg.peerDependencies)];
-	}
+  if (pkg.peerDependencies) {
+    deps = [...deps, ...Object.keys(pkg.peerDependencies)];
+  }
 
-	const builtins = Object.keys(builtIns);
+  const builtins = Object.keys(builtIns);
 
-	const warningAndGetUnused = () => {
-		const used = Object.keys(usedPkgs);
+  const warningAndGetUnused = () => {
+    const used = Object.keys(usedPkgs);
 
-		const unused = {
-			deps: {} as { [k: string]: boolean },
-			peerDeps: {} as { [k: string]: boolean },
-		};
+    const unused = {
+      deps: {} as { [k: string]: boolean },
+      peerDeps: {} as { [k: string]: boolean },
+    };
 
-		if (pkg.dependencies) {
-			Object.keys(pkg.dependencies).forEach((dep) => {
-				if (isSideDep(dep)) {
-					return;
-				}
+    if (pkg.dependencies) {
+      Object.keys(pkg.dependencies).forEach((dep) => {
+        if (isSideDep(dep)) {
+          return;
+        }
 
-				if (!used.some((id) => isPkgUsed(dep, id))) {
-					unused.deps[dep] = true;
-				}
-			});
-		}
+        if (!used.some((id) => isPkgUsed(dep, id))) {
+          unused.deps[dep] = true;
+        }
+      });
+    }
 
-		if (pkg.peerDependencies) {
-			Object.keys(pkg.peerDependencies).forEach((dep) => {
-				if (isSideDep(dep)) {
-					return;
-				}
+    if (pkg.peerDependencies) {
+      Object.keys(pkg.peerDependencies).forEach((dep) => {
+        if (isSideDep(dep)) {
+          return;
+        }
 
-				if (!used.some((id) => isPkgUsed(dep, id))) {
-					unused.peerDeps[dep] = true;
-				}
-			});
-		}
+        if (!used.some((id) => isPkgUsed(dep, id))) {
+          unused.peerDeps[dep] = true;
+        }
+      });
+    }
 
-		return unused;
-	};
+    return unused;
+  };
 
-	const autoExternal = (validate = true) => ({
-		name: "auto-external",
+  const autoExternal = (validate = true) => ({
+    name: "auto-external",
 
-		options(opts: InputOptions) {
-			const external = (
-				id: string,
-				importer: string | undefined,
-				isResolved: boolean,
-			) => {
-				if (
-					typeof opts.external === "function" &&
-					opts.external(id, importer, isResolved)
-				) {
-					return true;
-				}
+    options(opts: InputOptions) {
+      const external = (
+        id: string,
+        importer: string | undefined,
+        isResolved: boolean
+      ) => {
+        if (
+          typeof opts.external === "function" &&
+          opts.external(id, importer, isResolved)
+        ) {
+          return true;
+        }
 
-				if (Array.isArray(opts.external) && opts.external.includes(id)) {
-					return true;
-				}
+        if (Array.isArray(opts.external) && opts.external.includes(id)) {
+          return true;
+        }
 
-				if (!(id.startsWith(".") || id.startsWith("/"))) {
-					const parts = id.split("/");
+        if (!(id.startsWith(".") || id.startsWith("/"))) {
+          const parts = id.split("/");
 
-					if (parts.length > 2 && last(parts) === "macro") {
-						// import types of /macro
-						return false;
-					}
+          if (parts.length > 2 && last(parts) === "macro") {
+            // import types of /macro
+            return false;
+          }
 
-					if (
-						parts.length > 2 &&
-						existsSync(join(monoRoot, parts[0]!, parts[1]!))
-					) {
-						if (parts[2] !== "jsx-runtime") {
-							throw new Error(
-								`import error at ${importer}, don't import sub file ${id}.`,
-							);
-						}
-					}
+          if (
+            parts.length > 2 &&
+            existsSync(join(monoRoot, parts[0]!, parts[1]!))
+          ) {
+            if (parts[2] !== "jsx-runtime") {
+              throw new Error(
+                `import error at ${importer}, don't import sub file ${id}.`
+              );
+            }
+          }
 
-					const isDep = deps.some((idx) => id.startsWith(idx));
-					const isBuiltIn = builtins.some((idx) => id.startsWith(idx));
+          const isDep = deps.some((idx) => id.startsWith(idx));
+          const isBuiltIn = builtins.some((idx) => id.startsWith(idx));
 
-					if (isDep) {
-						usedPkgs[id] = true;
-					}
+          if (isDep) {
+            usedPkgs[id] = true;
+          }
 
-					if (isBuiltIn || isDep) {
-						return true;
-					}
+          if (isBuiltIn || isDep) {
+            return true;
+          }
 
-					if (validate) {
-						logger?.danger(
-							`missing "${id}" in dependencies or peerDependencies`,
-						);
-					}
+          if (validate) {
+            logger?.danger(
+              `missing "${id}" in dependencies or peerDependencies`
+            );
+          }
 
-					return true;
-				}
+          return true;
+        }
 
-				return false;
-			};
+        return false;
+      };
 
-			return Object.assign({}, opts, { external });
-		},
+      return Object.assign({}, opts, { external });
+    },
 
-		resolveId(id: string, importer: any) {
-			if (!importer) {
-				return;
-			}
+    resolveId(id: string, importer: any) {
+      if (!importer) {
+        return;
+      }
 
-			const parts = resolve(dirname(importer), id).split("/build/");
+      const parts = resolve(dirname(importer), id).split("/build/");
 
-			if (parts.length !== 2) {
-				return;
-			}
+      if (parts.length !== 2) {
+        return;
+      }
 
-			if (existsSync(join(monoRoot, parts[1]!, "package.json"))) {
-				return {
-					id: parts[1],
-					external: true,
-				};
-			}
+      if (existsSync(join(monoRoot, parts[1]!, "package.json"))) {
+        return {
+          id: parts[1],
+          external: true,
+        };
+      }
 
-			return;
-		},
-	});
+      return;
+    },
+  });
 
-	autoExternal.warningAndGetUnused = warningAndGetUnused;
+  autoExternal.warningAndGetUnused = warningAndGetUnused;
 
-	return autoExternal;
+  return autoExternal;
 };

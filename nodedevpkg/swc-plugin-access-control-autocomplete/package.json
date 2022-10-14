@@ -2,7 +2,7 @@
   "name": "@innoai-tech/swc-plugin-access-control-autocomplete",
   "version": "0.1.4",
   "devDependencies": {
-    "@swc/core": "^1.3.3"
+    "@swc/core": "^1.3.11"
   },
   "files": [
     "target/wasm32-wasi/release/swc_plugin_access_control_autocomplete.wasm"
