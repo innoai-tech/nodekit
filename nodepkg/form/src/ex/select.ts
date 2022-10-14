@@ -1,20 +1,27 @@
-import {ExpressionBuildFunc, isValidBuildExprFn, register} from "../Expression";
+import {
+  ExpressionBuildFunc,
+  isValidBuildExprFn,
+  register,
+} from "../Expression";
 
-export const select = register("select", <TTarget extends any>(
-    ...buildExprFns: ExpressionBuildFunc<TTarget, boolean>[]
-) =>
+export const select = register(
+  "select",
+  <TTarget extends any>(
+      ...buildExprFns: ExpressionBuildFunc<TTarget, boolean>[]
+    ) =>
     (ctx) => {
-        for (const buildExprFn of buildExprFns) {
-            const fn = buildExprFn(ctx);
+      for (const buildExprFn of buildExprFns) {
+        const fn = buildExprFn(ctx);
 
-            if (!isValidBuildExprFn(fn)) {
-                continue;
-            }
-
-            if (fn) {
-                return fn;
-            }
+        if (!isValidBuildExprFn(fn)) {
+          continue;
         }
 
-        return null;
-    });
+        if (fn) {
+          return fn;
+        }
+      }
+
+      return null;
+    }
+);

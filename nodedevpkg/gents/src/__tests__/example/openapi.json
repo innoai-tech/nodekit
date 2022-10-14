@@ -55,7 +55,9 @@
                 }
               }
             },
-            "x-status-returnErrors": ["StatusError{key=\"InvalidContentType\",msg=\"InvalidContentType\",code=400}"]
+            "x-status-returnErrors": [
+              "StatusError{key=\"InvalidContentType\",msg=\"InvalidContentType\",code=400}"
+            ]
           },
           "500": {
             "description": "",
@@ -66,7 +68,9 @@
                 }
               }
             },
-            "x-status-returnErrors": ["StatusError{key=\"RegistryError\",msg=\"RegistryError\",code=500}"]
+            "x-status-returnErrors": [
+              "StatusError{key=\"RegistryError\",msg=\"RegistryError\",code=500}"
+            ]
           }
         }
       }
@@ -99,7 +103,9 @@
                 }
               }
             },
-            "x-status-returnErrors": ["StatusError{key=\"InvalidDigest\",msg=\"InvalidDigest\",code=400}"]
+            "x-status-returnErrors": [
+              "StatusError{key=\"InvalidDigest\",msg=\"InvalidDigest\",code=400}"
+            ]
           },
           "404": {
             "description": "",
@@ -110,7 +116,9 @@
                 }
               }
             },
-            "x-status-returnErrors": ["StatusError{key=\"DigestNotFound\",msg=\"DigestNotFound\",code=404}"]
+            "x-status-returnErrors": [
+              "StatusError{key=\"DigestNotFound\",msg=\"DigestNotFound\",code=404}"
+            ]
           },
           "500": {
             "description": "",
@@ -121,7 +129,9 @@
                 }
               }
             },
-            "x-status-returnErrors": ["StatusError{key=\"RegistryError\",msg=\"RegistryError\",code=500}"]
+            "x-status-returnErrors": [
+              "StatusError{key=\"RegistryError\",msg=\"RegistryError\",code=500}"
+            ]
           }
         }
       }
@@ -154,7 +164,9 @@
                 }
               }
             },
-            "x-status-returnErrors": ["StatusError{key=\"RequestK8sFailed\",msg=\"RequestK8sFailed\",code=500}"]
+            "x-status-returnErrors": [
+              "StatusError{key=\"RequestK8sFailed\",msg=\"RequestK8sFailed\",code=500}"
+            ]
           }
         }
       },
@@ -247,7 +259,9 @@
                 }
               }
             },
-            "x-status-returnErrors": ["StatusError{key=\"RequestK8sFailed\",msg=\"RequestK8sFailed\",code=500}"]
+            "x-status-returnErrors": [
+              "StatusError{key=\"RequestK8sFailed\",msg=\"RequestK8sFailed\",code=500}"
+            ]
           }
         }
       },
@@ -292,7 +306,9 @@
                 }
               }
             },
-            "x-status-returnErrors": ["StatusError{key=\"RequestK8sFailed\",msg=\"RequestK8sFailed\",code=500}"]
+            "x-status-returnErrors": [
+              "StatusError{key=\"RequestK8sFailed\",msg=\"RequestK8sFailed\",code=500}"
+            ]
           }
         }
       }
@@ -777,7 +793,15 @@
             "x-go-field-name": "Sources"
           }
         },
-        "required": ["code", "key", "msg", "desc", "canBeTalkError", "sources", "errorFields"],
+        "required": [
+          "code",
+          "key",
+          "msg",
+          "desc",
+          "canBeTalkError",
+          "sources",
+          "errorFields"
+        ],
         "x-go-vendor-type": "github.com/octohelm/courier/pkg/statuserror.StatusErr"
       },
       "TypesUid": {

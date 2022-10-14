@@ -7,12 +7,12 @@ import { BehaviorSubject } from "rxjs";
  *  @vitest-environment jsdom
  **/
 describe("When render hook with BehaviorSubject, should use default value", () => {
-	const s$ = new BehaviorSubject(1);
-	const { result } = renderHook(() => useObservable(s$));
-	expect(result.current).toBe(1);
+  const s$ = new BehaviorSubject(1);
+  const { result } = renderHook(() => useObservable(s$));
+  expect(result.current).toBe(1);
 
-	test("when state changed, should rerender", () => {
-		act(() => s$.next(2));
-		expect(result.current).toBe(2);
-	});
+  test("when state changed, should rerender", () => {
+    act(() => s$.next(2));
+    expect(result.current).toBe(2);
+  });
 });

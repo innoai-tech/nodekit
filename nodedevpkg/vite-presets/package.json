@@ -48,7 +48,7 @@
     "directory": "nodedevpkg/vite-presets"
   },
   "scripts": {
-    "lint": "rome check --apply-suggested ./src && rome format --write ./src",
+    "lint": "prettier --write .",
     "build": "monobundle",
     "prepublishOnly": "pnpm run build"
   },

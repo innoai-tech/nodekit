@@ -1,11 +1,16 @@
 {
   "name": "@webapp/example",
-  "private": true,
   "version": "0.0.0",
   "dependencies": {
     "fp-ts": "2.x"
   },
   "license": "MIT",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@github.com:innoai-tech/nodekit.git",
+    "directory": "webapp/example"
+  },
   "scripts": {
     "build": "vite build --mode=production --config=vite.config.ts",
     "dev": "vite --config=vite.config.ts",

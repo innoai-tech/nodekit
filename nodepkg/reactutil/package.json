@@ -38,9 +38,9 @@
   },
   "scripts": {
     "build": "monobundle",
-    "test": "vitest --run",
+    "test": "vitest --run --passWithNoTests",
     "prepublishOnly": "pnpm run build",
-    "lint": "rome check --apply-suggested ./src && rome format --write ./src"
+    "lint": "prettier --write ."
   },
   "type": "module"
 }
