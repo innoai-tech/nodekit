@@ -88,10 +88,6 @@ actions: go: golang.#Project & {
 			]
 		}
 	}
-
-	devkit: load: host: client.network."unix:///var/run/docker.sock".connect
-	ship: load: host:   client.network."unix:///var/run/docker.sock".connect
 }
 
-client: network: "unix:///var/run/docker.sock": connect: dagger.#Socket
 client: filesystem: ".build/output": write: contents: actions.go.archive.output

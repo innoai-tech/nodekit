@@ -10,9 +10,9 @@
     }
   },
   "dependencies": {
-    "node-fetch": "^3.2.10",
+    "@innoai-tech/config": "workspace:*",
     "@innoai-tech/lodash": "workspace:*",
-    "@innoai-tech/config": "workspace:*"
+    "node-fetch": "^3.3.0"
   },
   "devDependencies": {
     "@innoai-tech/fetcher": "workspace:*"

@@ -1,9 +1,6 @@
 export GIT_SHA ?= $(shell git rev-parse HEAD)
 export GIT_REF ?= HEAD
 
-ship:
-	dagger do go ship pushx
-
 serve:
 	go run ./cmd/webappserve serve --help
 	go run ./cmd/webappserve serve --root=./cmd/webappserve/example/normal
@@ -42,3 +39,12 @@ build:
 
 pub:
 	pnpm -r publish --no-git-checks
+
+ship:
+	dagger do go ship pushx
+
+#save:
+	#dagger --log-level=debug do go ship save linux/arm64
+#
+#devkit.save:
+#	dagger --log-level=debug do go devkit save linux/arm64
