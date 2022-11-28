@@ -113,7 +113,7 @@ export class LinkedBehaviorSubject<T> extends Observable<T> {
 export class Domain<T, M extends object> extends LinkedBehaviorSubject<T> {
   meta$: LinkedBehaviorSubject<M>;
 
-  constructor(store$: Store, private name: string, initials: T) {
+  constructor(store$: Store, public name: string, initials: T) {
     super(store$, [name, "data"], initials);
 
     this.meta$ = new LinkedBehaviorSubject<M>(
