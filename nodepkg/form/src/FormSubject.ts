@@ -82,7 +82,7 @@ export class FormSubject<T extends object> extends Observable<T> {
     const schema = get(
       { rootSchema: this.schema },
       keyPathToSchemaKeyPath(keyPath),
-      {}
+      {} as Schema
     );
 
     walkExpression(schema.need || [], (name, args) => {
