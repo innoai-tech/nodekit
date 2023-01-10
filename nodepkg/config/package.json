@@ -10,8 +10,8 @@
   },
   "dependencies": {
     "@innoai-tech/lodash": "workspace:*",
-    "esbuild": "^0.16.10",
-    "vite": "^4.0.3"
+    "esbuild": "^0.16.16",
+    "vite": "^4.0.4"
   },
   "browserslist": [
     "defaults"

@@ -1,6 +1,6 @@
 {
   "name": "@innoai-tech/vite-presets",
-  "version": "0.2.0",
+  "version": "0.3.3",
   "monobundle": {
     "pipeline": {
       "test": false
@@ -10,20 +10,18 @@
     }
   },
   "dependencies": {
-    "@innoai-tech/lodash": "^0.2.0",
-    "@rollup/pluginutils": "^5.0.2",
-    "@vitejs/plugin-react": "^3.0.0",
-    "load-tsconfig": "^0.2.3"
+    "@innoai-tech/lodash": "workspace:^0.2.0",
+    "@vitejs/plugin-react": "^3.0.1",
+    "minimatch": "^5.1.2",
+    "@types/minimatch": "^5.1.2"
   },
   "peerDependencies": {
-    "@swc/core": "^1.x",
-    "vite": "^3.x"
+    "vite": "^4.x"
   },
   "devDependencies": {
-    "@swc/core": "^1.3.24",
-    "esbuild": "^0.16.10",
-    "rollup": "^3.8.1",
-    "vite": "^4.0.3"
+    "esbuild": "^0.16.16",
+    "rollup": "^3.9.1",
+    "vite": "^4.0.4"
   },
   "exports": {
     ".": {
