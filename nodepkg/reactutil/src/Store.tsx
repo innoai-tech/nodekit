@@ -7,7 +7,7 @@ import {
     useMemo,
 } from "react";
 import {BehaviorSubject, Observable, Subscription} from "rxjs";
-import {map as rxMap, distinctUntilChanged} from "rxjs/operators";
+import {map as rxMap, distinctUntilChanged} from "rxjs";
 
 export interface DomainData<T, M extends object> {
     data: T;
@@ -30,7 +30,7 @@ export class Store extends BehaviorSubject<{
         return new Domain(this, name, initial);
     }
 
-    override next(v: any | ((prev: any) => any)) {
+    override next = (v: any | ((prev: any) => any)) => {
         super.next(isFunction(v) ? v(this.value) : v);
     }
 }
@@ -100,7 +100,7 @@ export class LinkedBehaviorSubject<T> extends Observable<T> {
             replace(state, keyPath, value);
     }
 
-    next(v: T | ((prev: T) => T)) {
+    next = (v: T | ((prev: T) => T)) => {
         this.origin$.next((state: any) =>
             this._replaceOrigin(
                 state,

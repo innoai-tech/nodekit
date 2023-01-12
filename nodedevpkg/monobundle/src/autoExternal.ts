@@ -132,11 +132,11 @@ export const createAutoExternal = (
 
           if (validate) {
             logger?.danger(
-              `missing "${id}" in dependencies or peerDependencies`
+              `"${id}" is not in dependencies or peerDependencies, and will be bundled.`
             );
           }
 
-          return true;
+          return false;
         }
 
         return false;
