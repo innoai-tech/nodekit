@@ -2,7 +2,11 @@
   "name": "@webapp/example",
   "version": "0.0.0",
   "dependencies": {
-    "fp-ts": "~2.13.1"
+    "@innoai-tech/reactutil": "workspace:*",
+    "@innoai-tech/lodash": "workspace:*"
+  },
+  "devDependencies": {
+    "@innoai-tech/vite-presets": "workspace:*"
   },
   "license": "MIT",
   "private": true,

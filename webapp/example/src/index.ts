@@ -1,7 +1,6 @@
-import { pipeable, array } from "fp-ts";
+import {map} from "@innoai-tech/lodash";
+import {useAsObservable} from "@innoai-tech/reactutil";
 
-pipeable.pipe(
-  [1, 2, 4],
-  array.map((v) => v * v),
-  console.log
-);
+console.log(useAsObservable);
+console.log(map([1, 2, 4], (v) => v * v));
+
