@@ -1,24 +1,28 @@
-import {useState} from "react";
-import {Observable, tap} from "rxjs";
+import {useMemo, useState} from "react";
+import {Subscription, BehaviorSubject, Observable, Subject, tap} from "rxjs";
 import {useObservableEffect} from "./useObservableEffect";
 
-export interface ObservableWithValue<T> extends Observable<T> {
-    value: T;
-}
-
-export function useObservableState<T extends any>(ob$: ObservableWithValue<T>): T;
+export function useObservableState<T extends any>(ob$: BehaviorSubject<T>): T;
 export function useObservableState<T extends any>(ob$: Observable<T>, initialValue?: T): T | undefined;
-export function useObservableState<T extends any>(ob$: Observable<T> | ObservableWithValue<T>, initialValue?: T): T | undefined {
-    const [s, up] = useState(() => {
-        initialValue ??= (ob$ as any).value;
-        return initialValue;
-    });
+export function useObservableState<T extends any>(ob$: Observable<T> | BehaviorSubject<T>, initialValue?: T): T | undefined {
+    const bridge = useMemo(() => ({
+        output$: new Subject<T>(),
+        value: null as (T | null),
+        input$: null as (Observable<T> | null),
+        subscription: null as (Subscription | null),
+    }), [])
 
-    useObservableEffect(
-        () => ob$.pipe(tap((resp) => up(resp))),
-        [ob$],
-    );
 
-    return s;
+    if (!Object.is(bridge.input$, ob$)) {
+        bridge.subscription?.unsubscribe()
+        bridge.subscription = ob$.pipe(tap((value) => bridge.value = value)).subscribe(bridge.output$)
+        bridge.input$ = ob$
+    }
+
+    const [value, up] = useState(() => bridge.value ?? initialValue);
+
+    useObservableEffect(() => bridge.output$.pipe(tap(up)))
+
+    return value;
 }
 

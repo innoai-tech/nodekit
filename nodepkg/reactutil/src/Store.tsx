@@ -14,11 +14,13 @@ export interface DomainData<T, M extends object> {
     meta: M;
 }
 
-export class Store extends BehaviorSubject<{
-    [domain: string]: DomainData<any, {}>;
-}> {
+export class Store extends BehaviorSubject<{ [domain: string]: DomainData<any, {}> }> {
+    static override create(initials: { [domain: string]: DomainData<any, {}> }) {
+        return new Store(initials)
+    }
+
     static persist(p: Persister) {
-        const store$ = new Store(p.hydrate());
+        const store$ = Store.create(p.hydrate());
         p.connect(store$);
         return store$;
     }

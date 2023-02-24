@@ -1,10 +1,10 @@
 import type {FunctionComponent, ReactElement} from "react";
-import type {Observable} from "rxjs";
-import {ObservableWithValue, useObservableState} from "./useObservableState";
+import type {BehaviorSubject, Observable} from "rxjs";
+import {useObservableState} from "./useObservableState";
 
 
 export function Subscribe<T extends any>(props: {
-    value$: ObservableWithValue<T>;
+    value$: BehaviorSubject<T>;
     children: (v: T) => ReactElement | null;
 }): ReturnType<FunctionComponent>;
 export function Subscribe<T extends any>(props: {
@@ -12,7 +12,7 @@ export function Subscribe<T extends any>(props: {
     children: (v: T | undefined) => ReactElement | null;
 }): ReturnType<FunctionComponent>;
 export function Subscribe<T extends any>(props: {
-    value$: ObservableWithValue<T> | Observable<T>;
+    value$: BehaviorSubject<T> | Observable<T>;
     children: (v: T | undefined) => ReturnType<FunctionComponent>;
 }): ReturnType<FunctionComponent> {
     return props.children(useObservableState<T>(props.value$));

@@ -8,18 +8,18 @@ import {get} from "@innoai-tech/lodash";
  *  @vitest-environment jsdom
  **/
 describe("When render hook with BehaviorSubject, should use default value", () => {
-    const store$ = new Store({});
+    const store$ = Store.create({});
 
     interface LogonUser {
         name: string;
     }
 
-    const defaults = {} as any;
+    const defaults = {"x": "-"} as any;
     const logonUser$ = store$.domain<LogonUser>("user", defaults);
 
     test("when first render, should return default object.", () => {
-        const {result} = renderHook(() => useObservableState(logonUser$));
-        expect(result.current).toBe(defaults);
+        const hook = renderHook(() => useObservableState(logonUser$));
+        expect(hook.result.current).toBe(defaults);
     });
 
     test("when set state, should return updated date.", () => {
@@ -28,10 +28,10 @@ describe("When render hook with BehaviorSubject, should use default value", () =
                 name: "hello",
             }))
         );
-        const {result, unmount} = renderHook(() => useObservableState(logonUser$));
-        unmount();
+        const hook = renderHook(() => useObservableState(logonUser$));
+        hook.unmount();
 
-        expect(result.current).toEqual({name: "hello"});
+        expect(hook.result.current).toEqual({name: "hello"});
         expect(store$.value["user"]!.data).toEqual({name: "hello"});
     });
 
