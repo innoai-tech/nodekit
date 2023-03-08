@@ -1,3 +1,13 @@
 {
-  "extends": "@innoai-tech/devconfig/tsconfig.json"
+  "extends": "@innoai-tech/devconfig/tsconfig.json",
+  "compilerOptions": {
+    "paths": {
+      "@innoai-tech/reactutil": [
+        "../../nodepkg/reactutil/src/index.ts"
+      ],
+      "@innoai-tech/vite-presets": [
+        "../../nodedevpkg/vite-presets/src/index.ts"
+      ]
+    }
+  }
 }

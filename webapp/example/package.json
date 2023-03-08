@@ -5,9 +5,6 @@
     "@innoai-tech/reactutil": "workspace:*",
     "@innoai-tech/lodash": "workspace:*"
   },
-  "devDependencies": {
-    "@innoai-tech/vite-presets": "workspace:*"
-  },
   "license": "MIT",
   "private": true,
   "repository": {
