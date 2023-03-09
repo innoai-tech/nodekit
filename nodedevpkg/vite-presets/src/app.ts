@@ -19,6 +19,6 @@ export const app = (
         c.resolve = c.resolve ?? {};
       }
     },
-    tsconfigPaths()
+    tsconfigPaths({})
   ];
 };

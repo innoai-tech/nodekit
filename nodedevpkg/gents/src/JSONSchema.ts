@@ -14,7 +14,7 @@ import {
   get,
   some,
   values,
-  take,
+  take
 } from "@innoai-tech/lodash";
 
 const isObjectType = (schema: any): boolean => schema.type === "object";
@@ -35,7 +35,7 @@ const typeRelationKeywords: { [k: string]: string[] } = {
     "dependentSchemas",
 
     "maxProperties",
-    "minProperties",
+    "minProperties"
     // "required",
     // "dependentRequired",
   ],
@@ -49,7 +49,7 @@ const typeRelationKeywords: { [k: string]: string[] } = {
     "minItems",
     "uniqueItems",
     "maxContains",
-    "minContains",
+    "minContains"
   ],
   string: [
     "pattern",
@@ -57,15 +57,15 @@ const typeRelationKeywords: { [k: string]: string[] } = {
     "contentEncoding",
     "contentSchema",
     "maxLength",
-    "minLength",
+    "minLength"
   ],
   number: [
     "maximum",
     "minimum",
     "multipleOf",
     "exclusiveMaximum",
-    "exclusiveMinimum",
-  ],
+    "exclusiveMinimum"
+  ]
 };
 
 const hasProps = <T>(schema: T, props: Array<keyof T>): boolean =>
@@ -207,20 +207,20 @@ const refID = (f: Genfile, ref: string) => {
 
   if (schema.enum) {
     if (!f.declared(name)) {
-      f.enum(name, `${typeFromJSONSchema(f, schema)}`);
+      f.enum(name, `${typeFromJSONSchema(f, schema, true)}`);
     }
 
     return Genfile.id(`keyof typeof ${name}`);
   }
 
   if (!f.declared(name)) {
-    f.type(name, `${typeFromJSONSchema(f, schema)}`);
+    f.type(name, `${typeFromJSONSchema(f, schema, true)}`);
   }
 
   return Genfile.id(name);
 };
 
-export const typeFromJSONSchema = (f: Genfile, schema: any): any => {
+export const typeFromJSONSchema = (f: Genfile, schema: any, decl = false): any => {
   schema = normalizeSchema(schema);
 
   if (schema.$ref) {
@@ -228,15 +228,18 @@ export const typeFromJSONSchema = (f: Genfile, schema: any): any => {
   }
 
   if (schema.enum) {
-    return `{
+    if (decl) {
+      return `{
 ${map(schema.enum, (v) => `${dumpValue(Genfile.id(v))} = ${dumpValue(v)}`).join(
-  ",\n"
-)}        
+        ",\n"
+      )}        
 }`;
+    }
+    return Genfile.id(map(schema.enum, (v) => `${dumpValue(v)}`).join(" | "));
   }
 
-  if (schema.anyOf) {
-    return unionOf(...map(schema.anyOf, (s) => typeFromJSONSchema(f, s)));
+  if (schema.oneOf) {
+    return unionOf(...map(schema.oneOf, (s) => typeFromJSONSchema(f, s)));
   }
 
   if (schema.allOf) {
@@ -264,17 +267,19 @@ ${map(schema.enum, (v) => `${dumpValue(Genfile.id(v))} = ${dumpValue(v)}`).join(
     }
 
     if (extendableAllOf) {
-      return Genfile.id(
-        `extends ${map(
-          take(schema.allOf, schema.allOf.length - 1),
-          (s: any) => {
-            return `${refID(f, s.$ref)}`;
-          }
-        ).join(", ")} ${typeFromJSONSchema(
-          f,
-          schema.allOf[schema.allOf.length - 1]
-        )}`
-      );
+      if (decl) {
+        return Genfile.id(
+          `extends ${map(
+            take(schema.allOf, schema.allOf.length - 1),
+            (s: any) => {
+              return `${refID(f, s.$ref)}`;
+            }
+          ).join(", ")} ${typeFromJSONSchema(
+            f,
+            schema.allOf[schema.allOf.length - 1]
+          )}`
+        );
+      }
     }
 
     return intersectionOf(
