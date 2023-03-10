@@ -1,6 +1,6 @@
 {
   "name": "@innoai-tech/vite-presets",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "monobundle": {
     "pipeline": {
       "test": false

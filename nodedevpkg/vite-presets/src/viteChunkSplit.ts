@@ -24,6 +24,7 @@ export const viteChunkSplit = (
       const assetsDir = c.build.assetsDir ?? "assets";
 
       c.build.rollupOptions = c.build.rollupOptions ?? {};
+
       c.build.rollupOptions.output = c.build.rollupOptions.output ?? {} as OutputOptions;
       const chunkFileNames = get(c.build.rollupOptions.output, ["chunkFileNames"], `${assetsDir}/[name].[hash].chunk.js`);
 
@@ -42,6 +43,10 @@ export const viteChunkSplit = (
       o.manualChunks = (id: string, meta: ManualChunkMeta) => {
         return cs.chunkName(id, meta)?.replaceAll("/", "-").replaceAll("@", "");
       };
+    },
+    renderChunk(code: string) {
+      //  import './lib-reactutil.!~{003}~.chunk.js';
+      return code.replace(/import '([^']+\.chunk\.js)';/g, "");
     }
   };
 };
@@ -77,10 +82,7 @@ class ChunkSplit {
     }
 
     if (id.includes("node_modules") || id.startsWith("\0")) {
-      const r = this.pkgRelegation(meta, this.extractPkgName(id))?.federation;
-      if (r) {
-        return `vendor-${r}`;
-      }
+      return this.pkgRelegation(meta, this.extractPkgName(id))?.federation;
     }
 
     return;
@@ -90,7 +92,7 @@ class ChunkSplit {
                                 getModuleInfo,
                                 getModuleIds
                               }: ManualChunkMeta) {
-    const directs: Record<string, boolean> = { __internal: true };
+    const directs: Record<string, boolean> = {};
     const moduleFederations: Record<string, ModuleFederation> = {};
 
     [...getModuleIds()].forEach((modID) => {
@@ -126,10 +128,19 @@ class ChunkSplit {
       if (pkgName.startsWith("@lib")) {
         continue;
       }
+
+      if (pkgName.startsWith("vendor-")) {
+        if (!this.dependencies[pkgName.slice("vendor-".length)]) {
+          delete directs[pkgName];
+        }
+        continue;
+      }
+
       if (!this.dependencies[pkgName]) {
         delete directs[pkgName];
       }
     }
+
 
     markPkgRelegation(moduleFederations, directs);
 
@@ -161,7 +172,7 @@ class ChunkSplit {
           if (/react/.test(id)) {
             return "react";
           }
-          return "__internal";
+          return "@internal";
         }
         if (id[0] !== "/") {
           return id.split("/")[0]!;
@@ -173,10 +184,10 @@ class ChunkSplit {
     const dirPaths = parts[parts.length - 1]!.split("/");
 
     if (dirPaths[0]![0] === "@") {
-      return `${dirPaths[0]}/${dirPaths[1]}`;
+      return `vendor-${dirPaths[0]}/${dirPaths[1]}`;
     }
 
-    return dirPaths[0]!;
+    return `vendor-${dirPaths[0]!}`;
   }
 }
 

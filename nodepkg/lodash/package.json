@@ -1,6 +1,7 @@
 {
   "name": "@innoai-tech/lodash",
   "version": "0.2.0",
+  "sideEffects": false,
   "dependencies": {
     "@types/lodash-es": "^4.17.6",
     "lodash": "^4.17.21",
