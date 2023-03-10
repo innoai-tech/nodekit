@@ -1,6 +1,6 @@
 {
   "name": "@innoai-tech/vite-presets",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "monobundle": {
     "pipeline": {
       "test": false
@@ -11,10 +11,9 @@
   },
   "dependencies": {
     "@innoai-tech/lodash": "workspace:^0.2.0",
-    "@types/minimatch": "^5.1.2",
     "@vitejs/plugin-react": "^3.1.0",
-    "minimatch": "^7.4.2",
-    "vite-tsconfig-paths": "^4.0.5"
+    "vite-tsconfig-paths": "^4.0.5",
+    "vite-plugin-pages": "^0.28.0"
   },
   "peerDependencies": {
     "vite": "^4.x"

@@ -1,2 +1,3 @@
 export * from "./app";
-export * from "./presetReact";
+export * from "./viteChunkSplit";
+export * from "./viteReact";
