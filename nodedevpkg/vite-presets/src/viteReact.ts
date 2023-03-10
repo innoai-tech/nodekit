@@ -27,7 +27,11 @@ export const viteReact = (options: ViteReactOptions = {}): PluginOption[] => {
       name: "vite-presets/react",
       config(c) {
         c.resolve = c.resolve ?? {};
-        c.resolve.dedupe = ["react", "react-dom", "@emotion/react"];
+        c.resolve.dedupe = c.resolve.dedupe ?? [];
+        c.resolve.dedupe = [
+          ...c.resolve.dedupe,
+          "react", "react-dom", "@emotion/react"
+        ];
       }
     },
     react({
