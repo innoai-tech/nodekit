@@ -37,7 +37,7 @@ export interface Fetcher {
   ) => Promise<FetcherResponse<TInputs, TData>>;
 }
 
-const FetcherContext = /*#__PURE__*/createContext<{ fetcher?: Fetcher }>({});
+const FetcherContext = createContext<{ fetcher?: Fetcher }>({});
 
 export const FetcherProvider = ({
   fetcher,

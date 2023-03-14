@@ -1,6 +1,6 @@
 {
   "name": "@innoai-tech/vite-presets",
-  "version": "0.6.2",
+  "version": "0.7.0",
   "monobundle": {
     "pipeline": {
       "test": false
@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@innoai-tech/lodash": "workspace:^0.2.0",
-    "@vitejs/plugin-react": "^3.1.0",
+    "@vitejs/plugin-react-swc": "^3.2.0",
     "vite-tsconfig-paths": "^4.0.5",
     "vite-plugin-pages": "^0.28.0"
   },

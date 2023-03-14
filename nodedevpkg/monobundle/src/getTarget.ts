@@ -7,26 +7,24 @@ const SUPPORTED_BUILD_TARGETS = [
   "edge",
   "firefox",
   "ios",
-  "safari",
+  "safari"
 ];
 
 export function getBuildTargets(target: string | string[]) {
   const getEveryTar = browserslist(target).reverse();
 
   const sep = " ";
-  const targets = [];
-  let singleTar = "";
-  let i = 0;
+
+  const targets: Record<string, string> = {};
 
   for (const tar of getEveryTar) {
     for (const selTar of SUPPORTED_BUILD_TARGETS) {
-      if (tar.startsWith(selTar + sep) && !singleTar.startsWith(selTar)) {
-        i++;
-        singleTar = tar.replace(sep, "");
-        targets[i] = singleTar;
+      const parts = tar.split(sep);
+      if (tar.startsWith(selTar + sep) && !targets[parts[0]!]) {
+        targets[parts[0]!] = parts[1]!;
       }
     }
   }
 
-  return targets.filter(Boolean);
+  return targets;
 }

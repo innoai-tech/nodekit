@@ -126,7 +126,7 @@ export class Domain<T, M extends object> extends LinkedBehaviorSubject<T> {
   }
 }
 
-const StoreContext = /*#__PURE__*/createContext({ store$: /*#__PURE__*/Store.create({}) });
+const StoreContext = createContext({ store$: Store.create({}) });
 
 export const useStore$ = () => useContext(StoreContext).store$;
 

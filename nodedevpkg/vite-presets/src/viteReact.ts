@@ -1,8 +1,9 @@
 import type { PluginOption } from "vite";
-import react from "@vitejs/plugin-react";
+import react from "@vitejs/plugin-react-swc";
 import pages, { reactResolver, PageResolver } from "vite-plugin-pages";
 
 export interface ViteReactOptions {
+  plugins?: [string, Record<string, any>][];
   pagesDirs?: string | string[]
   pagesResolver?: Partial<PageResolver>,
 }
@@ -35,7 +36,7 @@ export const viteReact = (options: ViteReactOptions = {}): PluginOption[] => {
       }
     },
     react({
-      fastRefresh: true
+      plugins: options.plugins!
     }),
     pages({
       dirs: options.pagesDirs ?? "./app/routes",

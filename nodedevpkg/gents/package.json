@@ -14,6 +14,9 @@
     "@innoai-tech/lodash": "workspace:*",
     "node-fetch": "^3.3.0"
   },
+  "peerDependencies": {
+    "core-js": "*"
+  },
   "devDependencies": {
     "@innoai-tech/fetcher": "workspace:*"
   },

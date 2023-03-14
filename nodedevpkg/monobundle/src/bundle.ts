@@ -1,5 +1,7 @@
 import { nodeResolve } from "@rollup/plugin-node-resolve";
+import json from "@rollup/plugin-json";
 import { existsSync } from "fs";
+
 import {
   isEmpty,
   mapKeys,
@@ -8,12 +10,11 @@ import {
   startsWith,
   keys,
   forEach,
-  set,
+  set
 } from "@innoai-tech/lodash";
 import { join, relative, extname, basename, dirname } from "path";
 import { OutputOptions, rollup, RollupOptions } from "rollup";
 import dts from "rollup-plugin-dts";
-import esbuild from "rollup-plugin-esbuild";
 import { getBuildTargets } from "./getTarget";
 import { createAutoExternal } from "./autoExternal";
 import { createLogger } from "./log";
@@ -21,6 +22,7 @@ import { tsc } from "./tsc";
 import { writeFile, readFile, unlink } from "fs/promises";
 import { bootstrap } from "./bootstrap";
 import { globby } from "globby";
+import { swc } from "./swc";
 
 const resolveProjectRoot = (p: string): string => {
   const pnpmWorkspaceYAML = join(p, "./pnpm-workspace.yaml");
@@ -51,12 +53,13 @@ export interface MonoBundleOptions {
     build: string | boolean;
   };
   exports: { [k: string]: string };
+  sideDeps: { [k: string]: string };
 }
 
 export const bundle = async ({
-  cwd = process.cwd(),
-  dryRun,
-}: {
+                               cwd = process.cwd(),
+                               dryRun
+                             }: {
   cwd?: string;
   dryRun?: boolean;
 }) => {
@@ -99,39 +102,71 @@ dist/
 
   const outputBase: OutputOptions = {
     dir: cwd,
-    format: "es",
+    format: "es"
   };
 
-  const autoExternal = createAutoExternal(projectRoot, pkg, { logger });
+  pkg["peerDependencies"] = {
+    ...(pkg["peerDependencies"] ?? {}),
+    "core-js": "*"
+  };
+
+  const autoExternal = createAutoExternal(projectRoot, pkg, { logger, sideDeps: options["sideDeps"] as any });
 
   const buildTargets = getBuildTargets(
     (pkg as any).browserslist ?? ["defaults"]
   );
 
   const resolveRollupOptions: ResolveRollupOptions[] = [
-    () =>
-      Promise.resolve({
+    () => {
+      return Promise.resolve({
         input: inputs,
         output: {
           ...outputBase,
           entryFileNames: "[name].mjs",
-          chunkFileNames: "[name]-[hash].mjs",
+          chunkFileNames: "[name]-[hash].mjs"
         },
         plugins: [
           autoExternal(),
+          json(),
           nodeResolve({
-            extensions: [".ts", ".tsx", ".mjs", "", ".js", ".jsx"],
+            extensions: [".ts", ".tsx", ".mjs", "", ".js", ".jsx"]
           }),
-          esbuild({
-            target: buildTargets,
-            tsconfig: "tsconfig.json",
-            jsx: "automatic",
-            loaders: {
-              ".json": "json",
+          swc({
+            swcrc: false,
+            env: {
+              mode: "usage",
+              targets: buildTargets
             },
-          }),
-        ],
-      }),
+            module: {
+              type: "es6"
+            },
+            jsc: {
+              parser: {
+                syntax: "typescript",
+                tsx: true,
+                dynamicImport: true
+              },
+              transform: {
+                react: {
+                  runtime: "automatic"
+                }
+              },
+              preserveAllComments: true,
+              externalHelpers: true,
+              experimental: {
+                plugins: [
+                  [
+                    "@innoai-tech/swc-plugin-annotate-pure-calls",
+                    {}
+                  ]
+                ]
+              }
+            }
+          })
+        ]
+      });
+    },
+
 
     async () => {
       await tsc(cwd, ".turbo/types");
@@ -146,19 +181,19 @@ dist/
         output: {
           ...outputBase,
           entryFileNames: "[name].d.ts",
-          chunkFileNames: "[name]-[hash].d.ts",
+          chunkFileNames: "[name]-[hash].d.ts"
         },
         plugins: [
           autoExternal(false),
           dts({
-            respectExternal: true,
-          }) as any,
-        ],
+            respectExternal: true
+          }) as any
+        ]
       };
-    },
+    }
   ];
 
-  logger.warning(`bundling (target: ${buildTargets})`);
+  logger.warning(`bundling (target: ${JSON.stringify(buildTargets)})`);
 
   let outputFiles: { [k: string]: boolean } = {};
 
@@ -216,7 +251,7 @@ dist/
     // FIXME remote all old entries
     types: undefined,
     main: undefined,
-    module: undefined,
+    module: undefined
   };
 
   forEach(options.exports, (_, e) => {
@@ -230,8 +265,8 @@ dist/
     set(exports, ["exports", e], {
       import: {
         types: `./${distName}.d.ts`,
-        default: `./${distName}.mjs`,
-      },
+        default: `./${distName}.mjs`
+      }
     });
   });
 
@@ -250,7 +285,7 @@ dist/
           ? undefined
           : (pkg["devDependencies"] as { [k: string]: string }),
         files: ["*.mjs", "*.d.ts"],
-        ...exports,
+        ...exports
       },
       null,
       2

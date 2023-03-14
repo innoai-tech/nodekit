@@ -1,7 +1,6 @@
 {
   "name": "@innoai-tech/fetcher",
   "version": "0.4.0",
-  "sideEffects": false,
   "monobundle": {
     "exports": {
       ".": "./src/index.ts"
@@ -11,7 +10,8 @@
     "@innoai-tech/lodash": "workspace:*"
   },
   "peerDependencies": {
-    "rxjs": "7.x"
+    "rxjs": "7.x",
+    "core-js": "*"
   },
   "exports": {
     ".": {
@@ -41,5 +41,6 @@
     "prepublishOnly": "pnpm run build",
     "lint": "prettier --write ."
   },
+  "sideEffects": false,
   "type": "module"
 }

@@ -1,0 +1,18 @@
+[package]
+edition = "2021"
+name = "swc_plugin_annotate_pure_calls"
+version = "0.1.0"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[profile.release]
+lto = true
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+swc_core = { version = "0.69.x", features = ["ecma_plugin_transform", "__parser"] }
+swc_ecma_utils = { version = "0" }
+
+[dev-dependencies]
+testing = { version = "*" }

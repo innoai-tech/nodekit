@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "dependencies": {
     "@innoai-tech/reactutil": "workspace:*",
+    "@innoai-tech/fetcher": "workspace:*",
     "@innoai-tech/lodash": "workspace:*"
   },
   "license": "MIT",

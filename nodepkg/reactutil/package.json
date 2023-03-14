@@ -1,7 +1,6 @@
 {
   "name": "@innoai-tech/reactutil",
   "version": "0.5.3",
-  "sideEffects": false,
   "monobundle": {
     "exports": {
       ".": "./src/index.ts"
@@ -43,5 +42,6 @@
     "prepublishOnly": "pnpm run build",
     "lint": "prettier --write ."
   },
+  "sideEffects": false,
   "type": "module"
 }

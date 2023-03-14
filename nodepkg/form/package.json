@@ -1,7 +1,6 @@
 {
   "name": "@innoai-tech/form",
   "version": "0.2.0",
-  "sideEffects": false,
   "monobundle": {
     "exports": {
       ".": "./src/index.ts"
@@ -41,5 +40,6 @@
     "prepublishOnly": "pnpm run build",
     "lint": "prettier --write ."
   },
+  "sideEffects": false,
   "type": "module"
 }

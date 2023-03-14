@@ -17,6 +17,7 @@
   },
   "prettier": {},
   "devDependencies": {
+    "@innoai-tech/swc-plugin-annotate-pure-calls": "workspace:*",
     "@innoai-tech/devconfig": "workspace:*",
     "@innoai-tech/monobundle": "workspace:*",
     "@innoai-tech/vite-presets": "workspace:*",
