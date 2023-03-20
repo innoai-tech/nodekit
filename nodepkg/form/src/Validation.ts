@@ -1,6 +1,6 @@
 import { isArray, isObject } from "@innoai-tech/lodash";
 import type { Schema } from "./Schema";
-import { create, Expression } from "./Expression";
+import { create, type Expression } from "./Expression";
 import { required } from "./ex";
 
 export type Context = {

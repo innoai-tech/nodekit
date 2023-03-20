@@ -1,4 +1,4 @@
-import { AppConfig, AppConfigMetadata, AppContext, stringify } from "../";
+import { type AppConfig, type AppConfigMetadata, type AppContext, stringify } from "../";
 import type { Plugin, UserConfig } from "vite";
 import { loadConfig } from "../loader";
 import { join } from "path";
@@ -6,9 +6,9 @@ import { join } from "path";
 export type HandleConfig =
   | ((c: UserConfig, ctx: AppConfig & AppContext & AppConfigMetadata) => void)
   | ((
-      c: UserConfig,
-      ctx: AppConfig & AppContext & AppConfigMetadata
-    ) => Promise<void>);
+  c: UserConfig,
+  ctx: AppConfig & AppContext & AppConfigMetadata
+) => Promise<void>);
 
 export const injectWebAppConfig = (onConfig?: HandleConfig): Plugin => {
   let injectEnabled = false;
@@ -23,7 +23,7 @@ export const injectWebAppConfig = (onConfig?: HandleConfig): Plugin => {
       injectEnabled = ce.command === "build";
       conf = (await loadConfig(join(c.root!, "config.ts")))({
         env: injectEnabled ? "$" : appEnv,
-        feature: appFeature,
+        feature: appFeature
       });
       if (onConfig) {
         onConfig(c, conf);
@@ -40,9 +40,9 @@ export const injectWebAppConfig = (onConfig?: HandleConfig): Plugin => {
               content: stringify({
                 name: conf!.name,
                 env: injectEnabled ? "__ENV__" : appEnv,
-                version: appVersion,
-              }),
-            },
+                version: appVersion
+              })
+            }
           },
           {
             tag: "meta",
@@ -50,11 +50,11 @@ export const injectWebAppConfig = (onConfig?: HandleConfig): Plugin => {
               name: "webapp:config",
               content: injectEnabled
                 ? "__APP_CONFIG__"
-                : stringify(conf!.config as any),
-            },
-          },
-        ],
+                : stringify(conf!.config as any)
+            }
+          }
+        ]
       };
-    },
+    }
   };
 };

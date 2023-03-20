@@ -26,7 +26,7 @@
     "noUncheckedIndexedAccess": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "importsNotUsedAsValues": "error",
+    "verbatimModuleSyntax": true,
     "jsx": "react-jsx",
     "checkJs": false,
     "declaration": true,

@@ -10,10 +10,9 @@
   },
   "dependencies": {
     "@innoai-tech/lodash": "workspace:*",
-    "esbuild": "^0.17.11",
-    "vite": "^4.1.4"
+    "esbuild": "^0.17.12",
+    "vite": "^4.2.0"
   },
-  "peerDependencies": {},
   "browserslist": [
     "defaults"
   ],
@@ -58,5 +57,6 @@
     "lint": "prettier --write ."
   },
   "sideEffects": false,
-  "type": "module"
+  "type": "module",
+  "peerDependencies": {}
 }

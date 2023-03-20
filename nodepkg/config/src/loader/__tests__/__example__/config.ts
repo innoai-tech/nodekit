@@ -1,4 +1,4 @@
-import { AppConfig, api, AppContext } from "../../../index";
+import { type AppConfig, api, type AppContext } from "../../../index";
 
 export const CONFIG: AppConfig = {
   name: "test",

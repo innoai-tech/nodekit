@@ -5,7 +5,7 @@ import type { InferSchema, Schema } from "./Schema";
 import { validateForSchema } from "./Validation";
 import {
   create,
-  ExpressionFunc,
+  type ExpressionFunc,
   keyPathToSchemaKeyPath,
   walkExpression,
 } from "./Expression";

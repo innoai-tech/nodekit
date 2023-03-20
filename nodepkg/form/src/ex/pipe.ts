@@ -1,4 +1,4 @@
-import { ExpressionBuildFunc, register } from "../Expression";
+import { type ExpressionBuildFunc, register } from "../Expression";
 
 export const pipe = register(
   "pipe",

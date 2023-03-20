@@ -1,6 +1,6 @@
 import { isUndefined } from "@innoai-tech/lodash";
 import {
-  ExpressionBuildFunc,
+  type ExpressionBuildFunc,
   isValidBuildExprFn,
   register,
 } from "../Expression";

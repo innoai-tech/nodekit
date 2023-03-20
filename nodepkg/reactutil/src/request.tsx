@@ -1,5 +1,5 @@
 import { createFetcher, createRequestSubject } from "@innoai-tech/fetcher";
-import { createContext, ReactNode, useContext, useMemo } from "react";
+import { createContext, type ReactNode, useContext, useMemo } from "react";
 import { paramsSerializer, transformRequestBody } from "@innoai-tech/fetcher";
 
 export interface RequestConfig<TInputs> {

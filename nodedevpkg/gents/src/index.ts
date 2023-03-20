@@ -1,6 +1,6 @@
 import {readFile} from "fs/promises";
 import fetch from "node-fetch";
-import {genClientFromOpenAPI, RequestCreator} from "./gen";
+import {genClientFromOpenAPI, type RequestCreator} from "./gen";
 import {join} from "path";
 import {camelCase} from "@innoai-tech/lodash";
 import type {AppConfig, AppConfigMetadata} from "@innoai-tech/config";

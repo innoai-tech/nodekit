@@ -1,7 +1,7 @@
 import { get, isFunction, isUndefined, endsWith } from "@innoai-tech/lodash";
 import {
   createContext,
-  ReactNode,
+  type ReactNode,
   useContext,
   useEffect,
   useMemo

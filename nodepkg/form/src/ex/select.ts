@@ -1,5 +1,5 @@
 import {
-  ExpressionBuildFunc,
+  type ExpressionBuildFunc,
   isValidBuildExprFn,
   register,
 } from "../Expression";

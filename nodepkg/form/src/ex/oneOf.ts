@@ -1,5 +1,5 @@
 import { includes, isString, keys, some } from "@innoai-tech/lodash";
-import { ExpressionBuildFunc, register } from "../Expression";
+import { type ExpressionBuildFunc, register } from "../Expression";
 
 export const oneOf = register(
   "oneOf",

@@ -1,5 +1,5 @@
 import { get } from "@innoai-tech/lodash";
-import { ExpressionBuildFunc, register } from "../Expression";
+import { type ExpressionBuildFunc, register } from "../Expression";
 
 export const when = register(
   "when",
