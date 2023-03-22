@@ -19,22 +19,21 @@
   "devDependencies": {
     "@innoai-tech/devconfig": "workspace:*",
     "@innoai-tech/monobundle": "workspace:*",
-    "@innoai-tech/swc-plugin-annotate-pure-calls": "workspace:*",
     "@innoai-tech/vite-presets": "workspace:*",
     "@testing-library/react": "^14.0.0",
-    "@types/node": "^18.15.3",
+    "@types/node": "^18.15.5",
     "@types/react": "^18.0.28",
     "core-js": "^3.29.1",
     "esbuild": "^0.17.12",
     "jsdom": "^21.1.1",
-    "prettier": "^2.8.5",
+    "prettier": "^2.8.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "rxjs": "^7.8.0",
-    "tsx": "^3.12.5",
-    "turbo": "^1.8.3",
+    "tsx": "^3.12.6",
+    "turbo": "^1.8.5",
     "typescript": "^5.0.2",
-    "vite": "^4.2.0",
-    "vitest": "0.29.3"
+    "vite": "^4.2.1",
+    "vitest": "0.29.7"
   }
 }

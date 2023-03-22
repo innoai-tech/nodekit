@@ -946,6 +946,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "purebundle"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "swc_core",
+ "swc_ecma_utils",
+ "testing",
+]
+
+[[package]]
 name = "quote"
 version = "1.0.21"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1613,16 +1623,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ca5df720531bfbd7ceb1139319c39c20c446abfb8f7e0eb47b104205a71152b4"
 dependencies = [
  "once_cell",
-]
-
-[[package]]
-name = "swc_plugin_annotate_pure_calls"
-version = "0.1.0"
-dependencies = [
- "serde",
- "swc_core",
- "swc_ecma_utils",
- "testing",
 ]
 
 [[package]]

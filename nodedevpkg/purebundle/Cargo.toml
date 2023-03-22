@@ -1,6 +1,6 @@
 [package]
 edition = "2021"
-name = "swc_plugin_annotate_pure_calls"
+name = "purebundle"
 version = "0.1.0"
 
 [lib]

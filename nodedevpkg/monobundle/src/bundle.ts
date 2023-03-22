@@ -1,7 +1,5 @@
 import { nodeResolve } from "@rollup/plugin-node-resolve";
-import json from "@rollup/plugin-json";
 import { existsSync } from "fs";
-
 import {
   isEmpty,
   mapKeys,
@@ -10,10 +8,11 @@ import {
   startsWith,
   keys,
   forEach,
-  set
+  set,
+  map,
 } from "@innoai-tech/lodash";
 import { join, relative, extname, basename, dirname } from "path";
-import { OutputOptions, rollup, RollupOptions } from "rollup";
+import { type OutputOptions, rollup, type RollupOptions } from "rollup";
 import dts from "rollup-plugin-dts";
 import { getBuildTargets } from "./getTarget";
 import { createAutoExternal } from "./autoExternal";
@@ -22,7 +21,8 @@ import { tsc } from "./tsc";
 import { writeFile, readFile, unlink } from "fs/promises";
 import { bootstrap } from "./bootstrap";
 import { globby } from "globby";
-import { swc } from "./swc";
+import { esbuild } from "./esbuild";
+import { chunkCleanup } from "./chunkCleanup";
 
 const resolveProjectRoot = (p: string): string => {
   const pnpmWorkspaceYAML = join(p, "./pnpm-workspace.yaml");
@@ -127,42 +127,14 @@ dist/
         },
         plugins: [
           autoExternal(),
-          json(),
           nodeResolve({
             extensions: [".ts", ".tsx", ".mjs", "", ".js", ".jsx"]
           }),
-          swc({
-            swcrc: false,
-            env: {
-              mode: "usage",
-              targets: buildTargets
-            },
-            module: {
-              type: "es6"
-            },
-            jsc: {
-              parser: {
-                syntax: "typescript",
-                tsx: true,
-                dynamicImport: true
-              },
-              transform: {
-                react: {
-                  runtime: "automatic"
-                }
-              },
-              preserveAllComments: true,
-              externalHelpers: true,
-              experimental: {
-                plugins: [
-                  [
-                    "@innoai-tech/swc-plugin-annotate-pure-calls",
-                    {}
-                  ]
-                ]
-              }
-            }
-          })
+          esbuild({
+            tsconfig: "tsconfig.json",
+            target: map(buildTargets, (v, k) => `${k}${v}`)
+          }),
+          chunkCleanup()
         ]
       });
     },

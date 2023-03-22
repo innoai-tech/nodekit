@@ -10,8 +10,7 @@
     "@innoai-tech/lodash": "workspace:*"
   },
   "peerDependencies": {
-    "rxjs": "7.x",
-    "core-js": "*"
+    "rxjs": "7.x"
   },
   "exports": {
     ".": {

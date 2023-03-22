@@ -2,7 +2,7 @@ import { get } from "@innoai-tech/lodash";
 import { readFileSync } from "fs";
 import { dirname, isAbsolute, join, resolve } from "path";
 import type { ManualChunkMeta, PreRenderedChunk, OutputOptions } from "rollup";
-import { PluginOption, searchForWorkspaceRoot } from "vite";
+import { type PluginOption, searchForWorkspaceRoot } from "vite";
 
 export interface ChunkSplitOptions {
   libRoot?: string[];
@@ -43,10 +43,6 @@ export const viteChunkSplit = (
       o.manualChunks = (id: string, meta: ManualChunkMeta) => {
         return cs.chunkName(id, meta)?.replaceAll("/", "-").replaceAll("@", "");
       };
-    },
-    renderChunk(code: string) {
-      //  import './lib-reactutil.!~{003}~.chunk.js';
-      return code.replace(/import '([^']+\.chunk\.js)';/g, "");
     }
   };
 };

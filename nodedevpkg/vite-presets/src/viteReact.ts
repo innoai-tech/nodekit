@@ -1,9 +1,8 @@
 import type { PluginOption } from "vite";
-import react from "@vitejs/plugin-react-swc";
-import pages, { reactResolver, PageResolver } from "vite-plugin-pages";
+import react from "@vitejs/plugin-react";
+import pages, { reactResolver, type PageResolver } from "vite-plugin-pages";
 
 export interface ViteReactOptions {
-  plugins?: [string, Record<string, any>][];
   pagesDirs?: string | string[]
   pagesResolver?: Partial<PageResolver>,
 }
@@ -35,9 +34,7 @@ export const viteReact = (options: ViteReactOptions = {}): PluginOption[] => {
         ];
       }
     },
-    react({
-      plugins: options.plugins!
-    }),
+    react(),
     pages({
       dirs: options.pagesDirs ?? "./app/routes",
       resolver: {

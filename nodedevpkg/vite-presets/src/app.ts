@@ -1,5 +1,5 @@
 import { resolve } from "path";
-import { PluginOption, searchForWorkspaceRoot } from "vite";
+import { type PluginOption, searchForWorkspaceRoot } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 
 export const app = (

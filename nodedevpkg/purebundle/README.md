@@ -1,4 +1,4 @@
-## @innoai-tech/swc-plugin-prune-calls-annotation
+## Purebundle
 
 Automated annotate **`/*#__PURE__*/`** to call expression which in **variable declarator**,
 **assignment expression**, **arguments of call expression** and other expressions as values
@@ -11,11 +11,11 @@ Will transform
 
 ```typescript
 export const call = (s) => {
-    return "call" + s
-}
+  return "call" + s;
+};
 
-export const stringA = call("a")
-export const stringB = (() => call("b"))()
+export const stringA = call("a");
+export const stringB = (() => call("b"))();
 ```
 
 to

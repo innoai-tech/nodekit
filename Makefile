@@ -19,10 +19,8 @@ update:
 
 dep:
 	pnpm install
-	pnpm exec turbo run build --filter=monobundle --force
-	pnpm install
 
-bootstrap:
+bootstrap: dep
 	pnpm exec turbo run build --filter=monobundle --force
 	pnpm exec monobundle
 

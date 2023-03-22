@@ -33,7 +33,7 @@ jobs:
         with:
           version: "^7"
 
-      - run: make dep
+      - run: make bootstrap
       - run: make test
       - run: make pub
         env:

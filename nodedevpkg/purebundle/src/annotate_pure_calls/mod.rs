@@ -1,10 +1,12 @@
 use swc_core::common::comments::Comments;
-use swc_core::ecma::ast::{ArrayLit, AssignExpr, AssignProp, CallExpr, Expr, Ident, KeyValueProp, Pat, VarDeclarator};
+use swc_core::ecma::ast::{
+    ArrayLit, AssignExpr, AssignProp, CallExpr, Expr, Ident, KeyValueProp, Pat, VarDeclarator,
+};
 use swc_core::ecma::visit::{as_folder, noop_visit_mut_type, Fold, VisitMut, VisitMutWith};
 
 pub fn annotate_pure_calls<C>(comments: C) -> impl Fold + VisitMut
-    where
-        C: Comments + Clone,
+where
+    C: Comments + Clone,
 {
     as_folder(PureAnnotation {
         comments: Some(comments),
@@ -12,18 +14,17 @@ pub fn annotate_pure_calls<C>(comments: C) -> impl Fold + VisitMut
 }
 
 struct PureAnnotation<C: Comments>
-    where
-        C: Comments + Clone,
+where
+    C: Comments + Clone,
 {
     comments: Option<C>,
 }
 
 impl<C> VisitMut for PureAnnotation<C>
-    where
-        C: Comments + Clone,
+where
+    C: Comments + Clone,
 {
     noop_visit_mut_type!();
-
 
     // x = pureCall()
     // a.x = pureCall()
@@ -35,7 +36,6 @@ impl<C> VisitMut for PureAnnotation<C>
         }
         expr.visit_mut_children_with(self);
     }
-
 
     fn visit_mut_assign_prop(&mut self, expr: &mut AssignProp) {
         if let Expr::Call(call_expr) = expr.value.unwrap_parens() {
@@ -102,7 +102,6 @@ impl<C> VisitMut for PureAnnotation<C>
         expr.visit_mut_children_with(self);
     }
 }
-
 
 struct InitUsedVisit {
     ident: Ident,
