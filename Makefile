@@ -9,7 +9,7 @@ serve.base.href:
 	go run ./cmd/webappserve serve --base-href=/example --root=./cmd/webappserve/example/base
 
 dev:
-	pnpm exec turbo run dev --filter=example
+	pnpm exec vite
 
 tidy:
 	go mod tidy

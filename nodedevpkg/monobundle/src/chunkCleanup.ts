@@ -14,6 +14,7 @@ export const chunkCleanup = (): Plugin => {
         module: {
           type: "es6"
         },
+        minify: false,
         jsc: {
           parser: {
             syntax: "typescript",
@@ -26,9 +27,8 @@ export const chunkCleanup = (): Plugin => {
             plugins: [
               usePlugin({})
             ]
-          }
+          },
         },
-        minify: false,
         isModule: true
       });
     }

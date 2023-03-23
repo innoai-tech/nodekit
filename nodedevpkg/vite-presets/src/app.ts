@@ -15,11 +15,11 @@ export const app = (
       name: "vite-presets/app",
       config(c) {
         c.base = enableBaseHref ? `/${appName}/` : "/";
-        c.root = resolve(viteConfigRoot, "./src");
+        c.root = resolve(viteConfigRoot, `./webapp/${appName}`);
 
         c.build = c.build ?? {};
 
-        c.build.outDir = resolve(viteConfigRoot, "./dist");
+        c.build.outDir = resolve(viteConfigRoot, `./public/${appName}`);
         c.build.emptyOutDir = true;
 
         c.build.rollupOptions = c.build.rollupOptions ?? {};

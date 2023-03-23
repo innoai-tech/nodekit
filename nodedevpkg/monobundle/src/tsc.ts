@@ -2,7 +2,8 @@ import { spawn } from "child_process";
 
 export const tsc = async (
   projectRoot: string,
-  outDir: string
+  outDir: string,
+  tsconfig: string
 ): Promise<void> => {
   const ps = spawn(
     "tsc",
@@ -14,10 +15,10 @@ export const tsc = async (
       "--outDir",
       outDir,
       "-p",
-      ".",
+      tsconfig
     ],
     {
-      cwd: projectRoot,
+      cwd: projectRoot
     }
   );
 

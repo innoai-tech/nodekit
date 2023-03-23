@@ -1,0 +1,13 @@
+{
+  "extends": "@innoai-tech/devconfig/tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@innoai-tech/*": [
+        "nodedevpkg/*/src/index.ts",
+        "nodepkg/*/src/index.ts",
+        "*"
+      ]
+    }
+  }
+}

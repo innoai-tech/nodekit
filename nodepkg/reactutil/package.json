@@ -38,7 +38,7 @@
   },
   "scripts": {
     "build": "monobundle",
-    "test": "vitest --run --passWithNoTests",
+    "test": "vitest --run --passWithNoTests --dir .",
     "prepublishOnly": "pnpm run build",
     "lint": "prettier --write ."
   },

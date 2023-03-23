@@ -3,5 +3,5 @@ import { useAsObservable } from "@innoai-tech/reactutil";
 
 const Fetcher = createFetcher({ paramsSerializer, transformRequestBody });
 
-console.log(useAsObservable);
+console.log(Fetcher, useAsObservable);
 

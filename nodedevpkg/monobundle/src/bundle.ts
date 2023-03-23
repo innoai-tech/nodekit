@@ -1,4 +1,5 @@
 import { nodeResolve } from "@rollup/plugin-node-resolve";
+import commonjs from "@rollup/plugin-commonjs";
 import { existsSync } from "fs";
 import {
   isEmpty,
@@ -9,7 +10,7 @@ import {
   keys,
   forEach,
   set,
-  map,
+  map
 } from "@innoai-tech/lodash";
 import { join, relative, extname, basename, dirname } from "path";
 import { type OutputOptions, rollup, type RollupOptions } from "rollup";
@@ -23,6 +24,8 @@ import { bootstrap } from "./bootstrap";
 import { globby } from "globby";
 import { esbuild } from "./esbuild";
 import { chunkCleanup } from "./chunkCleanup";
+
+const tsconfigFile = "tsconfig.json";
 
 const resolveProjectRoot = (p: string): string => {
   const pnpmWorkspaceYAML = join(p, "./pnpm-workspace.yaml");
@@ -130,8 +133,9 @@ dist/
           nodeResolve({
             extensions: [".ts", ".tsx", ".mjs", "", ".js", ".jsx"]
           }),
+          commonjs(),
           esbuild({
-            tsconfig: "tsconfig.json",
+            tsconfig: tsconfigFile,
             target: map(buildTargets, (v, k) => `${k}${v}`)
           }),
           chunkCleanup()
@@ -141,7 +145,7 @@ dist/
 
 
     async () => {
-      await tsc(cwd, ".turbo/types");
+      await tsc(cwd, ".turbo/types", tsconfigFile);
 
       const indexForDts = mapValues(inputs, (input) => {
         const f = join(cwd, ".turbo/types", relative(join(cwd, "src"), input));
@@ -158,6 +162,7 @@ dist/
         plugins: [
           autoExternal(false),
           dts({
+            tsconfig: tsconfigFile,
             respectExternal: true
           }) as any
         ]
