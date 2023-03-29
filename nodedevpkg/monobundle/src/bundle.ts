@@ -25,7 +25,7 @@ import { globby } from "globby";
 import { esbuild } from "./esbuild";
 import { chunkCleanup } from "./chunkCleanup";
 
-const tsconfigFile = "tsconfig.json";
+const tsconfigFile = "tsconfig.monobundle.json";
 
 const resolveProjectRoot = (p: string): string => {
   const pnpmWorkspaceYAML = join(p, "./pnpm-workspace.yaml");
