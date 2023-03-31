@@ -6,31 +6,36 @@ export const chunkCleanup = (): Plugin => {
   return {
     name: "monobundle/chunk",
     async renderChunk(code: string) {
-      return await transform(code, {
-        swcrc: false,
-        env: {
-          targets: "defaults"
-        },
-        module: {
-          type: "es6"
-        },
-        minify: false,
-        jsc: {
-          parser: {
-            syntax: "typescript",
-            dynamicImport: true,
-            tsx: false
+      try {
+        return await transform(code, {
+          swcrc: false,
+          env: {
+            targets: "defaults"
           },
-          transform: {},
-          externalHelpers: false,
-          experimental: {
-            plugins: [
-              usePlugin({})
-            ]
+          module: {
+            type: "es6"
           },
-        },
-        isModule: true
-      });
+          minify: false,
+          jsc: {
+            parser: {
+              syntax: "typescript",
+              dynamicImport: true,
+              tsx: false
+            },
+            transform: {},
+            externalHelpers: false,
+            experimental: {
+              plugins: [
+                usePlugin({})
+              ]
+            }
+          },
+          isModule: true
+        });
+      } catch (e) {
+        console.error(e);
+        throw e;
+      }
     }
   };
 };

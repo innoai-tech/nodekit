@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@innoai-tech/lodash": "workspace:*",
-    "esbuild": "^0.17.12",
+    "esbuild": "^0.17.14",
     "vite": "^4.2.1"
   },
   "peerDependencies": {},

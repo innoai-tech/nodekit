@@ -19,7 +19,7 @@
     "vite": "^4.x"
   },
   "devDependencies": {
-    "esbuild": "^0.17.12",
+    "esbuild": "^0.17.14",
     "rollup": "^3.20.2",
     "vite": "^4.2.1"
   },
