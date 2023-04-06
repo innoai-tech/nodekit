@@ -13,13 +13,13 @@
     "@innoai-tech/lodash": "workspace:^0.2.0",
     "@vitejs/plugin-react": "^3.1.0",
     "vite-plugin-pages": "^0.29.0",
-    "vite-tsconfig-paths": "^4.0.7"
+    "vite-tsconfig-paths": "^4.0.8"
   },
   "peerDependencies": {
     "vite": "^4.x"
   },
   "devDependencies": {
-    "esbuild": "^0.17.14",
+    "esbuild": "^0.17.15",
     "rollup": "^3.20.2",
     "vite": "^4.2.1"
   },

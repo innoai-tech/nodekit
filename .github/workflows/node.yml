@@ -21,7 +21,6 @@ jobs:
         with:
           toolchain: nightly
 
-      - run: rustup default nightly-2022-09-27
       - run: rustup target add wasm32-wasi
 
       - uses: actions/setup-node@v3
