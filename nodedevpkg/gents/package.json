@@ -31,15 +31,6 @@
     "*.d.ts"
   ],
   "license": "MIT",
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com",
-    "access": "public"
-  },
-  "repository": {
-    "type": "git",
-    "url": "ssh://git@github.com:innoai-tech/nodekit.git",
-    "directory": "nodedevpkg/gents"
-  },
   "scripts": {
     "build": "monobundle",
     "test": "vitest --run --passWithNoTests --dir .",

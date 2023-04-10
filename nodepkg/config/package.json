@@ -10,9 +10,10 @@
   },
   "dependencies": {
     "@innoai-tech/lodash": "workspace:*",
-    "esbuild": "^0.17.15",
+    "esbuild": "^0.17.16",
     "vite": "^4.2.1"
   },
+  "peerDependencies": {},
   "browserslist": [
     "defaults"
   ],
@@ -41,15 +42,6 @@
     "*.d.ts"
   ],
   "license": "MIT",
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com",
-    "access": "public"
-  },
-  "repository": {
-    "type": "git",
-    "url": "ssh://git@github.com:innoai-tech/nodekit.git",
-    "directory": "nodepkg/config"
-  },
   "scripts": {
     "build": "monobundle",
     "test": "vitest --run --passWithNoTests --dir .",

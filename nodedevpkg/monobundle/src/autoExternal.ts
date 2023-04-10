@@ -1,7 +1,6 @@
 import { existsSync } from "fs";
 import { last } from "@innoai-tech/lodash";
-// @ts-ignore
-import minimatch from "minimatch";
+import { minimatch } from "minimatch";
 import { dirname, join, resolve } from "path";
 import type { InputOptions } from "rollup";
 // @ts-ignore

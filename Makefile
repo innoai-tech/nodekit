@@ -18,7 +18,7 @@ update:
 	pnpm up -r --latest
 
 dep:
-	pnpm install
+	pnpm install && pnpm dedupe
 
 bootstrap: dep
 	pnpm exec turbo run build --filter=monobundle --force
@@ -40,6 +40,9 @@ pub:
 
 ship:
 	dagger do go ship pushx
+
+clean:
+	find . -name 'node_modules' -type d -prune -print -exec rm -rf '{}' \;
 
 #save:
 	#dagger --log-level=debug do go ship save linux/arm64

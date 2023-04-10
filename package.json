@@ -7,14 +7,6 @@
     "node": ">= 19",
     "pnpm": ">= 7"
   },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com",
-    "access": "public"
-  },
-  "repository": {
-    "type": "git",
-    "url": "ssh://git@github.com:innoai-tech/nodekit.git"
-  },
   "prettier": {},
   "dependencies": {
     "@innoai-tech/fetcher": "workspace:*",
@@ -27,9 +19,9 @@
     "@innoai-tech/vite-presets": "workspace:*",
     "@testing-library/react": "^14.0.0",
     "@types/node": "^18.15.11",
-    "@types/react": "^18.0.33",
+    "@types/react": "^18.0.34",
     "core-js": "^3.30.0",
-    "esbuild": "^0.17.15",
+    "esbuild": "^0.17.16",
     "jsdom": "^21.1.1",
     "prettier": "^2.8.7",
     "react": "^18.2.0",
@@ -37,8 +29,8 @@
     "rxjs": "^7.8.0",
     "tsx": "^3.12.6",
     "turbo": "^1.8.8",
-    "typescript": "^5.0.3",
+    "typescript": "^5.0.4",
     "vite": "^4.2.1",
-    "vitest": "0.29.8"
+    "vitest": "0.30.0"
   }
 }

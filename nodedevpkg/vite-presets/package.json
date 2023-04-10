@@ -19,7 +19,7 @@
     "vite": "^4.x"
   },
   "devDependencies": {
-    "esbuild": "^0.17.15",
+    "esbuild": "^0.17.16",
     "rollup": "^3.20.2",
     "vite": "^4.2.1"
   },
@@ -36,15 +36,6 @@
     "*.d.ts"
   ],
   "license": "MIT",
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com",
-    "access": "public"
-  },
-  "repository": {
-    "type": "git",
-    "url": "ssh://git@github.com:innoai-tech/nodekit.git",
-    "directory": "nodedevpkg/vite-presets"
-  },
   "scripts": {
     "lint": "prettier --write .",
     "build": "monobundle",

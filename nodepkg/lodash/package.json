@@ -14,15 +14,6 @@
     }
   },
   "license": "MIT",
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com",
-    "access": "public"
-  },
-  "repository": {
-    "type": "git",
-    "url": "ssh://git@github.com:innoai-tech/nodekit.git",
-    "directory": "nodepkg/lodash"
-  },
   "scripts": {},
   "sideEffects": false,
   "type": "module"
