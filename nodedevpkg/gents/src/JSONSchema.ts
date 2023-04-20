@@ -210,7 +210,7 @@ const refID = (f: Genfile, ref: string) => {
       f.enum(name, `${typeFromJSONSchema(f, schema, true)}`);
     }
 
-    return Genfile.id(`keyof typeof ${name}`);
+    return Genfile.id(`${name}`);
   }
 
   if (!f.declared(name)) {

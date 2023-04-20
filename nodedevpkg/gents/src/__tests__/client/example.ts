@@ -108,7 +108,7 @@ export interface KubepkgV1Alpha1DigestMeta {
   platform?: string;
   size: KubepkgV1Alpha1FileSize;
   tag?: string;
-  type: keyof typeof KubepkgV1Alpha1DigestMetaType;
+  type: KubepkgV1Alpha1DigestMetaType;
 }
 
 export interface KubepkgV1Alpha1Statuses {
