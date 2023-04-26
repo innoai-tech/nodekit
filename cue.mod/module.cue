@@ -6,5 +6,6 @@ require: {
 }
 
 require: {
-	"universe.dagger.io": "v0.3.0" @indirect()
+	"universe.dagger.io":  "v0.3.0"                             @indirect()
+	"wagon.octohelm.tech": "v0.0.0-20200202235959-3d91e2e3161f" @indirect()
 }
