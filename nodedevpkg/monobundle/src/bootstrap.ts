@@ -20,12 +20,12 @@ const patchRootPackage = async (
   <component name="ProjectModuleManager">
     <modules>
 ${map(pkgs, (pkg, dir) => {
-      const filename = join(
-        "$PROJECT_DIR$",
-        imlFromPackageJSON(relative(projectRoot, dir), pkg)
-      );
-      return `<module fileurl="file://${filename}" filepath="${filename}" />`;
-    }).join("\n")}
+  const filename = join(
+    "$PROJECT_DIR$",
+    imlFromPackageJSON(relative(projectRoot, dir), pkg)
+  );
+  return `<module fileurl="file://${filename}" filepath="${filename}" />`;
+}).join("\n")}
     </modules>
   </component>
 </project>
@@ -36,7 +36,7 @@ ${map(pkgs, (pkg, dir) => {
 const defaultScripts = {
   lint: "prettier --write .",
   test: "vitest --run --passWithNoTests --dir .",
-  build: "monobundle"
+  build: "monobundle",
 };
 
 const orderKeys = (o: any) => {
@@ -49,7 +49,7 @@ const orderKeys = (o: any) => {
     "dependencies",
     "peerDependencies",
     "devDependencies",
-    ...keys(o).sort()
+    ...keys(o).sort(),
   ].forEach((k) => {
     v[k] = o[k];
   });
@@ -64,7 +64,7 @@ const patchMonoPackage = async (
   rootPkg: any
 ) => {
   const scripts = {
-    ...(pkg.scripts || {})
+    ...(pkg.scripts || {}),
   };
 
   if (get(pkg, ["monobundle"])) {
@@ -92,16 +92,16 @@ const patchMonoPackage = async (
         license: "MIT",
         repository: rootPkg.repository
           ? {
-            ...rootPkg.repository,
-            directory
-          }
+              ...rootPkg.repository,
+              directory,
+            }
           : undefined,
         publishConfig:
           !pkg.private && rootPkg.publishConfig
             ? {
-              ...rootPkg.publishConfig
-            }
-            : undefined
+                ...rootPkg.publishConfig,
+              }
+            : undefined,
       }),
       null,
       2
@@ -128,13 +128,13 @@ export const addImiFile = async (monoRoot: string, pkg: any) => {
       <excludeFolder url="file://$MODULE_DIR$/dist" />
       <excludeFolder url="file://$MODULE_DIR$/node_modules" />
       ${
-      isCueMod
-        ? `
+        isCueMod
+          ? `
       <excludeFolder url="file://$MODULE_DIR$/cue.mod/gen" />
       <excludeFolder url="file://$MODULE_DIR$/cue.mod/pkg" />
       `
-        : ""
-    }
+          : ""
+      }
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
@@ -156,11 +156,11 @@ export const bootstrap = async (projectRoot: string) => {
   const packageJsonFiles = await globby(
     [
       `${projectRoot}/package.json`,
-      ...workspace.packages.map((p) => `${p}/package.json`)
+      ...workspace.packages.map((p) => `${p}/package.json`),
     ],
     {
       cwd: projectRoot,
-      absolute: true
+      absolute: true,
     }
   );
 

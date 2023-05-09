@@ -7,7 +7,7 @@ const SUPPORTED_BUILD_TARGETS = [
   "edge",
   "firefox",
   "ios",
-  "safari"
+  "safari",
 ];
 
 export function getBuildTargets(target: string | string[]) {

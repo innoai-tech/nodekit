@@ -8,9 +8,6 @@ serve:
 serve.base.href:
 	go run ./cmd/webappserve serve --base-href=/example --root=./cmd/webappserve/example/base
 
-dev:
-	pnpm exec vite
-
 tidy:
 	go mod tidy
 
@@ -30,7 +27,7 @@ lint:
 	pnpm exec turbo run lint --force
 
 test:
-	pnpm exec turbo run test
+	pnpm exec turbo run test --force
 
 build:
 	pnpm exec turbo run build --filter=!monobundle --force

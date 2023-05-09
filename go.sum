@@ -148,8 +148,6 @@ github.com/hashicorp/golang-lru v0.5.1/go.mod h1:/m3WP610KZHVQ1SGc6re/UDhFvYD7pJ
 github.com/ianlancetaylor/demangle v0.0.0-20181102032728-5e5cf60278f6/go.mod h1:aSSvb/t6k1mPoxDqO4vJh6VOCGPwU4O0C2/Eqndh1Sc=
 github.com/inconshreveable/mousetrap v1.1.0 h1:wN+x4NVGpMsO7ErUn/mUI3vEoE6Jt13X2s0bqwp9tc8=
 github.com/inconshreveable/mousetrap v1.1.0/go.mod h1:vpF70FUmC8bwa3OWnCshd2FqLfsEA9PFc4w1p2J65bw=
-github.com/innoai-tech/infra v0.0.0-20230426073107-728607feaa08 h1:8pQgQRL6OnhG8gcwj/bWWzEUd4p1p7GX/cmccFDKP64=
-github.com/innoai-tech/infra v0.0.0-20230426073107-728607feaa08/go.mod h1:cyliTpW9gRIqQZ5GECEXa9GUwQ5XVq3QrbqZ3CK9+0I=
 github.com/innoai-tech/infra v0.0.0-20230426074355-84a24dba7d07 h1:3s+D8oHWPJWWI0izyZBwyVQGRT8mOwbaqavKrvROE5E=
 github.com/innoai-tech/infra v0.0.0-20230426074355-84a24dba7d07/go.mod h1:cyliTpW9gRIqQZ5GECEXa9GUwQ5XVq3QrbqZ3CK9+0I=
 github.com/jstemmer/go-junit-report v0.0.0-20190106144839-af01ea7f8024/go.mod h1:6v2b51hI/fHJwM22ozAgKL4VKDeJcHhJFhtBdhmNjmU=

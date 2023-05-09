@@ -79,92 +79,100 @@ export const createAutoExternal = (
     return unused;
   };
 
-  const autoExternal = (validate = true) => ({
-    name: "auto-external",
+  const autoExternal = (validate = true) => {
+    const collector = new Set<string>();
 
-    options(opts: InputOptions) {
-      const external = (
-        id: string,
-        importer: string | undefined,
-        isResolved: boolean
-      ) => {
-        if (
-          typeof opts.external === "function" &&
-          opts.external(id, importer, isResolved)
-        ) {
-          return true;
-        }
+    return {
+      name: "auto-external",
 
-        if (Array.isArray(opts.external) && opts.external.includes(id)) {
-          return true;
-        }
-
-        if (!(id.startsWith(".") || id.startsWith("/"))) {
-          const parts = id.split("/");
-
-          if (parts.length > 2 && last(parts) === "macro") {
-            // import types of /macro
-            return false;
-          }
-
+      options(opts: InputOptions) {
+        const external = (
+          id: string,
+          importer: string | undefined,
+          isResolved: boolean
+        ) => {
           if (
-            parts.length > 2 &&
-            existsSync(join(monoRoot, parts[0]!, parts[1]!))
+            typeof opts.external === "function" &&
+            opts.external(id, importer, isResolved)
           ) {
-            if (parts[2] !== "jsx-runtime") {
-              throw new Error(
-                `import error at ${importer}, don't import sub file ${id}.`
-              );
-            }
-          }
-
-          const isDep = deps.some((idx) => id.startsWith(idx));
-          const isBuiltIn = builtins.some((idx) => id.startsWith(idx));
-
-          if (isDep) {
-            usedPkgs[id] = true;
-          }
-
-          if (isBuiltIn || isDep) {
             return true;
           }
 
-          if (validate) {
-            logger?.danger(
-              `"${id}" is not in dependencies or peerDependencies, and will be bundled.`
-            );
+          if (Array.isArray(opts.external) && opts.external.includes(id)) {
+            return true;
+          }
+
+          if (!(id.startsWith(".") || id.startsWith("/"))) {
+            const parts = id.split("/");
+
+            if (parts.length > 2 && last(parts) === "macro") {
+              // import types of /macro
+              return false;
+            }
+
+            if (
+              parts.length > 2 &&
+              existsSync(join(monoRoot, parts[0]!, parts[1]!))
+            ) {
+              if (parts[2] !== "jsx-runtime") {
+                throw new Error(
+                  `import error at ${importer}, don't import sub file ${id}.`
+                );
+              }
+            }
+
+            const isDep = deps.some((idx) => id.startsWith(idx));
+            const isBuiltIn = builtins.some((idx) => id.startsWith(idx));
+
+            if (isDep) {
+              usedPkgs[id] = true;
+            }
+
+            if (isBuiltIn || isDep) {
+              return true;
+            }
+
+            if (validate) {
+              if (!collector.has(id)) {
+                collector.add(id);
+
+                logger?.danger(
+                  `"${id}" is not in dependencies or peerDependencies, and will be bundled.`
+                );
+              }
+            }
+
+            return false;
           }
 
           return false;
+        };
+
+        return Object.assign({}, opts, { external });
+      },
+
+      resolveId(id: string, importer: any) {
+        if (!importer) {
+          return;
         }
 
-        return false;
-      };
+        const parts = resolve(dirname(importer), id).split("/build/");
 
-      return Object.assign({}, opts, { external });
-    },
+        if (parts.length !== 2) {
+          return;
+        }
 
-    resolveId(id: string, importer: any) {
-      if (!importer) {
+        if (existsSync(join(monoRoot, parts[1]!, "package.json"))) {
+          return {
+            id: parts[1],
+            external: true,
+          };
+        }
+
         return;
-      }
-
-      const parts = resolve(dirname(importer), id).split("/build/");
-
-      if (parts.length !== 2) {
-        return;
-      }
-
-      if (existsSync(join(monoRoot, parts[1]!, "package.json"))) {
-        return {
-          id: parts[1],
-          external: true,
-        };
-      }
-
-      return;
-    },
-  });
+      },
+    };
+  };
 
   autoExternal.warningAndGetUnused = warningAndGetUnused;
 

@@ -1,6 +1,6 @@
 module github.com/innoai-tech/nodekit
 
-go 1.19
+go 1.20
 
 require github.com/innoai-tech/infra v0.0.0-20230426074355-84a24dba7d07
 

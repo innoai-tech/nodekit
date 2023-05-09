@@ -1,9 +1,9 @@
-use swc_core::{ecma::ast::Program, plugin::plugin_transform};
 use swc_core::ecma::visit::FoldWith;
 use swc_core::plugin::metadata::TransformPluginProgramMetadata;
+use swc_core::{ecma::ast::Program, plugin::plugin_transform};
 
-use self::ignore_side_imports::*;
 use self::annotate_pure_calls::*;
+use self::ignore_side_imports::*;
 
 mod annotate_pure_calls;
 mod ignore_side_imports;

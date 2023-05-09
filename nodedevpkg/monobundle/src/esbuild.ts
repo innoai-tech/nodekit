@@ -8,7 +8,7 @@ const defaultLoaders: { [ext: string]: Loader } = {
   ".js": "js",
   ".jsx": "jsx",
   ".ts": "ts",
-  ".tsx": "tsx"
+  ".tsx": "tsx",
 };
 
 type CompilerOptions = {
@@ -51,7 +51,7 @@ const loadTsCompilerOptions = (
       importsNotUsedAsValues: o.importsNotUsedAsValues
         ? toLower(ts.ImportsNotUsedAsValues[o.importsNotUsedAsValues])
         : undefined,
-      jsx: o.jsx ? kebabCase(ts.JsxEmit[o.jsx]) : undefined
+      jsx: o.jsx ? kebabCase(ts.JsxEmit[o.jsx]) : undefined,
     } as CompilerOptions;
   }
 
@@ -59,10 +59,10 @@ const loadTsCompilerOptions = (
 };
 
 export const esbuild = ({
-                          loaders,
-                          tsconfig,
-                          ...options
-                        }: TransformOptions & {
+  loaders,
+  tsconfig,
+  ...options
+}: TransformOptions & {
   tsconfig: string;
   loaders?: Record<string, Loader>;
 }): Plugin => {
@@ -72,7 +72,7 @@ export const esbuild = ({
 
   const allLoaders = {
     ...defaultLoaders,
-    ...loaders
+    ...loaders,
   };
 
   return {
@@ -91,15 +91,15 @@ export const esbuild = ({
         tsconfigRaw: { compilerOptions: compilerOptions as any },
         loader,
         target: options.target || "defaults",
-        sourcefile: id
+        sourcefile: id,
       });
 
       return (
         result.code && {
           code: result.code,
-          map: result.map || null
+          map: result.map || null,
         }
       );
-    }
+    },
   };
 };

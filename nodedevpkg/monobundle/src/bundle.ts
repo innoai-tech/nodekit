@@ -10,7 +10,7 @@ import {
   keys,
   forEach,
   set,
-  map
+  map,
 } from "@innoai-tech/lodash";
 import { join, relative, extname, basename, dirname } from "path";
 import { type OutputOptions, rollup, type RollupOptions } from "rollup";
@@ -60,9 +60,9 @@ export interface MonoBundleOptions {
 }
 
 export const bundle = async ({
-                               cwd = process.cwd(),
-                               dryRun
-                             }: {
+  cwd = process.cwd(),
+  dryRun,
+}: {
   cwd?: string;
   dryRun?: boolean;
 }) => {
@@ -105,15 +105,18 @@ dist/
 
   const outputBase: OutputOptions = {
     dir: cwd,
-    format: "es"
+    format: "es",
   };
 
   pkg["peerDependencies"] = {
     ...(pkg["peerDependencies"] ?? {}),
-    "core-js": "*"
+    "core-js": "*",
   };
 
-  const autoExternal = createAutoExternal(projectRoot, pkg, { logger, sideDeps: options["sideDeps"] as any });
+  const autoExternal = createAutoExternal(projectRoot, pkg, {
+    logger,
+    sideDeps: options["sideDeps"] as any,
+  });
 
   const buildTargets = getBuildTargets(
     (pkg as any).browserslist ?? ["defaults"]
@@ -126,23 +129,22 @@ dist/
         output: {
           ...outputBase,
           entryFileNames: "[name].mjs",
-          chunkFileNames: "[name]-[hash].mjs"
+          chunkFileNames: "[name]-[hash].mjs",
         },
         plugins: [
           autoExternal(),
           nodeResolve({
-            extensions: [".ts", ".tsx", ".mjs", "", ".js", ".jsx"]
+            extensions: [".ts", ".tsx", ".mjs", "", ".js", ".jsx"],
           }),
           commonjs(),
           esbuild({
             tsconfig: tsconfigFile,
-            target: map(buildTargets, (v, k) => `${k}${v}`)
+            target: map(buildTargets, (v, k) => `${k}${v}`),
           }),
-          chunkCleanup()
-        ]
+          chunkCleanup(),
+        ],
       });
     },
-
 
     async () => {
       await tsc(cwd, ".turbo/types", tsconfigFile);
@@ -157,17 +159,17 @@ dist/
         output: {
           ...outputBase,
           entryFileNames: "[name].d.ts",
-          chunkFileNames: "[name]-[hash].d.ts"
+          chunkFileNames: "[name]-[hash].d.ts",
         },
         plugins: [
           autoExternal(false),
           dts({
             tsconfig: tsconfigFile,
-            respectExternal: true
-          }) as any
-        ]
+            respectExternal: true,
+          }) as any,
+        ],
       };
-    }
+    },
   ];
 
   logger.warning(`bundling (target: ${JSON.stringify(buildTargets)})`);
@@ -228,7 +230,7 @@ dist/
     // FIXME remote all old entries
     types: undefined,
     main: undefined,
-    module: undefined
+    module: undefined,
   };
 
   forEach(options.exports, (_, e) => {
@@ -242,8 +244,8 @@ dist/
     set(exports, ["exports", e], {
       import: {
         types: `./${distName}.d.ts`,
-        default: `./${distName}.mjs`
-      }
+        default: `./${distName}.mjs`,
+      },
     });
   });
 
@@ -262,7 +264,7 @@ dist/
           ? undefined
           : (pkg["devDependencies"] as { [k: string]: string }),
         files: ["*.mjs", "*.d.ts"],
-        ...exports
+        ...exports,
       },
       null,
       2

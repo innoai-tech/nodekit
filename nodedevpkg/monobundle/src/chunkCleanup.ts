@@ -10,32 +10,30 @@ export const chunkCleanup = (): Plugin => {
         return await transform(code, {
           swcrc: false,
           env: {
-            targets: "defaults"
+            targets: "defaults",
           },
           module: {
-            type: "es6"
+            type: "es6",
           },
           minify: false,
           jsc: {
             parser: {
               syntax: "typescript",
               dynamicImport: true,
-              tsx: false
+              tsx: false,
             },
             transform: {},
             externalHelpers: false,
             experimental: {
-              plugins: [
-                usePlugin({})
-              ]
-            }
+              plugins: [usePlugin({})],
+            },
           },
-          isModule: true
+          isModule: true,
         });
       } catch (e) {
         console.error(e);
         throw e;
       }
-    }
+    },
   };
 };

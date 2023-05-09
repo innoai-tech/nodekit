@@ -15,10 +15,10 @@ export const tsc = async (
       "--outDir",
       outDir,
       "-p",
-      tsconfig
+      tsconfig,
     ],
     {
-      cwd: projectRoot
+      cwd: projectRoot,
     }
   );
 
