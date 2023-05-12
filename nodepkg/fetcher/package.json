@@ -7,7 +7,7 @@
     }
   },
   "dependencies": {
-    "@innoai-tech/lodash": "workspace:*"
+    "@innoai-tech/lodash": "workspace:^"
   },
   "peerDependencies": {
     "rxjs": "7.x"

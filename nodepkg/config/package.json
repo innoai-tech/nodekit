@@ -9,7 +9,7 @@
     }
   },
   "dependencies": {
-    "@innoai-tech/lodash": "workspace:*",
+    "@innoai-tech/lodash": "workspace:^",
     "esbuild": "^0.17.18"
   },
   "peerDependencies": {
