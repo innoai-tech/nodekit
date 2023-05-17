@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { transform } from "@swc/core";
-import { usePlugin } from "..";
+import { transform } from "..";
+import { transform as swcTransform } from "@swc/core";
 
 const cases = [
   {
@@ -159,30 +159,10 @@ function unPad(str: string) {
 describe("test cases", () => {
   cases.forEach((caseItem) => {
     ((caseItem as any).only ? it.only : it)(caseItem.title, async () => {
-      const transformedCode = (await transform(caseItem.src, {
-        swcrc: false,
-        module: {
-          type: "es6"
-        },
-        isModule: true,
-        minify: false,
-        jsc: {
-          parser: {
-            syntax: "typescript",
-            tsx: true,
-            dynamicImport: true
-          },
-          externalHelpers: false,
-          experimental: {
-            plugins: [
-              usePlugin({})
-            ]
-          }
-        }
-      })).code;
+      const transformedCode = await transform(caseItem.src);
 
       const expectCode = (
-        await transform(caseItem.dest, {
+        await swcTransform(caseItem.dest, {
           swcrc: false,
           jsc: {
             parser: {
