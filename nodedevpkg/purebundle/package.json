@@ -1,12 +1,12 @@
 {
   "name": "@innoai-tech/purebundle",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "dependencies": {
-    "@types/node": "^20.1.3",
+    "@types/node": "^20.1.7",
     "vitest": "^0.31.0"
   },
   "devDependencies": {
-    "@swc/core": "^1.3.57"
+    "@swc/core": "^1.3.58"
   },
   "exports": {
     ".": {
