@@ -164,6 +164,9 @@ describe("test cases", () => {
       const expectCode = (
         await swcTransform(caseItem.dest, {
           swcrc: false,
+          env: {
+            targets: "defaults"
+          },
           jsc: {
             parser: {
               syntax: "typescript",

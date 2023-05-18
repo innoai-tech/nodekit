@@ -16,6 +16,9 @@ export async function transform(code) {
       module: {
         type: "es6"
       },
+      env: {
+        targets: "defaults"
+      },
       minify: false,
       jsc: {
         parser: {
