@@ -34,6 +34,10 @@ export const createAutoExternal = (
 
   const usedPkgs: any = {};
 
+  if (pkg.name) {
+    deps = [pkg.name];
+  }
+
   if (pkg.dependencies) {
     deps = [...deps, ...Object.keys(pkg.dependencies)];
   }

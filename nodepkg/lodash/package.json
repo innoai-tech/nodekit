@@ -1,6 +1,6 @@
 {
   "name": "@innoai-tech/lodash",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "dependencies": {
     "@types/lodash-es": "^4.17.7",
     "lodash": "^4.17.21",
@@ -8,9 +8,14 @@
   },
   "exports": {
     ".": {
-      "types": "./index.d.ts",
-      "import": "./index.mjs",
-      "require": "./index.cjs"
+      "import": {
+        "types": "./index.d.ts",
+        "default": "./index.mjs"
+      },
+      "require": {
+        "types": "./index.d.ts",
+        "default": "./index.cjs"
+      }
     }
   },
   "license": "MIT",
