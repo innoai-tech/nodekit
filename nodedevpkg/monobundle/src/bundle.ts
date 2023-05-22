@@ -151,6 +151,15 @@ dist/
     },
 
     async () => {
+      const files = await globby(["*.mjs", "*.d.ts"]);
+
+      for (const f of files) {
+        if (outputFiles[f]) {
+          continue;
+        }
+        await unlink(join(cwd, f));
+      }
+
       await tsc(cwd, ".turbo/types", tsconfigFile);
 
       const indexForDts = mapValues(inputs, (input) => {
@@ -207,15 +216,6 @@ dist/
   }
 
   logger.success("bundled", ...keys(outputFiles));
-
-  const files = await globby(["*.mjs", "*.d.ts"]);
-
-  for (const f of files) {
-    if (outputFiles[f]) {
-      continue;
-    }
-    await unlink(join(cwd, f));
-  }
 
   const unused = autoExternal.warningAndGetUnused();
 
