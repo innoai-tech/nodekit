@@ -1,8 +1,9 @@
-import { existsSync } from "fs";
-import { last } from "@innoai-tech/lodash";
 import { minimatch } from "minimatch";
-import { dirname, join, resolve } from "path";
-import type { InputOptions } from "rollup";
+import { join } from "path";
+import { globby } from "globby";
+import { readFile } from "fs/promises";
+import { load } from "js-yaml";
+import { type InputOptions } from "rollup";
 // @ts-ignore
 const builtIns = process.binding("natives");
 
@@ -10,9 +11,57 @@ const isPkgUsed = (pkg: string, id: string) => {
   return id === pkg || `@types/${id}` === pkg || id.startsWith(`${pkg}/`);
 };
 
-export const createAutoExternal = (
+export type Package = {
+  name: string,
+  dependencies?: Record<string, string>,
+  peerDependencies?: Record<string, string>,
+}
+
+export const loadWorkspace = async (monoRoot: string, localPkg: Package) => {
+  const w = load(String(await readFile(join(monoRoot, "./pnpm-workspace.yaml")))) as { packages?: string[] };
+  const m = new Map<string, Set<string>>;
+
+  if (w?.packages) {
+    const packageJSONs = await globby(w?.packages.map((b) => `${b}/package.json`), {
+      cwd: monoRoot
+    });
+
+    for (const f of packageJSONs) {
+      let pkg = JSON.parse(String(await readFile(join(`${monoRoot}`, f)))) as Package;
+
+      // localPkg may be changed
+      if (localPkg.name === pkg.name) {
+        pkg = localPkg;
+      }
+
+      const dep = new Set<string>();
+
+      if (pkg.name) {
+        dep.add(pkg.name);
+      }
+
+      if (pkg.dependencies) {
+        for (const d in pkg.dependencies) {
+          dep.add(d);
+        }
+      }
+
+      if (pkg.peerDependencies) {
+        for (const d in pkg.peerDependencies) {
+          dep.add(d);
+        }
+      }
+
+      m.set(pkg.name, dep);
+    }
+  }
+
+  return m;
+};
+
+export const createAutoExternal = async (
   monoRoot: string,
-  pkg: any,
+  pkg: Package,
   opts: {
     logger?: ReturnType<typeof import("./log").createLogger>;
     sideDeps?: string[];
@@ -30,151 +79,104 @@ export const createAutoExternal = (
     );
   };
 
-  let deps: string[] = [];
+  const usedPkgs = new Set<string>();
 
-  const usedPkgs: any = {};
+  const w = await loadWorkspace(monoRoot, pkg);
 
-  if (pkg.name) {
-    deps = [pkg.name];
-  }
+  const dep = new Set<string>();
 
-  if (pkg.dependencies) {
-    deps = [...deps, ...Object.keys(pkg.dependencies)];
-  }
+  const collect = (pkgName: string) => {
+    const pkgDep = w.get(pkgName);
 
-  if (pkg.peerDependencies) {
-    deps = [...deps, ...Object.keys(pkg.peerDependencies)];
-  }
+    if (pkgDep) {
+      for (const d of pkgDep) {
+        dep.add(d);
+
+        if (d != pkgName) {
+          collect(d);
+        }
+      }
+    }
+  };
+
+  collect(pkg.name);
+
 
   const builtins = Object.keys(builtIns);
 
   const warningAndGetUnused = () => {
-    const used = Object.keys(usedPkgs);
+    const used = [...usedPkgs.keys()];
 
     const unused = {
       deps: {} as { [k: string]: boolean },
-      peerDeps: {} as { [k: string]: boolean },
+      peerDeps: {} as { [k: string]: boolean }
     };
 
-    if (pkg.dependencies) {
-      Object.keys(pkg.dependencies).forEach((dep) => {
-        if (isSideDep(dep)) {
-          return;
-        }
+    for (const d of dep) {
+      if (isSideDep(d)) {
+        continue;
+      }
 
-        if (!used.some((id) => isPkgUsed(dep, id))) {
-          unused.deps[dep] = true;
-        }
-      });
-    }
-
-    if (pkg.peerDependencies) {
-      Object.keys(pkg.peerDependencies).forEach((dep) => {
-        if (isSideDep(dep)) {
-          return;
-        }
-
-        if (!used.some((id) => isPkgUsed(dep, id))) {
-          unused.peerDeps[dep] = true;
-        }
-      });
+      if (!used.some((id) => isPkgUsed(d, id))) {
+        unused.deps[d] = true;
+        unused.peerDeps[d] = true;
+      }
     }
 
     return unused;
   };
 
+  const collector = new Set<string>();
+
   const autoExternal = (validate = true) => {
-    const collector = new Set<string>();
 
     return {
       name: "auto-external",
 
       options(opts: InputOptions) {
-        const external = (
-          id: string,
-          importer: string | undefined,
-          isResolved: boolean
-        ) => {
-          if (
-            typeof opts.external === "function" &&
-            opts.external(id, importer, isResolved)
-          ) {
-            return true;
-          }
-
-          if (Array.isArray(opts.external) && opts.external.includes(id)) {
-            return true;
-          }
-
-          if (!(id.startsWith(".") || id.startsWith("/"))) {
-            const parts = id.split("/");
-
-            if (parts.length > 2 && last(parts) === "macro") {
-              // import types of /macro
-              return false;
-            }
-
+        return {
+          ...opts,
+          external(id: string, importer: string | undefined, isResolved: boolean) {
             if (
-              parts.length > 2 &&
-              existsSync(join(monoRoot, parts[0]!, parts[1]!))
+              typeof opts.external === "function" &&
+              opts.external(id, importer, isResolved)
             ) {
-              if (parts[2] !== "jsx-runtime") {
-                throw new Error(
-                  `import error at ${importer}, don't import sub file ${id}.`
-                );
-              }
-            }
-
-            const isDep = deps.some((idx) => id.startsWith(idx));
-            const isBuiltIn = builtins.some((idx) => id.startsWith(idx));
-
-            if (isDep) {
-              usedPkgs[id] = true;
-            }
-
-            if (isBuiltIn || isDep) {
               return true;
             }
 
-            if (validate) {
-              if (!collector.has(id)) {
-                collector.add(id);
+            if (Array.isArray(opts.external) && opts.external.includes(id)) {
+              return true;
+            }
 
-                logger?.danger(
-                  `"${id}" is not in dependencies or peerDependencies, and will be bundled.`
-                );
+            if (!(id.startsWith(".") || id.startsWith("/"))) {
+              const isDep = [...dep.keys()].some((d) => id.startsWith(d));
+              const isBuiltIn = builtins.some((b) => id.startsWith(b));
+
+              if (isDep) {
+                usedPkgs.add(id);
               }
+
+              if (isBuiltIn || isDep) {
+                return true;
+              }
+
+              if (validate) {
+                if (!collector.has(id)) {
+                  collector.add(id);
+
+                  logger?.danger(
+                    `"${id}" is not in dependencies or peerDependencies, and will be bundled.`
+                  );
+                }
+              }
+
+              return false;
             }
 
             return false;
           }
-
-          return false;
         };
-
-        return Object.assign({}, opts, { external });
-      },
-
-      resolveId(id: string, importer: any) {
-        if (!importer) {
-          return;
-        }
-
-        const parts = resolve(dirname(importer), id).split("/build/");
-
-        if (parts.length !== 2) {
-          return;
-        }
-
-        if (existsSync(join(monoRoot, parts[1]!, "package.json"))) {
-          return {
-            id: parts[1],
-            external: true,
-          };
-        }
-
-        return;
-      },
+      }
     };
   };
 

@@ -114,7 +114,7 @@ dist/
     "core-js": "*"
   };
 
-  const autoExternal = createAutoExternal(projectRoot, pkg, {
+  const autoExternal = await createAutoExternal(projectRoot, pkg as any, {
     logger,
     sideDeps: options["sideDeps"] as any
   });
@@ -175,7 +175,7 @@ dist/
           chunkFileNames: "[name]-[hash].d.ts"
         },
         plugins: [
-          autoExternal(false),
+          autoExternal(),
           dts({
             tsconfig: tsconfigFile,
             respectExternal: true
