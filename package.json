@@ -11,16 +11,16 @@
   "devDependencies": {
     "@innoai-tech/devconfig": "workspace:^",
     "@innoai-tech/monobundle": "workspace:^",
-    "@types/node": "^20.2.3",
+    "@types/node": "^20.2.5",
     "core-js": "^3.30.2",
     "esbuild": "^0.17.19",
-    "jsdom": "^22.0.0",
+    "jsdom": "^22.1.0",
     "prettier": "^2.8.8",
     "rxjs": "^7.8.1",
     "tsx": "^3.12.7",
-    "turbo": "^1.9.8",
+    "turbo": "^1.9.9",
     "typescript": "^5.0.4",
-    "vite": "^4.3.8",
+    "vite": "^4.3.9",
     "vitest": "0.31.1"
   }
 }
