@@ -15,11 +15,14 @@ update:
 	pnpm up -r --latest
 
 dep:
-	pnpm install && pnpm dedupe
+	pnpm install
 
-bootstrap: dep
-	pnpm exec turbo run build --filter=monobundle --force
+bootstrap: dep build.monobundle
 	pnpm exec monobundle
+
+build.monobundle:
+	pnpm exec turbo run build --filter=monobundle --force
+	pnpm install
 
 ci: lint test
 
