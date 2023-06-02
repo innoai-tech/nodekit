@@ -30,6 +30,15 @@ export const parseSearch = (s: string): { [k: string]: string[] } => {
 const getContentType = (headers: any = {}) =>
   headers["Content-Type"] || headers["content-type"] || "";
 
+const dropContentType = (headers: any = {}) => {
+  if (headers["Content-Type"]) {
+    delete headers["Content-Type"];
+  }
+  if (headers["content-type"]) {
+    delete headers["content-type"];
+  }
+};
+
 const isContentTypeMultipartFormData = (headers: any) =>
   getContentType(headers).includes("multipart/form-data");
 const isContentTypeFormURLEncoded = (headers: any) =>
@@ -64,6 +73,9 @@ export const paramsSerializer = (params: any): string => {
 
 export const transformRequestBody = (data: any, headers: any) => {
   if (isContentTypeMultipartFormData(headers)) {
+    // https://github.com/github/fetch/issues/505#issuecomment-293064470
+    dropContentType(headers);
+
     const formData = new FormData();
 
     const appendValue = (k: string, v: any) => {
