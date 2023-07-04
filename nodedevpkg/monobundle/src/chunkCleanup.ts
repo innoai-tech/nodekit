@@ -3,6 +3,7 @@ import { transform } from "@innoai-tech/purebundle";
 
 
 export const chunkCleanup = (opts: {
+  minify?: boolean,
   env?: {
     targets?: string | { [K: string]: string }
     mode?: string,
@@ -11,6 +12,7 @@ export const chunkCleanup = (opts: {
 } = {}): Plugin => {
   return {
     name: "monobundle/chunk-cleanup",
+
     async renderChunk(code: string) {
       try {
         return await transform(code, opts);

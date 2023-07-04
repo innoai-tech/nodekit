@@ -16,10 +16,10 @@ export async function transform(code, opts = {}) {
       module: {
         type: "es6"
       },
-      env: opts.env || {
+      env: opts.env ?? {
         targets: "defaults"
       },
-      minify: false,
+      minify: opts.minify ?? false,
       jsc: {
         parser: {
           syntax: "typescript",
