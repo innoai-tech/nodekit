@@ -9,14 +9,14 @@ export const usePlugin = (opts = {}) => [
   opts
 ];
 
-export async function transform(code) {
+export async function transform(code, opts = {}) {
   return (
     await trans(code, {
       swcrc: false,
       module: {
         type: "es6"
       },
-      env: {
+      env: opts.env || {
         targets: "defaults"
       },
       minify: false,
