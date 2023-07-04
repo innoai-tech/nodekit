@@ -55,9 +55,6 @@ importers:
       '@innoai-tech/lodash':
         specifier: workspace:^
         version: link:../../nodepkg/lodash
-      '@innoai-tech/purebundle':
-        specifier: workspace:^
-        version: link:../purebundle
       '@rollup/plugin-commonjs':
         specifier: ^25.0.2
         version: 25.0.2(rollup@3.26.0)

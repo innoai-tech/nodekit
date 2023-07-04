@@ -12,6 +12,7 @@ export const usePlugin = (opts = {}) => [
 export async function transform(code, opts = {}) {
   return (
     await trans(code, {
+      filename: opts.filename,
       swcrc: false,
       module: {
         type: "es6"
@@ -21,6 +22,10 @@ export async function transform(code, opts = {}) {
       },
       minify: opts.minify ?? false,
       jsc: {
+        minify: opts.minify ? {
+          compress: true,
+          mangle: true
+        } : undefined,
         parser: {
           syntax: "typescript",
           dynamicImport: true,
@@ -28,11 +33,11 @@ export async function transform(code, opts = {}) {
         },
         transform: {},
         externalHelpers: false,
-        experimental: {
+        experimental: opts.annotatePure ? {
           plugins: [usePlugin({})]
-        }
+        } : undefined
       },
       isModule: true
     })
-  ).code;
+  );
 }

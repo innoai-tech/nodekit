@@ -159,7 +159,9 @@ function unPad(str: string) {
 describe("test cases", () => {
   cases.forEach((caseItem) => {
     ((caseItem as any).only ? it.only : it)(caseItem.title, async () => {
-      const transformedCode = await transform(caseItem.src);
+      const transformedCode = (await transform(caseItem.src, {
+        annotatePure: true
+      })).code;
 
       const expectCode = (
         await swcTransform(caseItem.dest, {

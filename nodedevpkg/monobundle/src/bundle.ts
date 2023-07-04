@@ -23,7 +23,6 @@ import { writeFile, readFile, unlink } from "fs/promises";
 import { bootstrap } from "./bootstrap";
 import { globby } from "globby";
 import { esbuild } from "./esbuild";
-import { chunkCleanup } from "./chunkCleanup";
 import { patchShebang } from "./patchShebang";
 
 const tsconfigFile = "tsconfig.monobundle.json";
@@ -145,7 +144,6 @@ dist/
           patchShebang((chunkName) => {
             return !!(options.exports ?? {})[`bin:${basename(chunkName, extname(chunkName))}`];
           }),
-          chunkCleanup()
         ]
       });
     },
