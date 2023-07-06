@@ -126,7 +126,6 @@ export const addImiFile = async (monoRoot: string, pkg: any) => {
       <excludeFolder url="file://$MODULE_DIR$/.tmp" />
       <excludeFolder url="file://$MODULE_DIR$/.build" />
       <excludeFolder url="file://$MODULE_DIR$/dist" />
-      <excludeFolder url="file://$MODULE_DIR$/node_modules" />
       ${
       isCueMod
         ? `
