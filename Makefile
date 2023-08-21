@@ -1,6 +1,3 @@
-export GIT_SHA ?= $(shell git rev-parse HEAD)
-export GIT_REF ?= HEAD
-
 serve:
 	go run ./cmd/webappserve serve --help
 	go run ./cmd/webappserve serve --root=./cmd/webappserve/example/normal
@@ -38,14 +35,9 @@ build:
 pub:
 	pnpm -r publish --no-git-checks
 
+export BUILDKIT_HOST =
 ship:
-	dagger do go ship pushx
+	wagon do go ship pushx
 
 clean:
 	find . -name 'node_modules' -type d -prune -print -exec rm -rf '{}' \;
-
-#save:
-	#dagger --log-level=debug do go ship save linux/arm64
-#
-#devkit.save:
-#	dagger --log-level=debug do go devkit save linux/arm64

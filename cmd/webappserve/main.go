@@ -8,17 +8,12 @@ import (
 )
 
 var (
-	version  = "devel"
-	revision = "-"
+	version = "devel"
 )
-
-func fullVersion() string {
-	return version + ".sha+" + revision
-}
 
 var App = cli.NewApp(
 	"app",
-	fullVersion(),
+	version,
 	cli.WithImageNamespace("ghcr.io/octohelm"),
 )
 

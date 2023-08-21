@@ -6,3 +6,5 @@ dist/
 .next/
 .turbo/
 .swc/
+
+.DS_Store
