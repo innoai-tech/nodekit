@@ -1,6 +1,6 @@
-import { describe, expect, it } from "vitest";
-import { transform } from "..";
+import { describe, expect, it } from "bun:test";
 import { transform as swcTransform } from "@swc/core";
+import { transform } from "..";
 
 const cases = [
   {

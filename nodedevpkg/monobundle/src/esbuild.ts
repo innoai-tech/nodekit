@@ -25,19 +25,19 @@ type CompilerOptions = {
 
 const loadTsCompilerOptions = (
   cwd: string,
-  tsconfigFile: string
+  tsconfigFile: string,
 ): CompilerOptions => {
   const configFileName = ts.findConfigFile(
     cwd,
     ts.sys.fileExists,
-    tsconfigFile
+    tsconfigFile,
   );
 
   if (configFileName) {
     const o = ts.parseJsonConfigFileContent(
       ts.readConfigFile(configFileName, ts.sys.readFile).config,
       ts.sys,
-      cwd
+      cwd,
     ).options;
 
     return {

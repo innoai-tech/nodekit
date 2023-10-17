@@ -15,20 +15,20 @@ export const createFetcher = ({
       return `${requestConfig.url}?${paramsSerializer(requestConfig.params)}`;
     },
     request: <TInputs extends any, TRespData extends any>(
-      requestConfig: RequestConfig<TInputs>
+      requestConfig: RequestConfig<TInputs>,
     ) => {
       const reqInit: RequestInit = {
         method: requestConfig.method,
         headers: requestConfig.headers || {},
         body: transformRequestBody(
           requestConfig.body,
-          requestConfig.headers || {}
+          requestConfig.headers || {},
         ),
       };
 
       return fetch(
         `${requestConfig.url}?${paramsSerializer(requestConfig.params)}`,
-        reqInit
+        reqInit,
       )
         .then(async (res) => {
           let body: any;

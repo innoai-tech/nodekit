@@ -44,10 +44,10 @@
   ],
   "license": "MIT",
   "scripts": {
-    "build": "monobundle",
-    "test": "vitest --run --passWithNoTests --dir .",
-    "prepublishOnly": "pnpm run build",
-    "lint": "prettier --write ."
+    "build": "bunx --bun monobundle",
+    "test": "bun test .",
+    "prepublishOnly": "bun run build",
+    "lint": "bunx --bun prettier --write ."
   },
   "sideEffects": false,
   "type": "module"

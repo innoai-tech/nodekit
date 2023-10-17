@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it } from "bun:test";
 import { createRequestSubject } from "../subject";
 
 describe("RequestSubject", () => {
@@ -8,7 +8,7 @@ describe("RequestSubject", () => {
       {
         request: (c) => Promise.resolve(c.body),
         toHref: () => "",
-      }
+      },
     );
 
     const rets: any[] = [];
@@ -34,7 +34,7 @@ describe("RequestSubject", () => {
       {
         request: (_) => Promise.reject("err"),
         toHref: () => "",
-      }
+      },
     );
 
     const rets: any[] = [];

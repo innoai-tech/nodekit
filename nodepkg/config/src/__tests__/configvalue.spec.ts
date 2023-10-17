@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect } from "bun:test";
 import { parse, stringify } from "../configvalue";
 
 describe("parse", () => {
@@ -16,7 +16,7 @@ describe("parse", () => {
       stringify({
         KEY1: "111",
         KEY2: "a111,",
-      })
+      }),
     ).toEqual("KEY1=111,KEY2=YTExMSw=");
   });
 });

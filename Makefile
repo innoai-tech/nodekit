@@ -1,3 +1,6 @@
+BUN = bun
+BUNX = bunx --bun
+
 serve:
 	go run ./cmd/webappserve serve --help
 	go run ./cmd/webappserve serve --root=./cmd/webappserve/example/normal
@@ -8,32 +11,32 @@ serve.base.href:
 tidy:
 	go mod tidy
 
-update:
-	pnpm up -r --latest
-
 dep:
-	pnpm install
+	$(BUN) install
+
+dep.update:
+	$(BUN) update --save --latest
 
 bootstrap: dep build.monobundle
-	pnpm exec monobundle
+	$(BUNX) monobundle
 
 build.monobundle:
-	pnpm exec turbo run build --filter=monobundle --force
-	pnpm install
-
-ci: lint test
+	$(BUNX) turbo run build --filter=monobundle --force
+	$(BUN) install
 
 lint:
-	pnpm exec turbo run lint --force
+	$(BUNX) turbo run lint --force
 
 test:
-	pnpm exec turbo run test --force
+	$(BUNX) turbo run test --force
 
 build:
-	pnpm exec turbo run build --filter=!monobundle --force
+	$(BUNX) turbo run build --filter=!monobundle --force
+
+ci: bootstrap lint build test
 
 pub:
-	pnpm -r publish --no-git-checks
+	$(BUN) ./nodedevpkg/bunpublish/src/bin/index.ts publish
 
 export BUILDKIT_HOST =
 ship:

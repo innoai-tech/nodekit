@@ -12,7 +12,7 @@ export type HandleConfig =
   | ((c: UserConfig, ctx: AppConfig & AppContext & AppConfigMetadata) => void)
   | ((
       c: UserConfig,
-      ctx: AppConfig & AppContext & AppConfigMetadata
+      ctx: AppConfig & AppContext & AppConfigMetadata,
     ) => Promise<void>);
 
 export const injectWebAppConfig = (onConfig?: HandleConfig): Plugin => {

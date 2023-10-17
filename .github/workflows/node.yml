@@ -20,17 +20,8 @@ jobs:
 
       - run: rustup target add wasm32-wasi
 
-      - uses: actions/setup-node@v3
-        with:
-          registry-url: 'https://npm.pkg.github.com'
-          node-version: "^20"
-
-      - uses: pnpm/action-setup@v2
-        with:
-          version: "^8"
+      - uses: oven-sh/setup-bun@v1
 
       - run: make bootstrap
+      - run: make build
       - run: make test
-      - run: make pub
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

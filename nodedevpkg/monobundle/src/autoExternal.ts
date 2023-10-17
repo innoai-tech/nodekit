@@ -2,8 +2,8 @@ import { minimatch } from "minimatch";
 import { join } from "path";
 import { globby } from "globby";
 import { readFile } from "fs/promises";
-import { load } from "js-yaml";
 import { type InputOptions } from "rollup";
+import type { Project } from "./pm";
 // @ts-ignore
 const builtIns = process.binding("natives");
 
@@ -12,22 +12,28 @@ const isPkgUsed = (pkg: string, id: string) => {
 };
 
 export type Package = {
-  name: string,
-  dependencies?: Record<string, string>,
-  peerDependencies?: Record<string, string>,
-}
+  name: string;
+  dependencies?: Record<string, string>;
+  peerDependencies?: Record<string, string>;
+};
 
-export const loadWorkspace = async (monoRoot: string, localPkg: Package) => {
-  const w = load(String(await readFile(join(monoRoot, "./pnpm-workspace.yaml")))) as { packages?: string[] };
-  const m = new Map<string, Set<string>>;
+export const loadWorkspace = async (project: Project, localPkg: Package) => {
+  const workspaces = await project.pm.workspaces(project.root);
 
-  if (w?.packages) {
-    const packageJSONs = await globby(w?.packages.map((b) => `${b}/package.json`), {
-      cwd: monoRoot
-    });
+  const m = new Map<string, Set<string>>();
+
+  if (workspaces) {
+    const packageJSONs = await globby(
+      workspaces.map((b) => `${b}/package.json`),
+      {
+        cwd: project.root,
+      },
+    );
 
     for (const f of packageJSONs) {
-      let pkg = JSON.parse(String(await readFile(join(`${monoRoot}`, f)))) as Package;
+      let pkg = JSON.parse(
+        String(await readFile(join(`${project.root}`, f))),
+      ) as Package;
 
       // localPkg may be changed
       if (localPkg.name === pkg.name) {
@@ -60,12 +66,12 @@ export const loadWorkspace = async (monoRoot: string, localPkg: Package) => {
 };
 
 export const createAutoExternal = async (
-  monoRoot: string,
+  project: Project,
   pkg: Package,
   opts: {
     logger?: ReturnType<typeof import("./log").createLogger>;
     sideDeps?: string[];
-  }
+  },
 ) => {
   const logger = opts.logger;
   const sideDeps = opts.sideDeps || [];
@@ -75,13 +81,13 @@ export const createAutoExternal = async (
       return false;
     }
     return sideDeps.some(
-      (glob) => pkgName === glob || minimatch(pkgName, glob)
+      (glob) => pkgName === glob || minimatch(pkgName, glob),
     );
   };
 
   const usedPkgs = new Set<string>();
 
-  const w = await loadWorkspace(monoRoot, pkg);
+  const w = await loadWorkspace(project, pkg);
 
   const dep = new Set<string>();
 
@@ -101,7 +107,6 @@ export const createAutoExternal = async (
 
   collect(pkg.name);
 
-
   const builtins = Object.keys(builtIns);
 
   const warningAndGetUnused = () => {
@@ -109,7 +114,7 @@ export const createAutoExternal = async (
 
     const unused = {
       deps: {} as { [k: string]: boolean },
-      peerDeps: {} as { [k: string]: boolean }
+      peerDeps: {} as { [k: string]: boolean },
     };
 
     for (const d of dep) {
@@ -129,14 +134,17 @@ export const createAutoExternal = async (
   const collector = new Set<string>();
 
   const autoExternal = (validate = true) => {
-
     return {
       name: "auto-external",
 
       options(opts: InputOptions) {
         return {
           ...opts,
-          external(id: string, importer: string | undefined, isResolved: boolean) {
+          external(
+            id: string,
+            importer: string | undefined,
+            isResolved: boolean,
+          ) {
             if (
               typeof opts.external === "function" &&
               opts.external(id, importer, isResolved)
@@ -165,7 +173,7 @@ export const createAutoExternal = async (
                   collector.add(id);
 
                   logger?.danger(
-                    `"${id}" is not in dependencies or peerDependencies, and will be bundled.`
+                    `"${id}" is not in dependencies or peerDependencies, and will be bundled.`,
                   );
                 }
               }
@@ -174,9 +182,9 @@ export const createAutoExternal = async (
             }
 
             return false;
-          }
+          },
         };
-      }
+      },
     };
   };
 

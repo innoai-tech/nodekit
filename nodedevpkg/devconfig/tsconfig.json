@@ -8,6 +8,9 @@
       "dom",
       "webworker"
     ],
+    "types": [
+      "bun-types"
+    ],
     "module": "es2022",
     "target": "es2021",
     "moduleResolution": "node",
