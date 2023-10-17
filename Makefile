@@ -33,8 +33,7 @@ build:
 	bunx turbo run build --filter=!monobundle --force
 
 pub:
-	bun add -g pnpm
-	pnpm -r publish --no-git-checks
+	bunx release-it --ci
 
 export BUILDKIT_HOST =
 ship:
