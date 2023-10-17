@@ -4,7 +4,7 @@ export type BaseConfig = { name: string; env: string; version: string };
 
 const getWebAppConfigValue = (key: string) => {
   return (
-    globalThis.document
+    (globalThis as any).document
       ?.querySelector(`meta[name="webapp:${key}"]`)
       ?.getAttribute("content") || ""
   );

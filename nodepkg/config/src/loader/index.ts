@@ -39,14 +39,14 @@ export const loadConfig = async (configFile: string) => {
   const conf = ctx.module.exports as { CONFIG: any };
 
   return (
-    configCtx: AppContext
+    configCtx: AppContext,
   ): AppContext & AppConfig & AppConfigMetadata => {
     return {
       ...conf.CONFIG,
       config: mapValues(
         conf.CONFIG.config,
         (fnOrValue: ConfigBuilder | string) =>
-          isFunction(fnOrValue) ? fnOrValue(configCtx) : fnOrValue
+          isFunction(fnOrValue) ? fnOrValue(configCtx) : fnOrValue,
       ),
       metadata: mapValues(
         conf.CONFIG.config,
@@ -73,7 +73,7 @@ export const loadConfig = async (configFile: string) => {
             return apiMetaData;
           }
           return {};
-        }
+        },
       ),
       env: configCtx.env,
       feature: configCtx.feature,

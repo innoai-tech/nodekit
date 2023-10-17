@@ -26,10 +26,10 @@
   ],
   "license": "MIT",
   "scripts": {
-    "build": "monobundle",
-    "test": "vitest --run --passWithNoTests --dir .",
+    "build": "bunx monobundle",
+    "test": "bun test .",
     "prepublishOnly": "pnpm run build",
-    "lint": "prettier --write ."
+    "lint": "bunx prettier --write ."
   },
   "sideEffects": false,
   "type": "module"

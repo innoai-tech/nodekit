@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it } from  "bun:test";
 import { transform } from "..";
 import { transform as swcTransform } from "@swc/core";
 

@@ -3,7 +3,7 @@ import { spawn } from "child_process";
 export const tsc = async (
   projectRoot: string,
   outDir: string,
-  tsconfig: string
+  tsconfig: string,
 ): Promise<void> => {
   const ps = spawn(
     "tsc",
@@ -19,7 +19,7 @@ export const tsc = async (
     ],
     {
       cwd: projectRoot,
-    }
+    },
   );
 
   return new Promise((resolve, reject) => {

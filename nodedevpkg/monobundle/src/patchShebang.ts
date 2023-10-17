@@ -11,6 +11,6 @@ ${code}`;
       }
 
       return null;
-    }
+    },
   };
 };

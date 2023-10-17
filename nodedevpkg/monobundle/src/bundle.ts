@@ -1,6 +1,5 @@
 import { nodeResolve } from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
-import { existsSync } from "fs";
 import {
   isEmpty,
   mapKeys,
@@ -10,7 +9,7 @@ import {
   keys,
   forEach,
   set,
-  map
+  map,
 } from "@innoai-tech/lodash";
 import { join, relative, extname, basename, dirname } from "path";
 import { type OutputOptions, rollup, type RollupOptions } from "rollup";
@@ -24,18 +23,9 @@ import { bootstrap } from "./bootstrap";
 import { globby } from "globby";
 import { esbuild } from "./esbuild";
 import { patchShebang } from "./patchShebang";
+import { resolveProjectRoot } from "./pm";
 
 const tsconfigFile = "tsconfig.monobundle.json";
-
-const resolveProjectRoot = (p: string): string => {
-  const pnpmWorkspaceYAML = join(p, "./pnpm-workspace.yaml");
-
-  if (!existsSync(pnpmWorkspaceYAML)) {
-    return resolveProjectRoot(join(p, "../"));
-  }
-
-  return p;
-};
 
 const entryAlias = (entry: string) => {
   if (entry === ".") {
@@ -60,16 +50,20 @@ export interface MonoBundleOptions {
 }
 
 export const bundle = async ({
-                               cwd = process.cwd(),
-                               dryRun
-                             }: {
+  cwd = process.cwd(),
+  dryRun,
+}: {
   cwd?: string;
   dryRun?: boolean;
 }) => {
-  const projectRoot = resolveProjectRoot(cwd);
+  const project = resolveProjectRoot(cwd);
 
-  if (projectRoot === cwd) {
-    return await bootstrap(cwd);
+  if (!project) {
+    throw new Error("must run in some monorepo");
+  }
+
+  if (project.root === cwd) {
+    return await bootstrap(project);
   }
 
   const pkg = JSON.parse(String(await readFile(join(cwd, "package.json")))) as {
@@ -89,7 +83,7 @@ target/
 dist/
 *.mjs
 *.d.ts
-`
+`,
   );
 
   const options: MonoBundleOptions = pkg["monobundle"] || {};
@@ -100,26 +94,26 @@ dist/
     mapKeys(options.exports, (_, k) => {
       return entryAlias(k);
     }),
-    (entry, _) => join(cwd, entry)
+    (entry, _) => join(cwd, entry),
   );
 
   const outputBase: OutputOptions = {
     dir: cwd,
-    format: "es"
+    format: "es",
   };
 
   pkg["peerDependencies"] = {
     ...(pkg["peerDependencies"] ?? {}),
-    "core-js": "*"
+    "core-js": "*",
   };
 
-  const autoExternal = await createAutoExternal(projectRoot, pkg as any, {
+  const autoExternal = await createAutoExternal(project.root, pkg as any, {
     logger,
-    sideDeps: options["sideDeps"] as any
+    sideDeps: options["sideDeps"] as any,
   });
 
   const buildTargets = getBuildTargets(
-    (pkg as any).browserslist ?? ["defaults"]
+    (pkg as any).browserslist ?? ["defaults"],
   );
 
   const resolveRollupOptions: ResolveRollupOptions[] = [
@@ -129,22 +123,24 @@ dist/
         output: {
           ...outputBase,
           entryFileNames: "[name].mjs",
-          chunkFileNames: "[name]-[hash].mjs"
+          chunkFileNames: "[name]-[hash].mjs",
         },
         plugins: [
           autoExternal(),
           nodeResolve({
-            extensions: [".ts", ".tsx", ".mjs", "", ".js", ".jsx"]
+            extensions: [".ts", ".tsx", ".mjs", "", ".js", ".jsx"],
           }),
           commonjs(),
           esbuild({
             tsconfig: tsconfigFile,
-            target: map(buildTargets, (v, k) => `${k}${v}`)
+            target: map(buildTargets, (v, k) => `${k}${v}`),
           }),
           patchShebang((chunkName) => {
-            return !!(options.exports ?? {})[`bin:${basename(chunkName, extname(chunkName))}`];
+            return !!(options.exports ?? {})[
+              `bin:${basename(chunkName, extname(chunkName))}`
+            ];
           }),
-        ]
+        ],
       });
     },
 
@@ -170,17 +166,17 @@ dist/
         output: {
           ...outputBase,
           entryFileNames: "[name].d.ts",
-          chunkFileNames: "[name]-[hash].d.ts"
+          chunkFileNames: "[name]-[hash].d.ts",
         },
         plugins: [
           autoExternal(),
           dts({
             tsconfig: tsconfigFile,
-            respectExternal: true
-          }) as any
-        ]
+            respectExternal: true,
+          }) as any,
+        ],
       };
-    }
+    },
   ];
 
   logger.warning(`bundling (target: ${JSON.stringify(buildTargets)})`);
@@ -199,12 +195,12 @@ dist/
           return bundle.write(output).then((ret) => {
             if (output.dir) {
               return (ret.output || []).map((o) =>
-                join(relative(cwd, output.dir!), o.fileName)
+                join(relative(cwd, output.dir!), o.fileName),
               );
             }
             return relative(cwd, output.file!);
           });
-        })
+        }),
       );
     });
 
@@ -232,7 +228,7 @@ dist/
     // FIXME remote all old entries
     types: undefined,
     main: undefined,
-    module: undefined
+    module: undefined,
   };
 
   forEach(options.exports, (_, e) => {
@@ -246,8 +242,8 @@ dist/
     set(exports, ["exports", e], {
       import: {
         types: `./${distName}.d.ts`,
-        default: `./${distName}.mjs`
-      }
+        default: `./${distName}.mjs`,
+      },
     });
   });
 
@@ -266,11 +262,11 @@ dist/
           ? undefined
           : (pkg["devDependencies"] as { [k: string]: string }),
         files: ["*.mjs", "*.d.ts"],
-        ...exports
+        ...exports,
       },
       null,
-      2
-    )
+      2,
+    ),
   );
 
   return;

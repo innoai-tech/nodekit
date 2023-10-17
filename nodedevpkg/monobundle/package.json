@@ -1,13 +1,13 @@
 {
   "name": "@innoai-tech/monobundle",
-  "version": "0.10.2",
+  "version": "0.11.0",
   "monobundle": {
     "exports": {
       ".": "./src/index.ts",
       "bin:monobundle": "./src/bin/index.ts"
     },
     "pipeline": {
-      "build": "tsx ./src/bin/index.ts"
+      "build": "bun ./src/bin/index.ts"
     }
   },
   "dependencies": {
@@ -49,10 +49,10 @@
   ],
   "license": "MIT",
   "scripts": {
-    "lint": "prettier --write .",
-    "build": "tsx ./src/bin/index.ts",
+    "lint": "bunx prettier --write .",
+    "build": "bun ./src/bin/index.ts",
     "prepublishOnly": "pnpm run build",
-    "test": "vitest --run --passWithNoTests --dir ."
+    "test": "bun test ."
   },
   "type": "module"
 }

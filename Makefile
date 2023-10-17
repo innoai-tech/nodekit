@@ -9,30 +9,31 @@ tidy:
 	go mod tidy
 
 update:
-	pnpm up -r --latest
+	bun update --latest
 
 dep:
-	pnpm install
+	bun install
 
 bootstrap: dep build.monobundle
-	pnpm exec monobundle
+	bunx monobundle
 
 build.monobundle:
-	pnpm exec turbo run build --filter=monobundle --force
-	pnpm install
+	bunx turbo run build --filter=monobundle --force
+	bun install
 
 ci: lint test
 
 lint:
-	pnpm exec turbo run lint --force
+	bunx turbo run lint --force
 
 test:
-	pnpm exec turbo run test --force
+	bunx turbo run test --force
 
 build:
-	pnpm exec turbo run build --filter=!monobundle --force
+	bunx turbo run build --filter=!monobundle --force
 
 pub:
+	bun add -g pnpm
 	pnpm -r publish --no-git-checks
 
 export BUILDKIT_HOST =

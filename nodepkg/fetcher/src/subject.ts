@@ -27,7 +27,7 @@ export interface RequestSubject<TInputs, TBody, TError>
 
 export const createRequestSubject = <TInputs, TBody, TError>(
   createConfig: RequestConfigCreator<TInputs, TBody>,
-  fetcher: Fetcher
+  fetcher: Fetcher,
 ): RequestSubject<TInputs, TBody, TError> => {
   return new ReqSubject(createConfig, fetcher);
 };
@@ -44,7 +44,7 @@ class ReqSubject<TInputs, TBody, TError>
 
   constructor(
     private createConfig: RequestConfigCreator<TInputs, TBody>,
-    private fetcher: Fetcher
+    private fetcher: Fetcher,
   ) {
     super((subscriber) => {
       return this._success$.subscribe(subscriber);
@@ -61,19 +61,19 @@ class ReqSubject<TInputs, TBody, TError>
         this.requesting$.next(true);
 
         return from(
-          this.fetcher.request<TInputs, TBody>(this.createConfig(input))
+          this.fetcher.request<TInputs, TBody>(this.createConfig(input)),
         ).pipe(
           tap((resp) => this._success$.next(resp)),
           catchError((errorResp) => {
             this.error$.next(errorResp);
             return of(errorResp);
-          })
+          }),
         );
       }),
       tap(() => {
         this.requesting$.next(false);
       }),
-      ignoreElements()
+      ignoreElements(),
     )
     .subscribe();
 
@@ -83,7 +83,7 @@ class ReqSubject<TInputs, TBody, TError>
     this._input$.next(
       (this._prevInputs = isFunction(inputs)
         ? inputs(this._prevInputs)
-        : inputs)
+        : inputs),
     );
   };
 
