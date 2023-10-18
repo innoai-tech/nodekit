@@ -22,7 +22,6 @@
     "update": "cargo update",
     "lint": "cargo fmt --all -- --emit files",
     "build": "cargo build --target wasm32-wasi --release",
-    "test": "bun test .",
     "prepublishOnly": "bun run build"
   },
   "type": "module"

@@ -22,15 +22,6 @@
         "package.json",
         "Cargo.toml"
       ]
-    },
-    "test": {
-      "dependsOn": [
-        "^build"
-      ],
-      "inputs": [
-        "src/*",
-        "package.json"
-      ]
     }
   }
 }

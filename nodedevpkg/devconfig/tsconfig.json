@@ -3,24 +3,24 @@
   "compilerOptions": {
     "baseUrl": ".",
     "outDir": "./dist",
-    "lib": [
-      "es2021",
-      "dom",
-      "webworker"
-    ],
     "types": [
       "bun-types"
     ],
-    "module": "es2022",
-    "target": "es2021",
-    "moduleResolution": "node",
+    "module": "esnext",
+    "target": "esnext",
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "moduleDetection": "force",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
+    "composite": true,
+    "downlevelIteration": true,
+    "allowSyntheticDefaultImports": true,
     "allowUnusedLabels": false,
     "allowUnreachableCode": false,
-    "exactOptionalPropertyTypes": true,
+    "exactOptionalPropertyTypes": false,
     "experimentalDecorators": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitOverride": true,
@@ -30,9 +30,9 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "verbatimModuleSyntax": true,
-    "jsx": "react-jsx",
     "checkJs": false,
     "declaration": true,
-    "emitDeclarationOnly": true
+    "emitDeclarationOnly": true,
+    "jsx": "react-jsx"
   }
 }

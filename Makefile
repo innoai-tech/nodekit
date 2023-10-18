@@ -28,12 +28,12 @@ lint:
 	$(BUNX) turbo run lint --force
 
 test:
-	$(BUNX) turbo run test --force
+	$(BUN) test
 
 build:
 	$(BUNX) turbo run build --filter=!monobundle --force
 
-ci: bootstrap lint build test
+ci: bootstrap build test
 
 pub:
 	$(BUN) ./nodedevpkg/bunpublish/src/bin/index.ts publish

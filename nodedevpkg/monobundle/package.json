@@ -1,6 +1,6 @@
 {
   "name": "@innoai-tech/monobundle",
-  "version": "0.11.3",
+  "version": "0.11.4",
   "monobundle": {
     "exports": {
       ".": "./src/index.ts",
@@ -50,8 +50,7 @@
   "scripts": {
     "lint": "bunx --bun prettier --write .",
     "build": "bun ./src/bin/index.ts",
-    "prepublishOnly": "bun run build",
-    "test": "bun test ."
+    "prepublishOnly": "bun run build"
   },
   "type": "module"
 }

@@ -45,7 +45,6 @@
   "license": "MIT",
   "scripts": {
     "build": "bunx --bun monobundle",
-    "test": "bun test .",
     "prepublishOnly": "bun run build",
     "lint": "bunx --bun prettier --write ."
   },

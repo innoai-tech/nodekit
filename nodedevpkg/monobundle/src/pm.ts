@@ -13,9 +13,9 @@ export interface ProjectManager {
   workspaces: (p: string) => Promise<string[]>;
   defaults: () => {
     scripts: {
-      build: string;
-      lint: string;
-      test: string;
+      build?: string;
+      lint?: string;
+      test?: string;
     };
   };
 }
@@ -45,7 +45,6 @@ const projectManagers: { [name: string]: ProjectManager } = {
         scripts: {
           build: "bunx --bun monobundle",
           lint: "bunx --bun prettier --write .",
-          test: "bun test .",
         },
       };
     },

@@ -38,7 +38,6 @@
   "scripts": {
     "lint": "bunx --bun prettier --write .",
     "build": "bunx --bun monobundle",
-    "test": "bun test .",
     "prepublishOnly": "bun run build"
   },
   "type": "module"
