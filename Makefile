@@ -1,5 +1,6 @@
 BUN = bun
 BUNX = bunx --bun
+MONOBUNDLE = $(BUN) ./nodedevpkg/monobundle/src/bin/index.ts
 
 serve:
 	go run ./cmd/webappserve serve --help
@@ -17,7 +18,7 @@ dep:
 dep.update:
 	$(BUN) update --save --latest
 
-bootstrap: dep build.monobundle
+bootstrap: build.monobundle
 	$(BUNX) monobundle
 
 build.monobundle:
@@ -36,11 +37,12 @@ build:
 ci: bootstrap build test
 
 pub:
-	$(BUN) ./nodedevpkg/bunpublish/src/bin/index.ts publish
+	$(BUN) ./nodedevpkg/bunpublish/src/bin/index.ts
 
 export BUILDKIT_HOST =
 ship:
 	wagon do go ship pushx
 
 clean:
+	find . -name '.turbo' -type d -prune -print -exec rm -rf '{}' \;
 	find . -name 'node_modules' -type d -prune -print -exec rm -rf '{}' \;

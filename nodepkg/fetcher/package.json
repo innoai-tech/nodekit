@@ -14,6 +14,7 @@
   },
   "exports": {
     ".": {
+      "bun": "./src/index.ts",
       "import": {
         "types": "./index.d.ts",
         "default": "./index.mjs"

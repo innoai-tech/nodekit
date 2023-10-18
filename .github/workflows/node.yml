@@ -22,4 +22,6 @@ jobs:
 
       - uses: oven-sh/setup-bun@v1
 
-      - run: make ci
+      - run: make dep ci
+        env:
+          INNOAI_TECH_REGISTRY_AUTH_TOKEN: ${{ github.token }}

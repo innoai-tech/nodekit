@@ -9,7 +9,7 @@ import {
   keys,
   forEach,
   set,
-  map,
+  map
 } from "@innoai-tech/lodash";
 import { join, relative, extname, basename, dirname } from "path";
 import { type OutputOptions, rollup, type RollupOptions } from "rollup";
@@ -52,9 +52,9 @@ export interface MonoBundleOptions {
 }
 
 export const bundle = async ({
-  cwd = process.cwd(),
-  dryRun,
-}: {
+                               cwd = process.cwd(),
+                               dryRun
+                             }: {
   cwd?: string;
   dryRun?: boolean;
 }) => {
@@ -85,7 +85,7 @@ target/
 dist/
 *.mjs
 *.d.ts
-`,
+`
   );
 
   const options: MonoBundleOptions = pkg["monobundle"] || {};
@@ -96,26 +96,26 @@ dist/
     mapKeys(options.exports, (_, k) => {
       return entryAlias(k);
     }),
-    (entry, _) => join(cwd, entry),
+    (entry, _) => join(cwd, entry)
   );
 
   const outputBase: OutputOptions = {
     dir: cwd,
-    format: "es",
+    format: "es"
   };
 
   pkg["peerDependencies"] = {
     ...(pkg["peerDependencies"] ?? {}),
-    "core-js": "*",
+    "core-js": "*"
   };
 
   const autoExternal = await createAutoExternal(project, pkg as any, {
     logger,
-    sideDeps: options["sideDeps"] as any,
+    sideDeps: options["sideDeps"] as any
   });
 
   const buildTargets = getBuildTargets(
-    (pkg as any).browserslist ?? ["defaults"],
+    (pkg as any).browserslist ?? ["defaults"]
   );
 
   const resolveRollupOptions: ResolveRollupOptions[] = [
@@ -125,24 +125,24 @@ dist/
         output: {
           ...outputBase,
           entryFileNames: "[name].mjs",
-          chunkFileNames: "[name]-[hash].mjs",
+          chunkFileNames: "[name]-[hash].mjs"
         },
         plugins: [
           autoExternal(),
           nodeResolve({
-            extensions: [".ts", ".tsx", ".mjs", "", ".js", ".jsx"],
+            extensions: [".ts", ".tsx", ".mjs", "", ".js", ".jsx"]
           }),
           commonjs(),
           esbuild({
             tsconfig: tsconfigFile,
-            target: map(buildTargets, (v, k) => `${k}${v}`),
+            target: map(buildTargets, (v, k) => `${k}${v}`)
           }),
           patchShebang((chunkName) => {
             return !!(options.exports ?? {})[
               `bin:${basename(chunkName, extname(chunkName))}`
-            ];
-          }, options.engine),
-        ],
+              ];
+          }, options.engine)
+        ]
       });
     },
 
@@ -168,17 +168,17 @@ dist/
         output: {
           ...outputBase,
           entryFileNames: "[name].d.ts",
-          chunkFileNames: "[name]-[hash].d.ts",
+          chunkFileNames: "[name]-[hash].d.ts"
         },
         plugins: [
           autoExternal(),
           dts({
             tsconfig: tsconfigFile,
-            respectExternal: true,
-          }) as any,
-        ],
+            respectExternal: true
+          }) as any
+        ]
       };
-    },
+    }
   ];
 
   logger.warning(`bundling (target: ${JSON.stringify(buildTargets)})`);
@@ -197,12 +197,12 @@ dist/
           return bundle.write(output).then((ret) => {
             if (output.dir) {
               return (ret.output || []).map((o) =>
-                join(relative(cwd, output.dir!), o.fileName),
+                join(relative(cwd, output.dir!), o.fileName)
               );
             }
             return relative(cwd, output.file!);
           });
-        }),
+        })
       );
     });
 
@@ -230,10 +230,10 @@ dist/
     // FIXME remote all old entries
     types: undefined,
     main: undefined,
-    module: undefined,
+    module: undefined
   };
 
-  forEach(options.exports, (_, e) => {
+  forEach(options.exports, (entryFile, e) => {
     const distName = entryAlias(e);
 
     if (startsWith(e, "bin:")) {
@@ -242,10 +242,12 @@ dist/
     }
 
     set(exports, ["exports", e], {
+      // bun must on first
+      bun: entryFile,
       import: {
         types: `./${distName}.d.ts`,
-        default: `./${distName}.mjs`,
-      },
+        default: `./${distName}.mjs`
+      }
     });
   });
 
@@ -261,7 +263,7 @@ dist/
       ? undefined
       : (pkg["devDependencies"] as { [k: string]: string }),
     files: ["*.mjs", "*.d.ts"],
-    ...exports,
+    ...exports
   });
 
   return;

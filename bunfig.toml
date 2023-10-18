@@ -1,4 +1,5 @@
 [install]
 registry = "https://registry.npmjs.org"
+
 [install.scopes]
-"@innoai-tech" = "https://npm.pkg.github.com"
+"@innoai-tech" = { url = "https://npm.pkg.github.com", token = "$INNOAI_TECH_REGISTRY_AUTH_TOKEN" }

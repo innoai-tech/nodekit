@@ -18,14 +18,14 @@ export const publish = async (dir: string, bunFig: BunFig) => {
   try {
     const headers: Record<string, string> = {};
 
-    const token = reg.token ?? process.env["NODE_AUTH_TOKEN"];
+    const token = reg.token;
     if (token) {
       headers["authorization"] = token;
     }
 
     await npmPublish(m as any, tar, {
       registry: reg.url,
-      headers: headers,
+      headers: headers
     });
 
     console.log(`${m._id} publish success.`);

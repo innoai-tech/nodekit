@@ -20,18 +20,21 @@
   ],
   "exports": {
     ".": {
+      "bun": "./src/index.ts",
       "import": {
         "types": "./index.d.ts",
         "default": "./index.mjs"
       }
     },
     "./loader": {
+      "bun": "./src/loader/index.ts",
       "import": {
         "types": "./loader.d.ts",
         "default": "./loader.mjs"
       }
     },
     "./vite-plugin-inject-config": {
+      "bun": "./src/vite-plugin-inject-config/index.ts",
       "import": {
         "types": "./vite-plugin-inject-config.d.ts",
         "default": "./vite-plugin-inject-config.mjs"

@@ -25,13 +25,15 @@ export class BunFig {
     const config = new BunFig(cwd);
 
     if (existsSync(globalBunfigToml)) {
-      config.registerFromBunFigFile(
+      config.registerBunFigFile(
         Bun.TOML.parse(String(await readFile(globalBunfigToml))),
+        process.env as Record<string, string>
       );
     }
     if (existsSync(localBunfigToml)) {
-      config.registerFromBunFigFile(
+      config.registerBunFigFile(
         Bun.TOML.parse(String(await readFile(localBunfigToml))),
+        process.env as Record<string, string>
       );
     }
 
@@ -40,11 +42,12 @@ export class BunFig {
 
   private registries: Record<string, Registry> = {
     "": {
-      url: "https://registry.npmjs.org",
-    },
+      url: "https://registry.npmjs.org"
+    }
   };
 
-  constructor(private root: string) {}
+  constructor(private root: string) {
+  }
 
   async manifest(): Promise<
     Manifest & { _resolvedWorkspaces?: { [name: string]: Manifest } }
@@ -58,8 +61,8 @@ export class BunFig {
         (pkg["workspaces"] as string[]).map((p) => `${p}/package.json`),
         {
           cwd: this.root,
-          absolute: true,
-        },
+          absolute: true
+        }
       );
 
       for (const f of files) {
@@ -68,23 +71,25 @@ export class BunFig {
       }
 
       return Object.assign(pkg, {
-        _resolvedWorkspaces: workspaces,
+        _resolvedWorkspaces: workspaces
       });
     }
 
     return pkg;
   }
 
-  registerFromBunFigFile(c: {
+  registerBunFigFile(c: {
     install?: {
       registry?: string | Registry;
       scopes: Record<string, Registry>;
     };
-  }) {
+  }, env: Record<string, string> = {}) {
+    const r = new EnvVarReplacer(env);
+
     if (c.install?.registry) {
       this.registries[""] = {
         ...(this.registries[""] ?? {}),
-        ...normalizeRegistry(c.install?.registry),
+        ...r.replaceValues(normalizeRegistry(c.install?.registry))
       };
     }
 
@@ -98,7 +103,7 @@ export class BunFig {
         }
         this.registries[k] = {
           ...(this.registries[k] ?? {}),
-          ...normalizeRegistry(scope),
+          ...r.replaceValues(normalizeRegistry(scope))
         };
       }
     }
@@ -120,7 +125,7 @@ export class BunFig {
 export const normalizeRegistry = (s: string | Registry): Registry => {
   if (typeof s == "string") {
     return {
-      url: s,
+      url: s
     };
   }
   return s;
@@ -129,16 +134,16 @@ export const normalizeRegistry = (s: string | Registry): Registry => {
 export const withoutWorkspace = async (
   m: Manifest,
   action: () => Promise<void>,
-  workspaces: { [name: string]: Manifest } = {},
+  workspaces: { [name: string]: Manifest } = {}
 ) => {
   const replaceWorkspace = async () => {
     await rename(
       join(m._resolved, "package.json"),
-      join(m._resolved, "package.json.bak"),
+      join(m._resolved, "package.json.bak")
     );
 
     const pkg = JSON.parse(
-      String(await readFile(join(m._resolved, "package.json.bak"))),
+      String(await readFile(join(m._resolved, "package.json.bak")))
     );
 
     const depKeys = [
@@ -146,7 +151,7 @@ export const withoutWorkspace = async (
       "devDependencies",
       "peerDependencies",
       "optionalDependencies",
-      "bundledDependencies",
+      "bundledDependencies"
     ];
 
     for (const key of depKeys) {
@@ -174,7 +179,7 @@ export const withoutWorkspace = async (
 
     await writeFile(
       join(m._resolved, "package.json"),
-      JSON.stringify(pkg, null, 2),
+      JSON.stringify(pkg, null, 2)
     );
   };
 
@@ -183,7 +188,7 @@ export const withoutWorkspace = async (
       await unlink(join(m._resolved, "package.json"));
       await rename(
         join(m._resolved, "package.json.bak"),
-        join(m._resolved, "package.json"),
+        join(m._resolved, "package.json")
       );
     } catch (e) {
       //
@@ -199,3 +204,29 @@ export const withoutWorkspace = async (
     throw err;
   }
 };
+
+
+const re = /(\$[A-Za-z0-9_]+)/g;
+
+class EnvVarReplacer {
+  constructor(private env: Record<string, any>) {
+  }
+
+  replaceValues<T extends Record<string, any>>(values: T): T {
+    const replaced: Record<string, string> = {};
+
+    for (const k in values) {
+      const v = values[k]!;
+
+      replaced[k] = v.replaceAll(re, (envVar: string) => {
+        const found = this.env[envVar.slice(1)];
+        if (typeof found == "undefined") {
+          throw new Error(`missing env var ${envVar}`);
+        }
+        return found;
+      });
+    }
+
+    return replaced as T;
+  }
+}
