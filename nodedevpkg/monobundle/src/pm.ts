@@ -29,7 +29,7 @@ const projectManagers: { [name: string]: ProjectManager } = {
     },
     isProjectRoot: (p: string) => {
       return (
-        existsSync(join(p, "./.bunfig.toml")) ||
+        existsSync(join(p, "./bunfig.toml")) ||
         existsSync(join(p, "./bun.lockb"))
       );
     },

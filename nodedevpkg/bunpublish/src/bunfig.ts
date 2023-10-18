@@ -20,7 +20,7 @@ type Record<K extends string, V> = {
 export class BunFig {
   static load = async (cwd: string): Promise<BunFig> => {
     const globalBunfigToml = join(process.env["HOME"]!, ".bunfig.toml");
-    const localBunfigToml = join(cwd, ".bunfig.toml");
+    const localBunfigToml = join(cwd, "bunfig.toml");
 
     const config = new BunFig(cwd);
 
