@@ -43,7 +43,9 @@
   },
   "files": [
     "*.mjs",
-    "*.d.ts"
+    "*.d.ts",
+    "src/*",
+    "!/**/__tests__"
   ],
   "license": "MIT",
   "repository": {

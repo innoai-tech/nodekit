@@ -209,7 +209,12 @@ dist/
     devDependencies: isEmpty(pkg["devDependencies"])
       ? undefined
       : (pkg["devDependencies"] as { [k: string]: string }),
-    files: ["*.mjs", "*.d.ts"],
+    files: [
+      "*.mjs",
+      "*.d.ts",
+      "src/*",
+      "!/**/__tests__"
+    ],
     type: "module",
     // FIXME remote all old entries
     types: undefined,

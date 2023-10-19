@@ -1,6 +1,6 @@
 {
   "name": "@innoai-tech/monobundle",
-  "version": "0.11.9",
+  "version": "0.11.10",
   "monobundle": {
     "exports": {
       ".": "./src/index.ts",
@@ -45,7 +45,9 @@
   },
   "files": [
     "*.mjs",
-    "*.d.ts"
+    "*.d.ts",
+    "src/*",
+    "!/**/__tests__"
   ],
   "license": "MIT",
   "repository": {
