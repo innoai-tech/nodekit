@@ -26,6 +26,11 @@
     "*.d.ts"
   ],
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@github.com:morlay/bunpublish.git",
+    "directory": "nodepkg/fetcher"
+  },
   "scripts": {
     "build": "bunx --bun monobundle",
     "prepublishOnly": "bun run build",

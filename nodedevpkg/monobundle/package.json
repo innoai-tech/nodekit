@@ -48,6 +48,11 @@
     "*.d.ts"
   ],
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@github.com:morlay/bunpublish.git",
+    "directory": "nodedevpkg/monobundle"
+  },
   "scripts": {
     "lint": "bunx --bun prettier --write .",
     "build": "bun ./src/bin/index.ts",

@@ -5,6 +5,11 @@
     "*.json"
   ],
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@github.com:morlay/bunpublish.git",
+    "directory": "nodedevpkg/devconfig"
+  },
   "scripts": {},
   "type": "module"
 }

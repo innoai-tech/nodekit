@@ -17,6 +17,11 @@
     "target/wasm32-wasi/release/purebundle.wasm"
   ],
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@github.com:morlay/bunpublish.git",
+    "directory": "nodedevpkg/purebundle"
+  },
   "scripts": {
     "initial": "rustup target add wasm32-wasi",
     "update": "cargo update",
