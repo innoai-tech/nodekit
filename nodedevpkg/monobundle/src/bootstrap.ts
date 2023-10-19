@@ -4,7 +4,8 @@ import { existsSync } from "fs";
 import { readFile, writeFile } from "fs/promises";
 import { map, get, keys } from "@innoai-tech/lodash";
 import type { Project } from "./pm";
-import { writeFormattedJsonFile } from "./util";
+import { entryAlias, type MonoBundleOptions, writeFormattedJsonFile } from "./util";
+import { forEach, set, startsWith } from "@innoai-tech/lodash";
 
 const imlFromPackageJSON = (rpath: string, pkg: any) => {
   return join(rpath, `${pkg.name.replace("/", "__")}.iml`);
@@ -12,7 +13,7 @@ const imlFromPackageJSON = (rpath: string, pkg: any) => {
 
 const patchRootPackage = async (
   project: Project,
-  pkgs: { [k: string]: any },
+  pkgs: { [k: string]: any }
 ) => {
   await writeFile(
     join(project.root, ".idea/modules.xml"),
@@ -21,16 +22,16 @@ const patchRootPackage = async (
   <component name="ProjectModuleManager">
     <modules>
 ${map(pkgs, (pkg, dir) => {
-  const filename = join(
-    "$PROJECT_DIR$",
-    imlFromPackageJSON(relative(project.root, dir), pkg),
-  );
-  return `<module fileurl="file://${filename}" filepath="${filename}" />`;
-}).join("\n")}
+      const filename = join(
+        "$PROJECT_DIR$",
+        imlFromPackageJSON(relative(project.root, dir), pkg)
+      );
+      return `<module fileurl="file://${filename}" filepath="${filename}" />`;
+    }).join("\n")}
     </modules>
   </component>
 </project>
-`,
+`
   );
 };
 
@@ -44,7 +45,7 @@ const orderKeys = (o: any) => {
     "dependencies",
     "peerDependencies",
     "devDependencies",
-    ...keys(o).sort(),
+    ...keys(o).sort()
   ].forEach((k) => {
     v[k] = o[k];
   });
@@ -52,24 +53,48 @@ const orderKeys = (o: any) => {
   return v;
 };
 
+const getExportsAndBin = (options?: MonoBundleOptions) => {
+  const pkg = {} as { bin?: {}, exports?: {} };
+
+  forEach(options?.exports, (entryFile, e) => {
+    const distName = entryAlias(e);
+
+    if (startsWith(e, "bin:")) {
+      set(pkg, ["bin", distName], `./${distName}.mjs`);
+      return;
+    }
+
+    set(pkg, ["exports", e], {
+      // bun must on first
+      bun: entryFile,
+      import: {
+        types: `./${distName}.d.ts`,
+        default: `./${distName}.mjs`
+      }
+    });
+  });
+
+  return pkg;
+};
+
 const patchMonoPackage = async (
   project: Project,
   monoRoot: string,
   directory: string,
   pkg: any,
-  rootPkg: any,
+  rootPkg: any
 ) => {
   const defaultScripts = project.pm.defaults().scripts;
 
   const scripts = {
-    ...(pkg.scripts || {}),
+    ...(pkg.scripts || {})
   };
 
   if (get(pkg, ["monobundle"])) {
     scripts.lint = get(
       pkg,
       ["monobundle", "pipeline", "lint"],
-      defaultScripts.lint,
+      defaultScripts.lint
     );
     scripts.build =
       get(pkg, ["monobundle", "pipeline", "build"], defaultScripts.build) ||
@@ -82,26 +107,29 @@ const patchMonoPackage = async (
       : undefined;
   }
 
+  const exportsAndBin = getExportsAndBin(get(pkg, ["monobundle"]));
+
   await writeFormattedJsonFile(
     join(monoRoot, "package.json"),
     orderKeys({
       ...pkg,
+      ...exportsAndBin,
       scripts,
       type: "module",
       license: "MIT",
       repository: rootPkg.repository
         ? {
-            ...rootPkg.repository,
-            directory,
-          }
+          ...rootPkg.repository,
+          directory
+        }
         : undefined,
       publishConfig:
         !pkg.private && rootPkg.publishConfig
           ? {
-              ...rootPkg.publishConfig,
-            }
-          : undefined,
-    }),
+            ...rootPkg.publishConfig
+          }
+          : undefined
+    })
   );
 };
 
@@ -123,17 +151,17 @@ export const addImiFile = async (monoRoot: string, pkg: any) => {
       <excludeFolder url="file://$MODULE_DIR$/.build" />
       <excludeFolder url="file://$MODULE_DIR$/dist" />
       ${
-        isCueMod
-          ? `
+      isCueMod
+        ? `
       <excludeFolder url="file://$MODULE_DIR$/cue.mod/gen" />
       <excludeFolder url="file://$MODULE_DIR$/cue.mod/pkg" />
       `
-          : ""
-      }
+        : ""
+    }
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
-</module>`,
+</module>`
   );
 };
 
@@ -147,12 +175,12 @@ export const bootstrap = async (project: Project) => {
   const packageJsonFiles = await globby(
     [
       `${project.root}/package.json`,
-      ...workspaces.map((p) => `${p}/package.json`),
+      ...workspaces.map((p) => `${p}/package.json`)
     ],
     {
       cwd: project.root,
-      absolute: true,
-    },
+      absolute: true
+    }
   );
 
   const packages: { [k: string]: any } = {};
@@ -171,7 +199,7 @@ export const bootstrap = async (project: Project) => {
         monoRoot,
         rpath,
         packageJSON,
-        packages[""],
+        packages[""]
       );
     }
 
@@ -180,3 +208,4 @@ export const bootstrap = async (project: Project) => {
 
   await patchRootPackage(project, packages);
 };
+

@@ -8,13 +8,19 @@
   },
   "exports": {
     ".": {
+      "bun": {
+        "import": {
+          "types": "./index.d.ts",
+          "default": "./index.mjs"
+        },
+        "require": {
+          "types": "./index.d.ts",
+          "default": "./index.cjs"
+        }
+      },
       "import": {
         "types": "./index.d.ts",
         "default": "./index.mjs"
-      },
-      "require": {
-        "types": "./index.d.ts",
-        "default": "./index.cjs"
       }
     }
   },

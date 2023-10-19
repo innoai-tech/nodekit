@@ -4,11 +4,7 @@ import {
   isEmpty,
   mapKeys,
   mapValues,
-  trimStart,
-  startsWith,
   keys,
-  forEach,
-  set,
   map
 } from "@innoai-tech/lodash";
 import { join, relative, extname, basename, dirname } from "path";
@@ -24,32 +20,11 @@ import { globby } from "globby";
 import { esbuild } from "./esbuild";
 import { patchShebang } from "./patchShebang";
 import { resolveProjectRoot } from "./pm";
-import { writeFormattedJsonFile } from "./util";
+import { entryAlias, type MonoBundleOptions, writeFormattedJsonFile } from "./util";
 
 const tsconfigFile = "tsconfig.monobundle.json";
 
-const entryAlias = (entry: string) => {
-  if (entry === ".") {
-    return "index";
-  }
-  if (startsWith(entry, "bin:")) {
-    return entry.slice(4);
-  }
-  return trimStart(entry, "./");
-};
-
 type ResolveRollupOptions = () => Promise<RollupOptions>;
-
-export interface MonoBundleOptions {
-  pipeline: {
-    lint: string | boolean;
-    test: string | boolean;
-    build: string | boolean;
-  };
-  engine?: string;
-  exports: { [k: string]: string };
-  sideDeps: { [k: string]: string };
-}
 
 export const bundle = async ({
                                cwd = process.cwd(),
@@ -223,34 +198,6 @@ dist/
     pkg["dependencies"][dep] = undefined;
   }
 
-  const exports = {
-    type: "module",
-    bin: undefined,
-    exports: undefined,
-    // FIXME remote all old entries
-    types: undefined,
-    main: undefined,
-    module: undefined
-  };
-
-  forEach(options.exports, (entryFile, e) => {
-    const distName = entryAlias(e);
-
-    if (startsWith(e, "bin:")) {
-      set(exports, ["bin", distName], `./${distName}.mjs`);
-      return;
-    }
-
-    set(exports, ["exports", e], {
-      // bun must on first
-      bun: entryFile,
-      import: {
-        types: `./${distName}.d.ts`,
-        default: `./${distName}.mjs`
-      }
-    });
-  });
-
   await writeFormattedJsonFile(join(cwd, "package.json"), {
     ...pkg,
     dependencies: isEmpty(pkg["dependencies"])
@@ -263,7 +210,11 @@ dist/
       ? undefined
       : (pkg["devDependencies"] as { [k: string]: string }),
     files: ["*.mjs", "*.d.ts"],
-    ...exports
+    type: "module",
+    // FIXME remote all old entries
+    types: undefined,
+    main: undefined,
+    module: undefined
   });
 
   return;
