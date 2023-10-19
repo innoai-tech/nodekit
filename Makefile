@@ -37,7 +37,7 @@ build:
 ci: bootstrap build test
 
 pub:
-	$(BUN) ./nodedevpkg/bunpublish/src/bin/index.ts
+	$(BUNX) @morlay/bunpublish
 
 export BUILDKIT_HOST =
 ship:
