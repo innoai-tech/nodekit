@@ -12,24 +12,24 @@
   },
   "dependencies": {
     "@innoai-tech/lodash": "workspace:^",
-    "@rollup/plugin-commonjs": "^25.0.4",
-    "@rollup/plugin-node-resolve": "^15.2.0",
-    "browserslist": "^4.21.10",
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "browserslist": "^4.22.1",
     "chalk": "^5.3.0",
-    "esbuild": "^0.19.2",
+    "esbuild": "^0.19.5",
     "globby": "^13.2.2",
     "js-yaml": "^4.1.0",
     "minimatch": "^9.0.3",
-    "rollup": "^3.28.0",
-    "rollup-plugin-dts": "^6.0.0",
+    "rollup": "^4.3.0",
+    "rollup-plugin-dts": "^6.1.0",
     "yargs": "^17.7.2"
   },
   "peerDependencies": {
     "typescript": "^5.0.x"
   },
   "devDependencies": {
-    "@types/js-yaml": "^4.0.5",
-    "@types/yargs": "^17.0.24"
+    "@types/js-yaml": "^4.0.9",
+    "@types/yargs": "^17.0.31"
   },
   "bin": {
     "monobundle": "./monobundle.mjs"
