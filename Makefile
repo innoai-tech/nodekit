@@ -16,7 +16,7 @@ dep:
 	$(BUN) install
 
 dep.update:
-	$(BUNX) npm-check-updates -ws -ui
+	$(BUNX) npm-check-updates -ws --root -ui
 
 bootstrap: build.monobundle
 	$(BUNX) monobundle
