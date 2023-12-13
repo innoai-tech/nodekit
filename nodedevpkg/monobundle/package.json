@@ -1,6 +1,6 @@
 {
   "name": "@innoai-tech/monobundle",
-  "version": "0.11.11",
+  "version": "0.12.0",
   "monobundle": {
     "exports": {
       ".": "./src/index.ts",
@@ -14,13 +14,13 @@
     "@innoai-tech/lodash": "workspace:^",
     "@rollup/plugin-commonjs": "^25.0.7",
     "@rollup/plugin-node-resolve": "^15.2.3",
-    "browserslist": "^4.22.1",
+    "browserslist": "^4.22.2",
     "chalk": "^5.3.0",
-    "esbuild": "^0.19.6",
+    "esbuild": "^0.19.9",
     "globby": "^14.0.0",
     "js-yaml": "^4.1.0",
     "minimatch": "^9.0.3",
-    "rollup": "^4.5.0",
+    "rollup": "^4.8.0",
     "rollup-plugin-dts": "^6.1.0",
     "yargs": "^17.7.2"
   },
@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "@types/js-yaml": "^4.0.9",
-    "@types/yargs": "^17.0.31"
+    "@types/yargs": "^17.0.32"
   },
   "bin": {
     "monobundle": "./monobundle.mjs"
@@ -56,7 +56,7 @@
     "directory": "nodedevpkg/monobundle"
   },
   "scripts": {
-    "lint": "bunx --bun prettier --write .",
+    "lint": "bunx --bun @biomejs/biome check --apply .",
     "build": "bun ./src/bin/index.ts",
     "prepublishOnly": "bun run build"
   },
