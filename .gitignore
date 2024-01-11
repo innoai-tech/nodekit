@@ -6,5 +6,8 @@ dist/
 .next/
 .turbo/
 .swc/
+.idea/
+vendor/
+node_modules/
 
 .DS_Store

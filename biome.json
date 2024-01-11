@@ -1,24 +1,4 @@
 {
 	"$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
-	"vcs": {
-		"clientKind": "git",
-		"enabled": true,
-		"useIgnoreFile": true
-	},
-	"files": {
-		"ignore": ["*.d.ts", "*.js", "*.mjs"]
-	},
-	"linter": {
-		"enabled": true,
-		"rules": {
-			"recommended": true,
-			"suspicious": {
-				"noExplicitAny": "off"
-			},
-			"complexity": {
-				"useLiteralKeys": "off",
-				"noBannedTypes": "off"
-			}
-		}
-	}
+	"extends": ["./node_modules/@innoai-tech/devconfig/biome.json"]
 }
