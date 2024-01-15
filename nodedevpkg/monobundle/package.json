@@ -20,7 +20,7 @@
     "globby": "^14.0.0",
     "js-yaml": "^4.1.0",
     "minimatch": "^9.0.3",
-    "rollup": "^4.9.4",
+    "rollup": "^4.9.5",
     "rollup-plugin-dts": "^6.1.0",
     "yargs": "^17.7.2"
   },
