@@ -1,69 +1,75 @@
 import type {
-	Fetcher,
-	FetcherCreatorOptions,
-	FetcherErrorResponse,
-	FetcherResponse,
-	RequestConfig,
+  Fetcher,
+  FetcherCreatorOptions,
+  FetcherErrorResponse,
+  FetcherResponse,
+  RequestConfig
 } from "../fetcher";
 
 export const createFetcher = ({
-	paramsSerializer,
-	transformRequestBody,
-}: FetcherCreatorOptions): Fetcher => {
-	return {
-		toHref: (requestConfig: RequestConfig<any>) => {
-			return `${requestConfig.url}?${paramsSerializer(requestConfig.params)}`;
-		},
-		request: <TInputs, TRespData>(requestConfig: RequestConfig<TInputs>) => {
-			const reqInit: RequestInit = {
-				method: requestConfig.method,
-				headers: requestConfig.headers || {},
-				body: transformRequestBody(
-					requestConfig.body,
-					requestConfig.headers || {},
-				),
-			};
+                                paramsSerializer,
+                                transformRequestBody
+                              }: FetcherCreatorOptions): Fetcher => {
+  return {
+    toHref: (requestConfig: RequestConfig<any>) => {
+      let search = paramsSerializer(requestConfig.params);
 
-			return fetch(
-				`${requestConfig.url}?${paramsSerializer(requestConfig.params)}`,
-				reqInit,
-			)
-				.then(async (res) => {
-					let body: any;
+      if (search.length && !search.startsWith("?")) {
+        search = "?" + search;
+      }
 
-					if (res.headers.get("Content-Type")?.includes("application/json")) {
-						body = await res.json();
-					} else if (
-						res.headers
-							.get("Content-Type")
-							?.includes("application/octet-stream")
-					) {
-						body = await res.blob();
-					} else {
-						body = await res.text();
-					}
+      return `${requestConfig.url}${search}`;
+    },
+    request: <TInputs, TRespData>(requestConfig: RequestConfig<TInputs>) => {
+      const reqInit: RequestInit = {
+        method: requestConfig.method,
+        headers: requestConfig.headers || {},
+        body: transformRequestBody(
+          requestConfig.body,
+          requestConfig.headers || {}
+        )
+      };
 
-					const resp: any = {
-						config: requestConfig,
-						status: res.status,
-						headers: {},
-					};
+      return fetch(
+        `${requestConfig.url}?${paramsSerializer(requestConfig.params)}`,
+        reqInit
+      )
+        .then(async (res) => {
+          let body: any;
 
-					for (const [key, value] of res.headers) {
-						resp.headers[key] = value;
-					}
+          if (res.headers.get("Content-Type")?.includes("application/json")) {
+            body = await res.json();
+          } else if (
+            res.headers
+              .get("Content-Type")
+              ?.includes("application/octet-stream")
+          ) {
+            body = await res.blob();
+          } else {
+            body = await res.text();
+          }
 
-					resp.body = body as TRespData;
+          const resp: any = {
+            config: requestConfig,
+            status: res.status,
+            headers: {}
+          };
 
-					return resp as FetcherResponse<TInputs, TRespData>;
-				})
-				.then((resp) => {
-					if (resp.status >= 400) {
-						(resp as FetcherErrorResponse<TInputs, any>).error = resp.body;
-						throw resp;
-					}
-					return resp;
-				});
-		},
-	};
+          for (const [key, value] of res.headers) {
+            resp.headers[key] = value;
+          }
+
+          resp.body = body as TRespData;
+
+          return resp as FetcherResponse<TInputs, TRespData>;
+        })
+        .then((resp) => {
+          if (resp.status >= 400) {
+            (resp as FetcherErrorResponse<TInputs, any>).error = resp.body;
+            throw resp;
+          }
+          return resp;
+        });
+    }
+  };
 };
