@@ -36,7 +36,7 @@
   "scripts": {
     "build": "bunx --bun monobundle",
     "prepublishOnly": "bun run build",
-    "lint": "bunx --bun @biomejs/biome check --apply . ."
+    "lint": "bunx --bun prettier --write . "
   },
   "sideEffects": false,
   "type": "module"

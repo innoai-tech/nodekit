@@ -1,6 +1,6 @@
 {
   "name": "@innoai-tech/config",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "monobundle": {
     "exports": {
       ".": "./src/index.ts",
@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@innoai-tech/lodash": "workspace:^",
-    "esbuild": "^0.19.11"
+    "esbuild": "^0.20.1"
   },
   "peerDependencies": {
     "vite": "^5.0.11"
@@ -56,7 +56,7 @@
   "scripts": {
     "build": "bunx --bun monobundle",
     "prepublishOnly": "bun run build",
-    "lint": "bunx --bun @biomejs/biome check --apply . ."
+    "lint": "bunx --bun prettier --write . "
   },
   "sideEffects": false,
   "type": "module"

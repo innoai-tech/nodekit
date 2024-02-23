@@ -26,7 +26,7 @@ build.monobundle:
 	$(BUN) install
 
 lint:
-	$(BUNX) @biomejs/biome check --max-diagnostics=1 --apply .
+	$(BUNX) turbo run lint --filter=monobundle --force
 
 test:
 	$(BUN) test
