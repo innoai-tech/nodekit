@@ -41,7 +41,10 @@ export const bundle = async ({
   }
 
   if (project.root === cwd) {
-    return await bootstrap(project);
+    // monorepo root
+    if ((await project.pm.workspaces(project.root)).length) {
+      return await bootstrap(project);
+    }
   }
 
   const pkg = JSON.parse(String(await readFile(join(cwd, "package.json")))) as {
