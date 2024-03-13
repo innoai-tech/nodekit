@@ -1,6 +1,6 @@
 {
   "name": "@innoai-tech/monobundle",
-  "version": "0.13.3",
+  "version": "0.13.4",
   "monobundle": {
     "exports": {
       ".": "./src/index.ts",
@@ -31,18 +31,18 @@
     "@types/yargs": "^17.0.32"
   },
   "bin": {
-    "monobundle": "./monobundle.mjs"
+    "monobundle": "./dist/monobundle.mjs"
   },
   "exports": {
     ".": {
       "import": {
         "types": "./src/index.ts",
-        "default": "./index.mjs"
+        "default": "./dist/index.mjs"
       }
     }
   },
   "files": [
-    "*.mjs",
+    "dist/*",
     "src/*",
     "!/**/__tests__"
   ],

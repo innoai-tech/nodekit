@@ -91,6 +91,7 @@ export const bundle = async ({
     input: inputs,
     output: {
       ...outputBase,
+      dir: "./dist",
       entryFileNames: "[name].mjs",
       chunkFileNames: "[name]-[hash].mjs"
     },
@@ -113,8 +114,11 @@ export const bundle = async ({
   }];
 
   // cleanup
-
-  const files = await globby(["*.mjs", "*.d.ts"]);
+  const files = await globby([
+    "dist/*",
+    "*.mjs",
+    "*.d.ts"
+  ]);
   for (const f of files) {
     await unlink(join(cwd, f));
   }
@@ -175,8 +179,11 @@ export const bundle = async ({
     devDependencies: isEmpty(pkg["devDependencies"])
       ? undefined
       : (pkg["devDependencies"] as { [k: string]: string }),
-    files: ["*.mjs",
-      "src/*", "!/**/__tests__"],
+    files: [
+      "dist/*",
+      "src/*",
+      "!/**/__tests__"
+    ],
     // FIXME remote all old entries
     types: undefined,
     main: undefined,
@@ -196,14 +203,14 @@ const genExportsAndBin = (options?: MonoBundleOptions) => {
     const distName = entryAlias(e);
 
     if (startsWith(e, "bin:")) {
-      set(pkg, ["bin", distName], `./${distName}.mjs`);
+      set(pkg, ["bin", distName], `./dist/${distName}.mjs`);
       return;
     }
 
     set(pkg, ["exports", e], {
       import: {
         types: `${entryFile}`,
-        default: `./${distName}.mjs`
+        default: `./dist/${distName}.mjs`
       }
     });
   });
