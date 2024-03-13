@@ -9,7 +9,7 @@ import {
 } from "@innoai-tech/lodash";
 import commonjs from "@rollup/plugin-commonjs";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
-import { readFile, unlink, writeFile } from "fs/promises";
+import { readFile, unlink } from "fs/promises";
 import { globby } from "globby";
 import { type OutputOptions, rollup } from "rollup";
 import { createAutoExternal } from "./autoExternal";
@@ -24,6 +24,7 @@ import {
   entryAlias,
   writeFormattedJsonFile
 } from "./util";
+import { forEach, set, startsWith } from "@innoai-tech/lodash";
 
 const tsconfigFile = "tsconfig.monobundle.json";
 
@@ -40,7 +41,7 @@ export const bundle = async ({
     throw new Error("must run in some monorepo");
   }
 
-  if (project.root === cwd) {
+  if (cwd === project.root) {
     // monorepo root
     if ((await project.pm.workspaces(project.root)).length) {
       return await bootstrap(project);
@@ -55,17 +56,6 @@ export const bundle = async ({
   if (!(has(pkg, ["monobundle"]) && pkg["monobundle"].exports)) {
     return;
   }
-
-  await writeFile(
-    join(cwd, ".gitignore"),
-    `
-.turbo/
-target/
-dist/
-*.mjs
-*.d.ts
-`
-  );
 
   const options: MonoBundleOptions = pkg["monobundle"] || {};
 
@@ -172,8 +162,10 @@ dist/
     pkg["dependencies"][dep] = undefined;
   }
 
+
   await writeFormattedJsonFile(join(cwd, "package.json"), {
     ...pkg,
+    ...genExportsAndBin(options),
     dependencies: isEmpty(pkg["dependencies"])
       ? undefined
       : (pkg["dependencies"] as { [k: string]: string }),
@@ -185,7 +177,6 @@ dist/
       : (pkg["devDependencies"] as { [k: string]: string }),
     files: ["*.mjs",
       "src/*", "!/**/__tests__"],
-    type: "module",
     // FIXME remote all old entries
     types: undefined,
     main: undefined,
@@ -193,4 +184,31 @@ dist/
   });
 
   return;
+};
+
+
+const genExportsAndBin = (options?: MonoBundleOptions) => {
+  const pkg = {
+    type: "module"
+  } as { bin?: {}; exports?: {} };
+
+  forEach(options?.exports, (entryFile, e) => {
+    const distName = entryAlias(e);
+
+    if (startsWith(e, "bin:")) {
+      set(pkg, ["bin", distName], `./${distName}.mjs`);
+      return;
+    }
+
+    set(pkg, ["exports", e], {
+      // bun must on first
+      bun: entryFile,
+      import: {
+        types: `${entryFile}`,
+        default: `./${distName}.mjs`
+      }
+    });
+  });
+
+  return pkg;
 };

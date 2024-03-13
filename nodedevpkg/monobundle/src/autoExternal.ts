@@ -17,22 +17,44 @@ export type Package = {
   peerDependencies?: Record<string, string>;
 };
 
-export const loadWorkspace = async (project: Project, localPkg: Package) => {
+export const collectDeps = async (project: Project, localPkg: Package) => {
   const workspaces = await project.pm.workspaces(project.root);
 
   const m = new Map<string, Set<string>>();
 
-  if (workspaces) {
+  const collectPkgDep = (pkg: Package) => {
+    const dep = new Set<string>();
+
+    if (pkg.name) {
+      dep.add(pkg.name);
+    }
+
+    if (pkg.dependencies) {
+      for (const d in pkg.dependencies) {
+        dep.add(d);
+      }
+    }
+
+    if (pkg.peerDependencies) {
+      for (const d in pkg.peerDependencies) {
+        dep.add(d);
+      }
+    }
+
+    return dep;
+  };
+
+  if (workspaces.length) {
     const packageJSONs = await globby(
       workspaces.map((b) => `${b}/package.json`),
       {
-        cwd: project.root,
-      },
+        cwd: project.root
+      }
     );
 
     for (const f of packageJSONs) {
       let pkg = JSON.parse(
-        String(await readFile(join(`${project.root}`, f))),
+        String(await readFile(join(`${project.root}`, f)))
       ) as Package;
 
       // localPkg may be changed
@@ -40,27 +62,14 @@ export const loadWorkspace = async (project: Project, localPkg: Package) => {
         pkg = localPkg;
       }
 
-      const dep = new Set<string>();
-
-      if (pkg.name) {
-        dep.add(pkg.name);
-      }
-
-      if (pkg.dependencies) {
-        for (const d in pkg.dependencies) {
-          dep.add(d);
-        }
-      }
-
-      if (pkg.peerDependencies) {
-        for (const d in pkg.peerDependencies) {
-          dep.add(d);
-        }
-      }
-
-      m.set(pkg.name, dep);
+      m.set(pkg.name, collectPkgDep(pkg));
     }
+
+    return m;
   }
+
+  // for non monorepo
+  m.set(localPkg.name, collectPkgDep(localPkg));
 
   return m;
 };
@@ -71,7 +80,7 @@ export const createAutoExternal = async (
   opts: {
     logger?: ReturnType<typeof import("./log").createLogger>;
     sideDeps?: string[];
-  },
+  }
 ) => {
   const logger = opts.logger;
   const sideDeps = opts.sideDeps || [];
@@ -81,13 +90,13 @@ export const createAutoExternal = async (
       return false;
     }
     return sideDeps.some(
-      (glob) => pkgName === glob || minimatch(pkgName, glob),
+      (glob) => pkgName === glob || minimatch(pkgName, glob)
     );
   };
 
   const usedPkgs = new Set<string>();
 
-  const w = await loadWorkspace(project, pkg);
+  const w = await collectDeps(project, pkg);
 
   const dep = new Set<string>();
 
@@ -114,7 +123,7 @@ export const createAutoExternal = async (
 
     const unused = {
       deps: {} as { [k: string]: boolean },
-      peerDeps: {} as { [k: string]: boolean },
+      peerDeps: {} as { [k: string]: boolean }
     };
 
     for (const d of dep) {
@@ -143,7 +152,7 @@ export const createAutoExternal = async (
           external(
             id: string,
             importer: string | undefined,
-            isResolved: boolean,
+            isResolved: boolean
           ) {
             if (
               typeof opts.external === "function" &&
@@ -173,7 +182,7 @@ export const createAutoExternal = async (
                   collector.add(id);
 
                   logger?.danger(
-                    `"${id}" is not in dependencies or peerDependencies, and will be bundled.`,
+                    `"${id}" is not in dependencies or peerDependencies, and will be bundled.`
                   );
                 }
               }
@@ -182,9 +191,9 @@ export const createAutoExternal = async (
             }
 
             return false;
-          },
+          }
         };
-      },
+      }
     };
   };
 

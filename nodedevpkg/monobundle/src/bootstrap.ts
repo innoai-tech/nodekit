@@ -1,13 +1,10 @@
 import { existsSync } from "fs";
 import { dirname, join, relative } from "path";
-import { get, keys, map, pick } from "@innoai-tech/lodash";
-import { forEach, set, startsWith } from "@innoai-tech/lodash";
+import { get, pick } from "@innoai-tech/lodash";
 import { readFile, writeFile } from "fs/promises";
 import { globby } from "globby";
 import type { Project } from "./pm";
 import {
-  type MonoBundleOptions,
-  entryAlias,
   writeFormattedJsonFile
 } from "./util";
 
@@ -25,7 +22,7 @@ const patchRootPackage = async (
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-${map(pkgs, (pkg, dir) => {
+${Object.entries(pkgs).map(([dir, pkg]) => {
       const filename = join(
         "$PROJECT_DIR$",
         imlFromPackageJSON(relative(project.root, dir), pkg)
@@ -47,33 +44,10 @@ const orderKeys = <T extends {}>(o: T) => {
     "dependencies",
     "peerDependencies",
     "devDependencies",
-    ...keys(o).sort()
+    ...Object.keys(o).sort()
   ];
+
   return pick(o, orderedKeys);
-};
-
-const getExportsAndBin = (options?: MonoBundleOptions) => {
-  const pkg = {} as { bin?: {}; exports?: {} };
-
-  forEach(options?.exports, (entryFile, e) => {
-    const distName = entryAlias(e);
-
-    if (startsWith(e, "bin:")) {
-      set(pkg, ["bin", distName], `./${distName}.mjs`);
-      return;
-    }
-
-    set(pkg, ["exports", e], {
-      // bun must on first
-      bun: entryFile,
-      import: {
-        types: `${entryFile}`,
-        default: `./${distName}.mjs`
-      }
-    });
-  });
-
-  return pkg;
 };
 
 const patchMonoPackage = async (
@@ -106,13 +80,20 @@ const patchMonoPackage = async (
       : undefined;
   }
 
-  const exportsAndBin = getExportsAndBin(get(pkg, ["monobundle"]));
+
+  await writeFile(join(monoRoot, ".gitignore"), `
+.turbo/
+target/
+dist/
+*.mjs
+*.d.ts
+`
+  );
 
   await writeFormattedJsonFile(
     join(monoRoot, "package.json"),
     orderKeys({
       ...pkg,
-      ...exportsAndBin,
       scripts,
       type: "module",
       license: "MIT",
