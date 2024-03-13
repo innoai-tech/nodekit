@@ -201,8 +201,6 @@ const genExportsAndBin = (options?: MonoBundleOptions) => {
     }
 
     set(pkg, ["exports", e], {
-      // bun must on first
-      bun: entryFile,
       import: {
         types: `${entryFile}`,
         default: `./${distName}.mjs`

@@ -1,6 +1,6 @@
 {
   "name": "@innoai-tech/monobundle",
-  "version": "0.13.2",
+  "version": "0.13.3",
   "monobundle": {
     "exports": {
       ".": "./src/index.ts",
@@ -35,7 +35,6 @@
   },
   "exports": {
     ".": {
-      "bun": "./src/index.ts",
       "import": {
         "types": "./src/index.ts",
         "default": "./index.mjs"
