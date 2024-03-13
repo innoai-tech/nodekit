@@ -12,9 +12,7 @@
     "@innoai-tech/lodash": "workspace:^",
     "esbuild": "^0.20.1"
   },
-  "peerDependencies": {
-    "vite": "^5.0.11"
-  },
+  "peerDependencies": {},
   "browserslist": [
     "defaults"
   ],
@@ -22,28 +20,27 @@
     ".": {
       "bun": "./src/index.ts",
       "import": {
-        "types": "./index.d.ts",
+        "types": "./src/index.ts",
         "default": "./index.mjs"
       }
     },
     "./loader": {
       "bun": "./src/loader/index.ts",
       "import": {
-        "types": "./loader.d.ts",
+        "types": "./src/loader/index.ts",
         "default": "./loader.mjs"
       }
     },
     "./vite-plugin-inject-config": {
       "bun": "./src/vite-plugin-inject-config/index.ts",
       "import": {
-        "types": "./vite-plugin-inject-config.d.ts",
+        "types": "./src/vite-plugin-inject-config/index.ts",
         "default": "./vite-plugin-inject-config.mjs"
       }
     }
   },
   "files": [
     "*.mjs",
-    "*.d.ts",
     "src/*",
     "!/**/__tests__"
   ],

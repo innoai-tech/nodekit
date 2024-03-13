@@ -16,14 +16,13 @@
     ".": {
       "bun": "./src/index.ts",
       "import": {
-        "types": "./index.d.ts",
+        "types": "./src/index.ts",
         "default": "./index.mjs"
       }
     }
   },
   "files": [
     "*.mjs",
-    "*.d.ts",
     "src/*",
     "!/**/__tests__"
   ],

@@ -1,18 +1,17 @@
-import { basename, dirname, extname, join, relative } from "path";
+import { basename, extname, join, relative } from "path";
 import {
   has,
   isEmpty,
   keys,
   map,
   mapKeys,
-  mapValues,
+  mapValues
 } from "@innoai-tech/lodash";
 import commonjs from "@rollup/plugin-commonjs";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
 import { readFile, unlink, writeFile } from "fs/promises";
 import { globby } from "globby";
-import { type OutputOptions, type RollupOptions, rollup } from "rollup";
-import dts from "rollup-plugin-dts";
+import { type OutputOptions, rollup } from "rollup";
 import { createAutoExternal } from "./autoExternal";
 import { bootstrap } from "./bootstrap";
 import { esbuild } from "./esbuild";
@@ -20,21 +19,18 @@ import { getBuildTargets } from "./getTarget";
 import { createLogger } from "./log";
 import { patchShebang } from "./patchShebang";
 import { resolveProjectRoot } from "./pm";
-import { tsc } from "./tsc";
 import {
   type MonoBundleOptions,
   entryAlias,
-  writeFormattedJsonFile,
+  writeFormattedJsonFile
 } from "./util";
 
 const tsconfigFile = "tsconfig.monobundle.json";
 
-type ResolveRollupOptions = () => Promise<RollupOptions>;
-
 export const bundle = async ({
-  cwd = process.cwd(),
-  dryRun,
-}: {
+                               cwd = process.cwd(),
+                               dryRun
+                             }: {
   cwd?: string;
   dryRun?: boolean;
 }) => {
@@ -65,7 +61,7 @@ target/
 dist/
 *.mjs
 *.d.ts
-`,
+`
   );
 
   const options: MonoBundleOptions = pkg["monobundle"] || {};
@@ -76,97 +72,65 @@ dist/
     mapKeys(options.exports, (_, k) => {
       return entryAlias(k);
     }),
-    (entry, _) => join(cwd, entry),
+    (entry, _) => join(cwd, entry)
   );
 
   const outputBase: OutputOptions = {
     dir: cwd,
-    format: "es",
+    format: "es"
   };
 
   pkg["peerDependencies"] = {
     ...(pkg["peerDependencies"] ?? {}),
-    "core-js": "*",
+    "core-js": "*"
   };
 
   const autoExternal = await createAutoExternal(project, pkg as any, {
     logger,
-    sideDeps: options["sideDeps"] as any,
+    sideDeps: options["sideDeps"] as any
   });
 
   const buildTargets = getBuildTargets(
-    (pkg as any).browserslist ?? ["defaults"],
+    (pkg as any).browserslist ?? ["defaults"]
   );
 
-  const resolveRollupOptions: ResolveRollupOptions[] = [
-    () => {
-      return Promise.resolve({
-        input: inputs,
-        output: {
-          ...outputBase,
-          entryFileNames: "[name].mjs",
-          chunkFileNames: "[name]-[hash].mjs",
-        },
-        plugins: [
-          autoExternal(),
-          nodeResolve({
-            extensions: [".ts", ".tsx", ".mjs", "", ".js", ".jsx"],
-          }),
-          commonjs(),
-          esbuild({
-            tsconfig: tsconfigFile,
-            target: map(buildTargets, (v, k) => `${k}${v}`),
-          }),
-          patchShebang((chunkName) => {
-            return !!options.exports?.[
-              `bin:${basename(chunkName, extname(chunkName))}`
-            ];
-          }, options.engine),
-        ],
-      });
+  const rollupOptions = [{
+    input: inputs,
+    output: {
+      ...outputBase,
+      entryFileNames: "[name].mjs",
+      chunkFileNames: "[name]-[hash].mjs"
     },
+    plugins: [
+      autoExternal(),
+      nodeResolve({
+        extensions: [".ts", ".tsx", ".mjs", "", ".js", ".jsx"]
+      }),
+      commonjs(),
+      esbuild({
+        tsconfig: tsconfigFile,
+        target: map(buildTargets, (v, k) => `${k}${v}`)
+      }),
+      patchShebang((chunkName) => {
+        return !!options.exports?.[
+          `bin:${basename(chunkName, extname(chunkName))}`
+          ];
+      }, options.engine)
+    ]
+  }];
 
-    async () => {
-      const files = await globby(["*.mjs", "*.d.ts"]);
+  // cleanup
 
-      for (const f of files) {
-        if (outputFiles[f]) {
-          continue;
-        }
-        await unlink(join(cwd, f));
-      }
-
-      await tsc(cwd, ".turbo/types", tsconfigFile);
-
-      const indexForDts = mapValues(inputs, (input) => {
-        const f = join(cwd, ".turbo/types", relative(join(cwd, "src"), input));
-        return `${join(dirname(f), basename(f, extname(f)))}.d.ts`;
-      });
-
-      return {
-        input: indexForDts,
-        output: {
-          ...outputBase,
-          entryFileNames: "[name].d.ts",
-          chunkFileNames: "[name]-[hash].d.ts",
-        },
-        plugins: [
-          autoExternal(),
-          dts({
-            tsconfig: tsconfigFile,
-            respectExternal: true,
-          }) as any,
-        ],
-      };
-    },
-  ];
+  const files = await globby(["*.mjs", "*.d.ts"]);
+  for (const f of files) {
+    await unlink(join(cwd, f));
+  }
 
   logger.warning(`bundling (target: ${JSON.stringify(buildTargets)})`);
 
   const outputFiles: { [k: string]: boolean } = {};
 
-  for (const resolveRollupOption of resolveRollupOptions) {
-    const rollupOption = await resolveRollupOption();
+  for (const rollupOption of rollupOptions) {
 
     const files = await rollup(rollupOption).then((bundle) => {
       return Promise.all(
@@ -179,12 +143,12 @@ dist/
             return bundle.write(output).then((ret) => {
               if (output.dir) {
                 return (ret.output || []).map((o) =>
-                  join(relative(cwd, output.dir ?? ""), o.fileName),
+                  join(relative(cwd, output.dir ?? ""), o.fileName)
                 );
               }
               return relative(cwd, output.file ?? "");
             });
-          }),
+          })
       );
     });
 
@@ -216,12 +180,13 @@ dist/
     devDependencies: isEmpty(pkg["devDependencies"])
       ? undefined
       : (pkg["devDependencies"] as { [k: string]: string }),
-    files: ["*.mjs", "*.d.ts", "src/*", "!/**/__tests__"],
+    files: ["*.mjs",
+      "src/*", "!/**/__tests__"],
     type: "module",
     // FIXME remote all old entries
     types: undefined,
     main: undefined,
-    module: undefined,
+    module: undefined
   });
 
   return;
