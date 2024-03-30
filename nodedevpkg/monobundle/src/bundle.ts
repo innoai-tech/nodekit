@@ -5,7 +5,7 @@ import {
   keys,
   map,
   mapKeys,
-  mapValues
+  mapValues,
 } from "@innoai-tech/lodash";
 import commonjs from "@rollup/plugin-commonjs";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
@@ -22,16 +22,16 @@ import { resolveProjectRoot } from "./pm";
 import {
   type MonoBundleOptions,
   entryAlias,
-  writeFormattedJsonFile
+  writeFormattedJsonFile,
 } from "./util";
 import { forEach, set, startsWith } from "@innoai-tech/lodash";
 
 const tsconfigFile = "tsconfig.monobundle.json";
 
 export const bundle = async ({
-                               cwd = process.cwd(),
-                               dryRun
-                             }: {
+  cwd = process.cwd(),
+  dryRun,
+}: {
   cwd?: string;
   dryRun?: boolean;
 }) => {
@@ -65,60 +65,58 @@ export const bundle = async ({
     mapKeys(options.exports, (_, k) => {
       return entryAlias(k);
     }),
-    (entry, _) => join(cwd, entry)
+    (entry, _) => join(cwd, entry),
   );
 
   const outputBase: OutputOptions = {
     dir: cwd,
-    format: "es"
+    format: "es",
   };
 
   pkg["peerDependencies"] = {
     ...(pkg["peerDependencies"] ?? {}),
-    "core-js": "*"
+    "core-js": "*",
   };
 
   const autoExternal = await createAutoExternal(project, pkg as any, {
     logger,
-    sideDeps: options["sideDeps"] as any
+    sideDeps: options["sideDeps"] as any,
   });
 
   const buildTargets = getBuildTargets(
-    (pkg as any).browserslist ?? ["defaults"]
+    (pkg as any).browserslist ?? ["defaults"],
   );
 
-  const rollupOptions = [{
-    input: inputs,
-    output: {
-      ...outputBase,
-      dir: "./dist",
-      entryFileNames: "[name].mjs",
-      chunkFileNames: "[name]-[hash].mjs"
-    },
-    plugins: [
-      autoExternal(),
-      nodeResolve({
-        extensions: [".ts", ".tsx", ".mjs", "", ".js", ".jsx"]
-      }),
-      commonjs(),
-      esbuild({
-        tsconfig: tsconfigFile,
-        target: map(buildTargets, (v, k) => `${k}${v}`)
-      }),
-      patchShebang((chunkName) => {
-        return !!options.exports?.[
-          `bin:${basename(chunkName, extname(chunkName))}`
+  const rollupOptions = [
+    {
+      input: inputs,
+      output: {
+        ...outputBase,
+        dir: "./dist",
+        entryFileNames: "[name].mjs",
+        chunkFileNames: "[name]-[hash].mjs",
+      },
+      plugins: [
+        autoExternal(),
+        nodeResolve({
+          extensions: [".ts", ".tsx", ".mjs", "", ".js", ".jsx"],
+        }),
+        commonjs(),
+        esbuild({
+          tsconfig: tsconfigFile,
+          target: map(buildTargets, (v, k) => `${k}${v}`),
+        }),
+        patchShebang((chunkName) => {
+          return !!options.exports?.[
+            `bin:${basename(chunkName, extname(chunkName))}`
           ];
-      }, options.engine)
-    ]
-  }];
+        }, options.engine),
+      ],
+    },
+  ];
 
   // cleanup
-  const files = await globby([
-    "dist/*",
-    "*.mjs",
-    "*.d.ts"
-  ]);
+  const files = await globby(["dist/*", "*.mjs", "*.d.ts"]);
   for (const f of files) {
     await unlink(join(cwd, f));
   }
@@ -128,7 +126,6 @@ export const bundle = async ({
   const outputFiles: { [k: string]: boolean } = {};
 
   for (const rollupOption of rollupOptions) {
-
     const files = await rollup(rollupOption).then((bundle) => {
       return Promise.all(
         ([] as OutputOptions[])
@@ -140,12 +137,12 @@ export const bundle = async ({
             return bundle.write(output).then((ret) => {
               if (output.dir) {
                 return (ret.output || []).map((o) =>
-                  join(relative(cwd, output.dir ?? ""), o.fileName)
+                  join(relative(cwd, output.dir ?? ""), o.fileName),
                 );
               }
               return relative(cwd, output.file ?? "");
             });
-          })
+          }),
       );
     });
 
@@ -166,7 +163,6 @@ export const bundle = async ({
     pkg["dependencies"][dep] = undefined;
   }
 
-
   await writeFormattedJsonFile(join(cwd, "package.json"), {
     ...pkg,
     ...genExportsAndBin(options),
@@ -179,24 +175,19 @@ export const bundle = async ({
     devDependencies: isEmpty(pkg["devDependencies"])
       ? undefined
       : (pkg["devDependencies"] as { [k: string]: string }),
-    files: [
-      "dist/*",
-      "src/*",
-      "!/**/__tests__"
-    ],
+    files: ["dist/*", "src/*", "!/**/__tests__"],
     // FIXME remote all old entries
     types: undefined,
     main: undefined,
-    module: undefined
+    module: undefined,
   });
 
   return;
 };
 
-
 const genExportsAndBin = (options?: MonoBundleOptions) => {
   const pkg = {
-    type: "module"
+    type: "module",
   } as { bin?: {}; exports?: {} };
 
   forEach(options?.exports, (entryFile, e) => {
@@ -210,8 +201,8 @@ const genExportsAndBin = (options?: MonoBundleOptions) => {
     set(pkg, ["exports", e], {
       import: {
         types: `${entryFile}`,
-        default: `./dist/${distName}.mjs`
-      }
+        default: `./dist/${distName}.mjs`,
+      },
     });
   });
 

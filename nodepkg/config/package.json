@@ -20,24 +20,24 @@
     ".": {
       "import": {
         "types": "./src/index.ts",
-        "default": "./index.mjs"
+        "default": "./dist/index.mjs"
       }
     },
     "./loader": {
       "import": {
         "types": "./src/loader/index.ts",
-        "default": "./loader.mjs"
+        "default": "./dist/loader.mjs"
       }
     },
     "./vite-plugin-inject-config": {
       "import": {
         "types": "./src/vite-plugin-inject-config/index.ts",
-        "default": "./vite-plugin-inject-config.mjs"
+        "default": "./dist/vite-plugin-inject-config.mjs"
       }
     }
   },
   "files": [
-    "*.mjs",
+    "dist/*",
     "src/*",
     "!/**/__tests__"
   ],

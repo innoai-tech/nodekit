@@ -7,7 +7,6 @@
     "nodepkg/*",
     "nodedevpkg/*"
   ],
-  "packageManager": "bun@1.0.30",
   "engines": {
     "bun": ">= 1"
   },
@@ -18,15 +17,15 @@
   "devDependencies": {
     "@innoai-tech/devconfig": "workspace:*",
     "@innoai-tech/monobundle": "workspace:*",
-    "bun-types": "^1.0.30",
-    "core-js": "^3.36.0",
-    "esbuild": "^0.20.1",
+    "bun-types": "^1.0.36",
+    "core-js": "^3.36.1",
+    "esbuild": "^0.20.2",
     "jsdom": "^24.0.0",
     "prettier": "^3.2.5",
     "rxjs": "^7.8.1",
-    "turbo": "^1.12.5",
-    "typescript": "^5.4.2",
-    "vite": "^5.1.6"
+    "turbo": "^1.13.0",
+    "typescript": "^5.4.3",
+    "vite": "^5.2.7"
   },
   "resolutions": {
     "rollup": "^4.13.0"
