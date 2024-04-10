@@ -12,7 +12,7 @@ var (
 )
 
 var App = cli.NewApp(
-	"app",
+	"webappserve",
 	version,
 	cli.WithImageNamespace("ghcr.io/octohelm"),
 )

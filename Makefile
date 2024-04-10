@@ -39,9 +39,8 @@ ci: bootstrap build test
 pub:
 	$(BUNX) @morlay/bunpublish
 
-export BUILDKIT_HOST =
 ship:
-	wagon do go ship pushx
+	TTY=0 piper do ship push
 
 clean:
 	find . -name '.turbo' -type d -prune -print -exec rm -rf '{}' \;
