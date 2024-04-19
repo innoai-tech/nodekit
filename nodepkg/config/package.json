@@ -44,7 +44,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "ssh://git@github.com:morlay/bunpublish.git",
+    "url": "ssh://git@github.com:innoai-tech/nodekit.git",
     "directory": "nodepkg/config"
   },
   "scripts": {

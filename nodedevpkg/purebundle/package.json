@@ -2,7 +2,7 @@
   "name": "@innoai-tech/purebundle",
   "version": "0.3.0",
   "dependencies": {
-    "@swc/core": "1.4.13"
+    "@swc/core": "1.4.16"
   },
   "exports": {
     ".": {
@@ -27,7 +27,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "ssh://git@github.com:morlay/bunpublish.git",
+    "url": "ssh://git@github.com:innoai-tech/nodekit.git",
     "directory": "nodedevpkg/purebundle"
   },
   "scripts": {
