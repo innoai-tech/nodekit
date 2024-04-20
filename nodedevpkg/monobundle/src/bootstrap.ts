@@ -12,7 +12,7 @@ const imlFromPackageJSON = (rpath: string, pkg: any) => {
 
 const patchRootPackage = async (
   project: Project,
-  pkgs: { [k: string]: any },
+  pkgs: { [k: string]: any }
 ) => {
   await writeFile(
     join(project.root, ".idea/modules.xml"),
@@ -21,18 +21,18 @@ const patchRootPackage = async (
   <component name="ProjectModuleManager">
     <modules>
 ${Object.entries(pkgs)
-  .map(([dir, pkg]) => {
-    const filename = join(
-      "$PROJECT_DIR$",
-      imlFromPackageJSON(relative(project.root, dir), pkg),
-    );
-    return `<module fileurl="file://${filename}" filepath="${filename}" />`;
-  })
-  .join("\n")}
+      .map(([dir, pkg]) => {
+        const filename = join(
+          "$PROJECT_DIR$",
+          imlFromPackageJSON(relative(project.root, dir), pkg)
+        );
+        return `<module fileurl="file://${filename}" filepath="${filename}" />`;
+      })
+      .join("\n")}
     </modules>
   </component>
 </project>
-`,
+`
   );
 };
 
@@ -44,7 +44,7 @@ const orderKeys = <T extends {}>(o: T) => {
     "dependencies",
     "peerDependencies",
     "devDependencies",
-    ...Object.keys(o).sort(),
+    ...Object.keys(o).sort()
   ];
 
   return pick(o, orderedKeys);
@@ -55,19 +55,19 @@ const patchMonoPackage = async (
   monoRoot: string,
   directory: string,
   pkg: any,
-  rootPkg: any,
+  rootPkg: any
 ) => {
   const defaultScripts = project.pm.defaults().scripts;
 
   const scripts = {
-    ...(pkg.scripts || {}),
+    ...(pkg.scripts || {})
   };
 
   if (get(pkg, ["monobundle"])) {
     scripts.lint = get(
       pkg,
       ["monobundle", "pipeline", "lint"],
-      defaultScripts.lint,
+      defaultScripts.lint
     );
     scripts.build =
       get(pkg, ["monobundle", "pipeline", "build"], defaultScripts.build) ||
@@ -78,18 +78,19 @@ const patchMonoPackage = async (
     scripts.prepublishOnly = scripts.build
       ? `${project.pm.bin.run} build`
       : undefined;
-  }
 
-  await writeFile(
-    join(monoRoot, ".gitignore"),
-    `
+
+    await writeFile(
+      join(monoRoot, ".gitignore"),
+      `
 .turbo/
 target/
 dist/
 *.mjs
 *.d.ts
-`,
-  );
+`
+    );
+  }
 
   await writeFormattedJsonFile(
     join(monoRoot, "package.json"),
@@ -100,17 +101,17 @@ dist/
       license: "MIT",
       repository: rootPkg.repository
         ? {
-            ...rootPkg.repository,
-            directory,
-          }
+          ...rootPkg.repository,
+          directory
+        }
         : undefined,
       publishConfig:
         !pkg.private && rootPkg.publishConfig
           ? {
-              ...rootPkg.publishConfig,
-            }
-          : undefined,
-    }),
+            ...rootPkg.publishConfig
+          }
+          : undefined
+    })
   );
 };
 
@@ -132,17 +133,17 @@ export const addImiFile = async (monoRoot: string, pkg: any) => {
       <excludeFolder url="file://$MODULE_DIR$/.build" />
       <excludeFolder url="file://$MODULE_DIR$/dist" />
       ${
-        isCueMod
-          ? `
+      isCueMod
+        ? `
       <excludeFolder url="file://$MODULE_DIR$/cue.mod/gen" />
       <excludeFolder url="file://$MODULE_DIR$/cue.mod/pkg" />
       `
-          : ""
-      }
+        : ""
+    }
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
-</module>`,
+</module>`
   );
 };
 
@@ -156,12 +157,12 @@ export const bootstrap = async (project: Project) => {
   const packageJsonFiles = await globby(
     [
       `${project.root}/package.json`,
-      ...workspaces.map((p) => `${p}/package.json`),
+      ...workspaces.map((p) => `${p}/package.json`)
     ],
     {
       cwd: project.root,
-      absolute: true,
-    },
+      absolute: true
+    }
   );
 
   const packages: { [k: string]: any } = {};
@@ -180,7 +181,7 @@ export const bootstrap = async (project: Project) => {
         monoRoot,
         rpath,
         packageJSON,
-        packages[""],
+        packages[""]
       );
     }
 
