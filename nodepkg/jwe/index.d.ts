@@ -1,0 +1,1 @@
+export function encrypt(payload: string, key: object): Promise<string>
