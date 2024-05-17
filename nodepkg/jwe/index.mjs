@@ -1,17 +1,8 @@
-import wasmURL from "./jwe.wasm?url";
+import init, { encrypt as _encrypt } from "./pkg/jwe";
 
-let wasm;
+// make vite happy
+import wasmURL from "./pkg/jwe_bg.wasm?url";
 
-void import("./wasm_exec.js").then(() => {
-  const go = new Go();
-
-  return WebAssembly.instantiateStreaming(fetch(wasmURL), go.importObject)
-    .then((obj) => {
-      wasm = obj.instance;
-      return go.run(obj.instance);
-    });
-});
-
-export const encrypt = async (payload, key) => {
-  return wasm?.exports.encrypt?.(payload, JSON.stringify(key)) ?? __go_jwe_encrypt(payload, JSON.stringify(key));
+export const encrypt = (payload, jwk) => {
+  return init(wasmURL).then(() => _encrypt(payload, JSON.stringify(jwk)));
 };

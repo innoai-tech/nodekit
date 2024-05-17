@@ -1,0 +1,24 @@
+[package]
+name = "jwe"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+wasm-bindgen = "0.2.92"
+base64ct = { version = "1.6.0", features = ["alloc"] }
+rand = "0.8"
+sha1 = "0.10.6"
+serde_json = "1"
+aes-gcm = { version = "0.10", features = ["heapless", "getrandom"] }
+serde = { version = "1.0", features = ["derive"] }
+getrandom = { version = "*", features = ["js"] }
+rsa = "0.9.6"
+
+[dev-dependencies]
+wasm-bindgen-test = "0.3.42"
+
+[profile.release]
+opt-level = "s"
