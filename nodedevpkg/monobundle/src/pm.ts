@@ -43,7 +43,7 @@ const projectManagers: { [name: string]: ProjectManager } = {
     defaults: () => {
       return {
         scripts: {
-          build: "bunx --bun monobundle",
+          build: "bunx --bun @innoai-tech/monobundle",
           lint: "bunx --bun prettier --write . ",
         },
       };

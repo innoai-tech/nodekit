@@ -33,7 +33,7 @@
     "directory": "nodepkg/fetcher"
   },
   "scripts": {
-    "build": "bunx --bun monobundle",
+    "build": "bunx --bun @innoai-tech/monobundle",
     "prepublishOnly": "bun run build",
     "lint": "bunx --bun prettier --write . "
   },

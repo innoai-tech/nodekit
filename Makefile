@@ -22,17 +22,17 @@ bootstrap: build.monobundle
 	$(BUNX) monobundle
 
 build.monobundle:
-	$(BUNX) turbo run build --filter=monobundle --force
+	$(BUNX) turbo run build --filter="@innoai-tech/monobundle" --force
 	$(BUN) install
 
 lint:
-	$(BUNX) turbo run lint --filter=monobundle --force
+	$(BUNX) turbo run lint --filter="@innoai-tech/monobundle" --force
 
 test:
 	$(BUN) test
 
 build:
-	$(BUNX) turbo run build --filter=!monobundle --force
+	$(BUNX) turbo run build --filter="!@innoai-tech/monobundle" --force --concurrency=1
 
 ci: bootstrap build test
 

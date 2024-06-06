@@ -1,6 +1,6 @@
 {
-  "name": "@innoai-tech/jwe",
-  "version": "0.2.2",
+  "name": "@innoai-tech/crypto",
+  "version": "0.1.0",
   "exports": {
     ".": {
       "import": {
@@ -10,9 +10,9 @@
     }
   },
   "files": [
-    "pkg/jwe.d.ts",
-    "pkg/jwe.js",
-    "pkg/jwe_bg.wasm",
+    "pkg/crypto.d.ts",
+    "pkg/crypto.js",
+    "pkg/crypto_bg.wasm",
     "index.d.ts",
     "index.mjs"
   ],
@@ -20,10 +20,10 @@
   "repository": {
     "type": "git",
     "url": "ssh://git@github.com:innoai-tech/nodekit.git",
-    "directory": "nodepkg/jwe"
+    "directory": "nodepkg/crypto"
   },
   "scripts": {
-    "test": "cargo test -- --nocapture",
+    "test:rust": "cargo test -- --nocapture",
     "build": "bunx wasm-pack build --release --target web --no-pack",
     "prepublishOnly": "bun run build"
   },

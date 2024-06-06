@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@innoai-tech/lodash": "workspace:^",
-    "esbuild": "^0.21.1"
+    "esbuild": "^0.21.4"
   },
   "peerDependencies": {},
   "browserslist": [
@@ -51,7 +51,7 @@
     "directory": "nodepkg/config"
   },
   "scripts": {
-    "build": "bunx --bun monobundle",
+    "build": "bunx --bun @innoai-tech/monobundle",
     "prepublishOnly": "bun run build",
     "lint": "bunx --bun prettier --write . "
   },

@@ -1,5 +1,5 @@
 [package]
-name = "jwe"
+name = "crypto"
 version = "0.1.0"
 edition = "2021"
 
@@ -12,7 +12,8 @@ base64ct = { version = "1.6.0", features = ["alloc"] }
 rand = "0.8"
 sha1 = "0.10.6"
 serde_json = "1"
-aes-gcm = { version = "0.10", features = ["heapless", "getrandom"] }
+aes = { version = "0.8.4" }
+cfb-mode = { version = "0.8.2" }
 serde = { version = "1.0", features = ["derive"] }
 getrandom = { version = "*", features = ["js"] }
 rsa = "0.9.6"
