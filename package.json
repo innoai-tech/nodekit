@@ -3,7 +3,7 @@
   "type": "module",
   "version": "1.0.0",
   "private": true,
-  "packageManager": "bun@1.1.12",
+  "packageManager": "bun@1.1.20",
   "workspaces": [
     "nodepkg/*",
     "nodedevpkg/*"
@@ -18,18 +18,18 @@
   "devDependencies": {
     "@innoai-tech/devconfig": "workspace:*",
     "@innoai-tech/monobundle": "workspace:*",
-    "bun-types": "^1.1.12",
+    "bun-types": "^1.1.20",
     "core-js": "^3.37.1",
-    "esbuild": "^0.21.4",
-    "jsdom": "^24.1.0",
-    "prettier": "^3.3.1",
+    "esbuild": "^0.23.0",
+    "jsdom": "^24.1.1",
+    "prettier": "^3.3.3",
     "rxjs": "^7.8.1",
-    "turbo": "^2.0.1",
-    "typescript": "^5.4.5",
-    "vite": "^5.2.12"
+    "turbo": "^2.0.9",
+    "typescript": "^5.5.4",
+    "vite": "^5.3.5"
   },
   "resolutions": {
-    "rollup": "^4.18.0"
+    "rollup": "^4.19.0"
   },
   "prettier": {}
 }

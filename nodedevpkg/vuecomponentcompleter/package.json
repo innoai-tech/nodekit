@@ -1,6 +1,6 @@
 {
-  "name": "@innoai-tech/purebundle",
-  "version": "0.4.0",
+  "name": "@innoai-tech/vuecomponentcompleter",
+  "version": "0.1.1",
   "dependencies": {
     "@swc/core": "^1.7.2"
   },
@@ -12,7 +12,7 @@
       }
     },
     "./swc-plugin": {
-      "bun": "./target/wasm32-wasi/release/purebundle.wasm",
+      "bun": "./target/wasm32-wasi/release/vuecomponentcompleter.wasm",
       "import": {
         "types": "./swc-plugin.d.ts",
         "default": "./swc-plugin.mjs"
@@ -22,13 +22,13 @@
   "files": [
     "index.d.ts",
     "index.mjs",
-    "target/wasm32-wasi/release/purebundle.wasm"
+    "target/wasm32-wasi/release/vuecomponentcompleter.wasm"
   ],
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "ssh://git@github.com:innoai-tech/nodekit.git",
-    "directory": "nodedevpkg/purebundle"
+    "directory": "nodedevpkg/vuecomponentcompleter"
   },
   "scripts": {
     "initial": "rustup target add wasm32-wasi",

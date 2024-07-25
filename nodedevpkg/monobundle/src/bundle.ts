@@ -5,7 +5,7 @@ import {
   keys,
   map,
   mapKeys,
-  mapValues,
+  mapValues
 } from "@innoai-tech/lodash";
 import commonjs from "@rollup/plugin-commonjs";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
@@ -22,16 +22,18 @@ import { resolveProjectRoot } from "./pm";
 import {
   type MonoBundleOptions,
   entryAlias,
-  writeFormattedJsonFile,
+  writeFormattedJsonFile
 } from "./util";
 import { forEach, set, startsWith } from "@innoai-tech/lodash";
+import { chunkCleanup } from "./chunkCleanup.ts";
+import { vueComponentComplete } from "./vueComponentComplete.ts";
 
 const tsconfigFile = "tsconfig.monobundle.json";
 
 export const bundle = async ({
-  cwd = process.cwd(),
-  dryRun,
-}: {
+                               cwd = process.cwd(),
+                               dryRun
+                             }: {
   cwd?: string;
   dryRun?: boolean;
 }) => {
@@ -65,26 +67,26 @@ export const bundle = async ({
     mapKeys(options.exports, (_, k) => {
       return entryAlias(k);
     }),
-    (entry, _) => join(cwd, entry),
+    (entry, _) => join(cwd, entry)
   );
 
   const outputBase: OutputOptions = {
     dir: cwd,
-    format: "es",
+    format: "es"
   };
 
   pkg["peerDependencies"] = {
     ...(pkg["peerDependencies"] ?? {}),
-    "core-js": "*",
+    "core-js": "*"
   };
 
   const autoExternal = await createAutoExternal(project, pkg as any, {
     logger,
-    sideDeps: options["sideDeps"] as any,
+    sideDeps: options["sideDeps"] as any
   });
 
   const buildTargets = getBuildTargets(
-    (pkg as any).browserslist ?? ["defaults"],
+    (pkg as any).browserslist ?? ["defaults"]
   );
 
   const rollupOptions = [
@@ -94,25 +96,27 @@ export const bundle = async ({
         ...outputBase,
         dir: "./dist",
         entryFileNames: "[name].mjs",
-        chunkFileNames: "[name]-[hash].mjs",
+        chunkFileNames: "[name]-[hash].mjs"
       },
       plugins: [
         autoExternal(),
         nodeResolve({
-          extensions: [".ts", ".tsx", ".mjs", "", ".js", ".jsx"],
+          extensions: [".ts", ".tsx", ".mjs", "", ".js", ".jsx"]
         }),
         commonjs(),
+        vueComponentComplete({}),
         esbuild({
           tsconfig: tsconfigFile,
-          target: map(buildTargets, (v, k) => `${k}${v}`),
+          target: map(buildTargets, (v, k) => `${k}${v}`)
         }),
         patchShebang((chunkName) => {
           return !!options.exports?.[
             `bin:${basename(chunkName, extname(chunkName))}`
-          ];
+            ];
         }, options.engine),
-      ],
-    },
+        chunkCleanup()
+      ]
+    }
   ];
 
   // cleanup
@@ -137,12 +141,12 @@ export const bundle = async ({
             return bundle.write(output).then((ret) => {
               if (output.dir) {
                 return (ret.output || []).map((o) =>
-                  join(relative(cwd, output.dir ?? ""), o.fileName),
+                  join(relative(cwd, output.dir ?? ""), o.fileName)
                 );
               }
               return relative(cwd, output.file ?? "");
             });
-          }),
+          })
       );
     });
 
@@ -179,7 +183,7 @@ export const bundle = async ({
     // FIXME remote all old entries
     types: undefined,
     main: undefined,
-    module: undefined,
+    module: undefined
   });
 
   return;
@@ -187,7 +191,7 @@ export const bundle = async ({
 
 const genExportsAndBin = (options?: MonoBundleOptions) => {
   const pkg = {
-    type: "module",
+    type: "module"
   } as { bin?: {}; exports?: {} };
 
   forEach(options?.exports, (entryFile, e) => {
@@ -202,8 +206,8 @@ const genExportsAndBin = (options?: MonoBundleOptions) => {
       bun: `${entryFile}`,
       import: {
         types: `${entryFile}`,
-        default: `./dist/${distName}.mjs`,
-      },
+        default: `./dist/${distName}.mjs`
+      }
     });
   });
 

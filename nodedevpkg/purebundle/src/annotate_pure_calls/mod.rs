@@ -113,7 +113,7 @@ impl VisitMut for InitUsedVisit {
 
     fn visit_mut_ident(&mut self, ident: &mut Ident) {
         if ident.sym == self.ident.sym {
-            if ident.span.ctxt == self.ident.span.ctxt {
+            if ident.ctxt == self.ident.ctxt {
                 self.used = true
             }
         }
