@@ -1,7 +1,7 @@
 use swc_core::common::DUMMY_SP;
 use swc_core::ecma::ast::{Expr, ExprOrSpread, Prop, Ident, IdentName, KeyValueProp, Lit, ObjectLit, Pat, PropName, VarDeclarator, PropOrSpread, ArrayLit, CallExpr};
 use swc_core::ecma::visit::{as_folder, noop_visit_mut_type, Fold, VisitMut, VisitMutWith};
-
+use convert_case::{Case, Casing};
 pub fn vue_component_completer() -> impl Fold + VisitMut {
     as_folder(VueComponentCompleter {})
 }
@@ -142,7 +142,7 @@ fn prop_emits(props: Vec<&str>) -> Box<Prop> {
         .iter()
         .map(|v| Some(ExprOrSpread {
             spread: None,
-            expr: Box::new(Expr::Lit(Lit::from(to_lower_first_letter(*v)))),
+            expr: Box::new(Expr::Lit(Lit::from(to_emit_name(*v)))),
         }))
         .collect();
 
@@ -157,13 +157,8 @@ fn prop_emits(props: Vec<&str>) -> Box<Prop> {
     );
 }
 
-fn to_lower_first_letter(s: &str) -> String {
-    let mut c = s.chars();
-
-    match c.next() {
-        None => String::new(),
-        Some(f) => f.to_lowercase().collect::<String>() + c.as_str(),
-    }
+fn to_emit_name(s: &str) -> String {
+    return s.to_case(Case::Kebab);
 }
 
 #[cfg(test)]
@@ -235,10 +230,10 @@ mod test {
     test_inline!(SYNTAX, runner,
         /* Name */ should_complete_with_emits,
         /* Input */ r#"
-            const X = component<{ onSelected?: () => void }>(() => null)
+            const X = component<{ onSelected?: () => void, onDidUpdate?: () => void }>(() => null)
         "#,
         /* Output */ r#"
-            const X = component<{ onSelected?: () => void }>(() => null, { displayName: "X", emits: ["selected"] })
+            const X = component<{ onSelected?: () => void, onDidUpdate?: () => void }>(() => null, { displayName: "X", emits: ["selected", "did-update"] })
         "#
     );
 }
