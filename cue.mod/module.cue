@@ -1,6 +1,6 @@
 module: "github.com/innoai-tech/nodekit@v0"
 language: {
-	version: "v0.9.2"
+	version: "v0.10.0"
 }
 deps: {
 	"github.com/octohelm/piper@v0": {

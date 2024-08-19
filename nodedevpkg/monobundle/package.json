@@ -16,13 +16,13 @@
     "@innoai-tech/vuecomponentcompleter": "workspace:^",
     "@rollup/plugin-commonjs": "^25.0.8",
     "@rollup/plugin-node-resolve": "^15.2.3",
-    "browserslist": "^4.23.2",
+    "browserslist": "^4.23.3",
     "chalk": "^5.3.0",
-    "esbuild": "^0.23.0",
+    "esbuild": "^0.23.1",
     "globby": "^14.0.2",
     "js-yaml": "^4.1.0",
     "minimatch": "^10.0.1",
-    "rollup": "^4.19.0",
+    "rollup": "^4.21.0",
     "yargs": "^17.7.2"
   },
   "peerDependencies": {
@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@types/js-yaml": "^4.0.9",
-    "@types/yargs": "^17.0.32"
+    "@types/yargs": "^17.0.33"
   },
   "bin": {
     "monobundle": "./dist/monobundle.mjs"
