@@ -11,7 +11,7 @@ jobs:
   go:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: docker/setup-qemu-action@v2
       - run: curl -sSLf https://raw.githubusercontent.com/octohelm/piper/main/install.sh | sudo sh
 
