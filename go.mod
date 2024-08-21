@@ -2,7 +2,7 @@ module github.com/innoai-tech/nodekit
 
 go 1.23.0
 
-require github.com/innoai-tech/infra v0.0.0-20240819044450-8e8ac3f58287
+require github.com/innoai-tech/infra v0.0.0-20240821071818-df820288104f
 
 require (
 	cuelang.org/go v0.10.0 // indirect

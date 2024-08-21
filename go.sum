@@ -40,8 +40,8 @@ github.com/grpc-ecosystem/grpc-gateway/v2 v2.22.0 h1:asbCHRVmodnJTuQ3qamDwqVOIjw
 github.com/grpc-ecosystem/grpc-gateway/v2 v2.22.0/go.mod h1:ggCgvZ2r7uOoQjOyu2Y1NhHmEPPzzuhWgcza5M1Ji1I=
 github.com/inconshreveable/mousetrap v1.1.0 h1:wN+x4NVGpMsO7ErUn/mUI3vEoE6Jt13X2s0bqwp9tc8=
 github.com/inconshreveable/mousetrap v1.1.0/go.mod h1:vpF70FUmC8bwa3OWnCshd2FqLfsEA9PFc4w1p2J65bw=
-github.com/innoai-tech/infra v0.0.0-20240819044450-8e8ac3f58287 h1:WB6BwE7NlIv4r3+7vQ1FBH/yW1piK3uzUtIlfffc+fY=
-github.com/innoai-tech/infra v0.0.0-20240819044450-8e8ac3f58287/go.mod h1:nQ4Yyin0XuKRFaEwHZcioMu+my5Bz/bZmo/r0thn9Og=
+github.com/innoai-tech/infra v0.0.0-20240821071818-df820288104f h1:iD2JweFC5fQ7GpnWWh8Sf+h6AbmcXdkkdC4yKJ0KQA4=
+github.com/innoai-tech/infra v0.0.0-20240821071818-df820288104f/go.mod h1:nQ4Yyin0XuKRFaEwHZcioMu+my5Bz/bZmo/r0thn9Og=
 github.com/juju/ansiterm v1.0.0 h1:gmMvnZRq7JZJx6jkfSq9/+2LMrVEwGwt7UR6G+lmDEg=
 github.com/juju/ansiterm v1.0.0/go.mod h1:PyXUpnI3olx3bsPcHt98FGPX/KCFZ1Fi+hw1XLI6384=
 github.com/julienschmidt/httprouter v1.3.0 h1:U0609e9tgbseu3rBINet9P48AI/D3oJs4dN7jwJOQ1U=
