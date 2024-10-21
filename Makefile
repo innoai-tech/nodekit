@@ -16,7 +16,7 @@ dep:
 	$(BUN) install
 
 dep.update:
-	$(BUNX) taze -w -r
+	$(BUNX) taze -w -r latest
 
 bootstrap: build.monobundle
 	$(BUNX) monobundle
