@@ -1,8 +1,8 @@
-use swc_core::ecma::ast::{ModuleDecl, ModuleItem};
-use swc_core::ecma::visit::{as_folder, noop_visit_mut_type, Fold, VisitMut, VisitMutWith};
+use swc_core::ecma::ast::{ModuleDecl, ModuleItem, Pass};
+use swc_core::ecma::visit::{noop_visit_mut_type, visit_mut_pass, VisitMut, VisitMutWith};
 
-pub fn ignore_side_imports() -> impl Fold + VisitMut {
-    as_folder(IgnoreSideImports {})
+pub fn ignore_side_imports() -> impl VisitMut + Pass {
+    visit_mut_pass(IgnoreSideImports {})
 }
 
 struct IgnoreSideImports {}
@@ -24,16 +24,16 @@ impl VisitMut for IgnoreSideImports {
     }
 }
 
-
 #[cfg(test)]
 mod test {
-    use swc_core::common::{chain, Mark};
+    use swc_core::common::Mark;
     use swc_core::ecma::transforms::base::resolver;
     use swc_core::ecma::transforms::testing::{test, Tester};
     use swc_core::ecma::{
         parser::{Syntax, TsSyntax},
-        visit::{as_folder, Fold},
+        visit::{visit_mut_pass},
     };
+    use swc_core::ecma::ast::Pass;
 
     const SYNTAX: Syntax = Syntax::Typescript(TsSyntax {
         tsx: true,
@@ -43,14 +43,16 @@ mod test {
         disallow_ambiguous_jsx_like: true,
     });
 
-    fn runner(_: &mut Tester) -> impl Fold {
-        chain!(
+    fn runner(_: &mut Tester) -> impl Pass {
+        (
             resolver(Mark::new(), Mark::new(), false),
-            as_folder(super::IgnoreSideImports{})
+            visit_mut_pass(super::IgnoreSideImports {}),
         )
     }
 
-    swc_core::ecma::transforms::testing::test_inline!(SYNTAX, runner,
+    swc_core::ecma::transforms::testing::test_inline!(
+        SYNTAX,
+        runner,
         /* Name */ side_import_should_drop,
         /* Input */ r#"
             import { x } from "x"

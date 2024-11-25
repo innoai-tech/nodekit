@@ -1,14 +1,14 @@
 use swc_core::common::comments::Comments;
 use swc_core::ecma::ast::{
-    ArrayLit, AssignExpr, AssignProp, CallExpr, Expr, Ident, KeyValueProp, Pat, VarDeclarator,
+    ArrayLit, AssignExpr, AssignProp, CallExpr, Expr, Ident, KeyValueProp, Pass, Pat, VarDeclarator,
 };
-use swc_core::ecma::visit::{as_folder, noop_visit_mut_type, Fold, VisitMut, VisitMutWith};
+use swc_core::ecma::visit::{noop_visit_mut_type, visit_mut_pass, VisitMut, VisitMutWith};
 
-pub fn annotate_pure_calls<C>(comments: C) -> impl Fold + VisitMut
+pub fn annotate_pure_calls<C>(comments: C) -> impl VisitMut + Pass
 where
     C: Comments + Clone,
 {
-    as_folder(PureAnnotation {
+    visit_mut_pass(PureAnnotation {
         comments: Some(comments),
     })
 }
