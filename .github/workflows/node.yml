@@ -12,15 +12,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
 
-      - run: rustup target add wasm32-wasi
+      - run: rustup target add wasm32-wasip1
 
-      - uses: oven-sh/setup-bun@v1
+      - uses: oven-sh/setup-bun@v2
 
       - run: make dep ci
         env:

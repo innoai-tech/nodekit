@@ -5,7 +5,7 @@ import {transform as trans} from "@swc/core";
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 
 export const usePlugin = (opts = {}) => [
-    join(__dirname, "./target/wasm32-wasi/release/vuecomponentcompleter.wasm"),
+    join(__dirname, "./target/wasm32-wasip1/release/vuecomponentcompleter.wasm"),
     opts,
 ];
 
