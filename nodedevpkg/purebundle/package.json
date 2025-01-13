@@ -1,8 +1,8 @@
 {
   "name": "@innoai-tech/purebundle",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "dependencies": {
-    "@swc/core": "^1.10.1"
+    "@swc/core": "^1.10.7"
   },
   "exports": {
     ".": {
@@ -12,7 +12,7 @@
       }
     },
     "./swc-plugin": {
-      "bun": "./target/wasm32-wasi/release/purebundle.wasm",
+      "bun": "./target/wasm32-wasip1/release/purebundle.wasm",
       "import": {
         "types": "./swc-plugin.d.ts",
         "default": "./swc-plugin.mjs"
@@ -22,7 +22,7 @@
   "files": [
     "index.d.ts",
     "index.mjs",
-    "target/wasm32-wasi/release/purebundle.wasm"
+    "target/wasm32-wasip1/release/purebundle.wasm"
   ],
   "license": "MIT",
   "repository": {
@@ -31,11 +31,11 @@
     "directory": "nodedevpkg/purebundle"
   },
   "scripts": {
-    "initial": "rustup target add wasm32-wasi",
+    "initial": "rustup target add wasm32-wasip1",
     "update": "cargo update",
     "lint": "cargo fmt --all -- --emit files",
     "test": "cargo test",
-    "build": "cargo build --target wasm32-wasi --release",
+    "build": "cargo build --target wasm32-wasip1 --release",
     "prepublishOnly": "bun run build"
   },
   "type": "module"

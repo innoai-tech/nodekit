@@ -5,7 +5,7 @@ import { transform as trans } from "@swc/core";
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 
 export const usePlugin = (opts = {}) => [
-	join(__dirname, "./target/wasm32-wasi/release/purebundle.wasm"),
+	join(__dirname, "./target/wasm32-wasip1/release/purebundle.wasm"),
 	opts,
 ];
 
