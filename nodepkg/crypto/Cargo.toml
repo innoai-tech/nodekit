@@ -9,17 +9,17 @@ crate-type = ["cdylib", "rlib"]
 [dependencies]
 wasm-bindgen = "0.2.99"
 base64ct = { version = "1.6.0", features = ["alloc"] }
-rand = "0.8"
 sha1 = "0.10.6"
 serde_json = "1"
 aes = { version = "0.8.4" }
 cfb-mode = { version = "0.8.2" }
-serde = { version = "1.0", features = ["derive"] }
+serde = { version = "1", features = ["derive"] }
+rsa = "0.9.7"
+rand = { version = "0.8.5" }
 getrandom = { version = "*", features = ["js"] }
-rsa = "0.9.6"
 
 [dev-dependencies]
-wasm-bindgen-test = "0.3.42"
+wasm-bindgen-test = "0.3.50"
 
 [profile.release]
 opt-level = "s"
