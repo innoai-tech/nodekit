@@ -1,6 +1,6 @@
 {
   "name": "@innoai-tech/monobundle",
-  "version": "0.14.8",
+  "version": "0.15.0",
   "monobundle": {
     "exports": {
       ".": "./src/index.ts",
@@ -22,7 +22,7 @@
     "globby": "^14.1.0",
     "js-yaml": "^4.1.0",
     "minimatch": "^10.0.1",
-    "rollup": "^4.34.6",
+    "rollup": "^4.34.9",
     "yargs": "^17.7.2"
   },
   "peerDependencies": {

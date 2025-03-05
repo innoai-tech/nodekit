@@ -10,7 +10,7 @@ crate-type = ["cdylib", "rlib"]
 lto = true
 
 [dependencies]
-swc_core = { version = "13.2.0", features = ["ecma_plugin_transform", "__parser"] }
+swc_core = { version = "16.4.0", features = ["ecma_plugin_transform", "__parser"] }
 convert_case = { version = "0.7.1" }
 
 [dev-dependencies]

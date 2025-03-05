@@ -45,4 +45,4 @@ ship:
 clean:
 	find . -name '.turbo' -type d -prune -print -exec rm -rf '{}' \;
 	find . -name 'node_modules' -type d -prune -print -exec rm -rf '{}' \;
-	rm -f bun.lockb
+	rm -f bun.lock
