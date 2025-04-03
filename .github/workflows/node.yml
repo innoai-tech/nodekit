@@ -13,15 +13,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - uses: extractions/setup-just@v3
 
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
-
       - run: rustup target add wasm32-wasip1
 
-      - uses: oven-sh/setup-bun@v2
-
-      - run: make dep ci
+      - run: just dep ci
         env:
           INNOAI_TECH_REGISTRY_AUTH_TOKEN: ${{ github.token }}
