@@ -1455,9 +1455,9 @@ dependencies = [
 
 [[package]]
 name = "swc_core"
-version = "19.0.0"
+version = "17.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "daca62565e1ae2a6b840f624e7d4613a1b2feb8790c5b9ac3df0b3cd442e167d"
+checksum = "776e57792d0474b8fd53d07c2dcf5b8729bb2251c749d841adda4fbe3197e671"
 dependencies = [
  "once_cell",
  "swc_allocator",
@@ -1471,7 +1471,6 @@ dependencies = [
  "swc_plugin",
  "swc_plugin_macro",
  "swc_plugin_proxy",
- "swc_transform_common",
  "vergen",
 ]
 
@@ -1498,9 +1497,9 @@ dependencies = [
 
 [[package]]
 name = "swc_ecma_codegen"
-version = "8.0.2"
+version = "8.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "92103aa982740f265d6850bb3ffffbf6c3c1dee30ab0ed25117ca553f0d7467d"
+checksum = "f131ade75f9a3cfea38dbce11893f5636b0954de973ad29a2556124322a08372"
 dependencies = [
  "ascii",
  "compact_str",
@@ -1738,20 +1737,6 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn",
-]
-
-[[package]]
-name = "swc_transform_common"
-version = "2.0.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e40bbeef964d6edd66081a31bbfeef913bb0be536e398392f99e8e91b7da63eb"
-dependencies = [
- "better_scoped_tls",
- "once_cell",
- "rustc-hash 2.1.1",
- "serde",
- "serde_json",
- "swc_common",
 ]
 
 [[package]]
