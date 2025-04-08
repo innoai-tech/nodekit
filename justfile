@@ -43,6 +43,7 @@ ship:
     TTY=0 piper do ship push
 
 clean:
+    find . -name '.swc' -type d -prune -print -exec rm -rf '{}' \;
     find . -name '.turbo' -type d -prune -print -exec rm -rf '{}' \;
     find . -name 'node_modules' -type d -prune -print -exec rm -rf '{}' \;
     rm -f bun.lock
