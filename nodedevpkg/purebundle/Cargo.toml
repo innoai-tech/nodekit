@@ -11,7 +11,7 @@ lto = true
 
 [dependencies]
 # locked cause https://plugins.swc.rs/versions/range/271
-swc_core = { version = "21.0.1", features = ["ecma_plugin_transform", "__parser"] }
+swc_core = { version = "22.3.1", features = ["ecma_plugin_transform", "__parser"] }
 
 [dev-dependencies]
 testing = { version = "*" }
