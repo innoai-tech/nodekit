@@ -13,7 +13,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: extractions/setup-just@v3
-
       - uses: docker/setup-qemu-action@v3
 
       - run: curl -sSLf https://raw.githubusercontent.com/octohelm/piper/main/install.sh | sudo sh
