@@ -23,7 +23,7 @@
     "js-yaml": "^4.1.0",
     "minimatch": "^10.0.1",
     "rollup": "^4.40.2",
-    "yargs": "^17.7.2"
+    "yargs": "^18.0.0"
   },
   "peerDependencies": {
     "typescript": "^5.0.x"
