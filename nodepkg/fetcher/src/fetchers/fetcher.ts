@@ -4,28 +4,31 @@ export const createFetcher = ({
                                 paramsSerializer,
                                 transformRequestBody
                               }: FetcherCreatorOptions): Fetcher => {
+
+  const toHref = (requestConfig: RequestConfig<any>) => {
+    let search = paramsSerializer(requestConfig.params);
+
+    if (search.length && !search.startsWith("?")) {
+      search = "?" + search;
+    }
+
+    return `${requestConfig.url}${search}`;
+  };
+
+  const toRequestBody = (requestConfig: RequestConfig<any>) => {
+    return transformRequestBody(requestConfig.body, requestConfig.headers || {});
+  };
+
   return {
     build: (c) => c,
-    toHref: (requestConfig: RequestConfig<any>) => {
-      let search = paramsSerializer(requestConfig.params);
-
-      if (search.length && !search.startsWith("?")) {
-        search = "?" + search;
-      }
-
-      return `${requestConfig.url}${search}`;
-    },
+    toRequestBody: toRequestBody,
+    toHref: toHref,
     request: <TInputs, TRespData>(requestConfig: RequestConfig<TInputs>) => {
-      const reqInit: RequestInit = {
+      return fetch(toHref(requestConfig), {
         method: requestConfig.method,
         headers: requestConfig.headers || {},
-        body: transformRequestBody(
-          requestConfig.body,
-          requestConfig.headers || {}
-        )
-      };
-
-      return fetch(`${requestConfig.url}?${paramsSerializer(requestConfig.params)}`, reqInit)
+        body: toRequestBody(requestConfig)
+      })
         .then(async (res) => {
           let body: any;
 

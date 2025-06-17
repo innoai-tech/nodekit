@@ -29,6 +29,7 @@ export interface FetcherErrorResponse<TInputs, TError>
 export interface Fetcher {
   build: (requestConfig: RequestConfig<any>) => RequestConfig<any>;
   toHref: (requestConfig: RequestConfig<any>) => string;
+  toRequestBody: (requestConfig: RequestConfig<any>) => any;
   request: <TInputs, TData>(requestConfig: RequestConfig<TInputs>) => Promise<FetcherResponse<TInputs, TData>>;
 }
 
@@ -44,22 +45,25 @@ export type RequestInterceptor = (requestConfig: RequestConfig<any>) => RequestC
 export const applyRequestInterceptors =
   (...requestInterceptors: RequestInterceptor[]) =>
     (fetcher: Fetcher) => {
-      const build = (requestConfig: RequestConfig<any>) => {
-        let config = requestConfig;
+      const build = (requestConfig: RequestConfig<any>): RequestConfig<any> => {
+        let config = fetcher.build(requestConfig);
+
         for (const requestInterceptor of requestInterceptors) {
           config = requestInterceptor(config);
         }
+
         return config;
       };
 
 
       return {
+        build,
+        toRequestBody: fetcher.toRequestBody,
         request: <TInputs, TRespData>(requestConfig: RequestConfig<TInputs>) => {
           return fetcher.request<TInputs, TRespData>(build(requestConfig));
         },
         toHref: (requestConfig: RequestConfig<any>): string => {
           return fetcher.toHref(build(requestConfig));
-        },
-        build
+        }
       };
     };

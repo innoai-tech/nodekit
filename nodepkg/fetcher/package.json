@@ -1,6 +1,6 @@
 {
   "name": "@innoai-tech/fetcher",
-  "version": "0.6.0",
+  "version": "0.6.3",
   "monobundle": {
     "exports": {
       ".": "./src/index.ts"

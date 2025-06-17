@@ -8,7 +8,8 @@ describe("RequestSubject", () => {
       {
         build: (c) => c,
         request: (c) => Promise.resolve(c.body),
-        toHref: () => ""
+        toHref: () => "",
+        toRequestBody: () => undefined
       }
     );
 
@@ -35,7 +36,8 @@ describe("RequestSubject", () => {
       {
         build: (c) => c,
         request: (_) => Promise.reject("err"),
-        toHref: () => ""
+        toHref: () => "",
+        toRequestBody: () => undefined
       }
     );
 
