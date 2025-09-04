@@ -1,8 +1,8 @@
 {
   "name": "@innoai-tech/vuecomponentcompleter",
-  "version": "0.3.9",
+  "version": "0.3.10",
   "dependencies": {
-    "@swc/core": "1.13.2"
+    "@swc/core": "1.13.5"
   },
   "exports": {
     ".": {

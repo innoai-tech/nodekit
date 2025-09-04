@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@innoai-tech/lodash": "workspace:^",
-    "esbuild": "^0.25.8"
+    "esbuild": "^0.25.9"
   },
   "peerDependencies": {},
   "browserslist": [
