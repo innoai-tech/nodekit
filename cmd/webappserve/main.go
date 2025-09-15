@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+
 	"github.com/innoai-tech/infra/pkg/cli"
 	"github.com/innoai-tech/infra/pkg/http/webapp"
 	"github.com/innoai-tech/infra/pkg/otel"

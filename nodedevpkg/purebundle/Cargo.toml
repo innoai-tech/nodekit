@@ -10,7 +10,6 @@ crate-type = ["cdylib", "rlib"]
 lto = true
 
 [dependencies]
-# locked cause https://plugins.swc.rs/versions/range/271
 swc_core = { version = "37.0.0", features = ["ecma_plugin_transform", "__parser"] }
 
 [dev-dependencies]
