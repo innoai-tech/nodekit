@@ -16,13 +16,13 @@
     "@innoai-tech/vuecomponentcompleter": "workspace:^",
     "@rollup/plugin-commonjs": "^28.0.6",
     "@rollup/plugin-node-resolve": "^16.0.1",
-    "browserslist": "^4.26.0",
+    "browserslist": "^4.26.2",
     "chalk": "^5.6.2",
-    "esbuild": "^0.25.9",
+    "esbuild": "^0.25.10",
     "globby": "^14.1.0",
     "js-yaml": "^4.1.0",
     "minimatch": "^10.0.3",
-    "rollup": "^4.50.1",
+    "rollup": "^4.52.2",
     "yargs": "^18.0.0"
   },
   "peerDependencies": {
