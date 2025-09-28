@@ -50,7 +50,7 @@ export const createFetcher = ({
             headers: {}
           };
 
-          for (const [key, value] of res.headers) {
+          for (const [key, value] of Object.entries(res.headers ?? {})) {
             resp.headers[key] = value;
           }
 
