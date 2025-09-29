@@ -1,5 +1,5 @@
 import { extname } from "path";
-import type { Plugin } from "rollup";
+import type { Plugin } from "rolldown";
 import { transform, usePlugin } from "@innoai-tech/vuecomponentcompleter";
 
 export const vueComponentComplete = ({}): Plugin => {

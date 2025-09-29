@@ -1,5 +1,5 @@
 import { transform, usePlugin } from "@innoai-tech/purebundle";
-import { type Plugin } from "rollup";
+import { type Plugin } from "rolldown";
 
 export const chunkCleanup = (
   opt: {

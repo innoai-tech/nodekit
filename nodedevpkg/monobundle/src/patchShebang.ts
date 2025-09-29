@@ -1,4 +1,4 @@
-import type { Plugin } from "rollup";
+import type { Plugin } from "rolldown";
 
 export const patchShebang = (
   isBin: (fileName: string) => boolean,

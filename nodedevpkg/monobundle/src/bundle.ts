@@ -1,30 +1,14 @@
 import { basename, extname, join, relative } from "path";
-import {
-  has,
-  isEmpty,
-  keys,
-  map,
-  mapKeys,
-  mapValues
-} from "@innoai-tech/lodash";
-import commonjs from "@rollup/plugin-commonjs";
-import { nodeResolve } from "@rollup/plugin-node-resolve";
+import { forEach, has, isEmpty, keys, mapKeys, mapValues, set, startsWith } from "@innoai-tech/lodash";
 import { readFile, unlink } from "fs/promises";
 import { globby } from "globby";
-import { type OutputOptions, rollup } from "rollup";
+import { type OutputOptions, rolldown } from "rolldown";
 import { createAutoExternal } from "./autoExternal";
 import { bootstrap } from "./bootstrap";
-import { esbuild } from "./esbuild";
-import { getBuildTargets } from "./getTarget";
 import { createLogger } from "./log";
 import { patchShebang } from "./patchShebang";
 import { resolveProjectRoot } from "./pm";
-import {
-  type MonoBundleOptions,
-  entryAlias,
-  writeFormattedJsonFile
-} from "./util";
-import { forEach, set, startsWith } from "@innoai-tech/lodash";
+import { entryAlias, type MonoBundleOptions, writeFormattedJsonFile } from "./util";
 import { chunkCleanup } from "./chunkCleanup.ts";
 import { vueComponentComplete } from "./vueComponentComplete.ts";
 
@@ -85,11 +69,7 @@ export const bundle = async ({
     sideDeps: options["sideDeps"] as any
   });
 
-  const buildTargets = getBuildTargets(
-    (pkg as any).browserslist ?? ["defaults"]
-  );
-
-  const rollupOptions = [
+  const rolldownOptions = [
     {
       input: inputs,
       output: {
@@ -98,17 +78,13 @@ export const bundle = async ({
         entryFileNames: "[name].mjs",
         chunkFileNames: "[name]-[hash].mjs"
       },
+      resolve: {
+        extensions: [".ts", ".tsx", ".mjs", "", ".js", ".jsx"]
+      },
+      tsconfig: tsconfigFile,
       plugins: [
         autoExternal(),
-        nodeResolve({
-          extensions: [".ts", ".tsx", ".mjs", "", ".js", ".jsx"]
-        }),
-        commonjs(),
         vueComponentComplete({}),
-        esbuild({
-          tsconfig: tsconfigFile,
-          target: map(buildTargets, (v, k) => `${k}${v}`)
-        }),
         patchShebang((chunkName) => {
           return !!options.exports?.[
             `bin:${basename(chunkName, extname(chunkName))}`
@@ -125,15 +101,15 @@ export const bundle = async ({
     await unlink(join(cwd, f));
   }
 
-  logger.warning(`bundling (target: ${JSON.stringify(buildTargets)})`);
+  logger.warning(`bundling`);
 
   const outputFiles: { [k: string]: boolean } = {};
 
-  for (const rollupOption of rollupOptions) {
-    const files = await rollup(rollupOption).then((bundle) => {
+  for (const rolldownOption of rolldownOptions) {
+    const files = await rolldown(rolldownOption).then((bundle) => {
       return Promise.all(
         ([] as OutputOptions[])
-          .concat(rollupOption.output ?? [])
+          .concat(rolldownOption.output ?? [])
           .map((output) => {
             if (dryRun) {
               return [];

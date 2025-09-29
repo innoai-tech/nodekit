@@ -2,7 +2,7 @@ import { join } from "path";
 import { readFile } from "fs/promises";
 import { globby } from "globby";
 import { minimatch } from "minimatch";
-import { type InputOptions } from "rollup";
+import { type InputOptions, type Plugin } from "rolldown";
 import type { Project } from "./pm";
 // @ts-ignore
 const builtIns = process.binding("natives");
@@ -48,13 +48,13 @@ export const collectDeps = async (project: Project, localPkg: Package) => {
     const packageJSONs = await globby(
       workspaces.map((b) => `${b}/package.json`),
       {
-        cwd: project.root,
-      },
+        cwd: project.root
+      }
     );
 
     for (const f of packageJSONs) {
       let pkg = JSON.parse(
-        String(await readFile(join(`${project.root}`, f))),
+        String(await readFile(join(`${project.root}`, f)))
       ) as Package;
 
       // localPkg may be changed
@@ -80,7 +80,7 @@ export const createAutoExternal = async (
   opts: {
     logger?: ReturnType<typeof import("./log").createLogger>;
     sideDeps?: string[];
-  },
+  }
 ) => {
   const logger = opts.logger;
   const sideDeps = opts.sideDeps || [];
@@ -90,7 +90,7 @@ export const createAutoExternal = async (
       return false;
     }
     return sideDeps.some(
-      (glob) => pkgName === glob || minimatch(pkgName, glob),
+      (glob) => pkgName === glob || minimatch(pkgName, glob)
     );
   };
 
@@ -123,7 +123,7 @@ export const createAutoExternal = async (
 
     const unused = {
       deps: {} as { [k: string]: boolean },
-      peerDeps: {} as { [k: string]: boolean },
+      peerDeps: {} as { [k: string]: boolean }
     };
 
     for (const d of dep) {
@@ -142,7 +142,7 @@ export const createAutoExternal = async (
 
   const collector = new Set<string>();
 
-  const autoExternal = (validate = true) => {
+  const autoExternal = (validate = true): Plugin => {
     return {
       name: "auto-external",
 
@@ -152,7 +152,7 @@ export const createAutoExternal = async (
           external(
             id: string,
             importer: string | undefined,
-            isResolved: boolean,
+            isResolved: boolean
           ) {
             if (
               typeof opts.external === "function" &&
@@ -162,6 +162,10 @@ export const createAutoExternal = async (
             }
 
             if (Array.isArray(opts.external) && opts.external.includes(id)) {
+              return true;
+            }
+
+            if (id.startsWith("node:")) {
               return true;
             }
 
@@ -184,7 +188,7 @@ export const createAutoExternal = async (
                   collector.add(id);
 
                   logger?.danger(
-                    `"${id}" is not in dependencies or peerDependencies, and will be bundled.`,
+                    `"${id}" is not in dependencies or peerDependencies, and will be bundled.`
                   );
                 }
               }
@@ -193,9 +197,9 @@ export const createAutoExternal = async (
             }
 
             return false;
-          },
+          }
         };
-      },
+      }
     };
   };
 

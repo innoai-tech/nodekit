@@ -1,6 +1,6 @@
 {
   "name": "@innoai-tech/config",
-  "version": "0.5.8",
+  "version": "0.6.4",
   "monobundle": {
     "exports": {
       ".": "./src/index.ts",
@@ -9,10 +9,11 @@
     }
   },
   "dependencies": {
-    "@innoai-tech/lodash": "workspace:^",
-    "esbuild": "^0.25.10"
+    "@innoai-tech/lodash": "workspace:^"
   },
-  "peerDependencies": {},
+  "peerDependencies": {
+    "rolldown": "*"
+  },
   "browserslist": [
     "defaults"
   ],
