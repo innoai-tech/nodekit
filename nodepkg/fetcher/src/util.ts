@@ -42,6 +42,11 @@ const dropContentType = (headers: any = {}) => {
 
 const isContentTypeMultipartFormData = (headers: any) =>
   getContentType(headers).includes("multipart/form-data");
+
+
+const isContentTypeOctetStream = (headers: any) =>
+  getContentType(headers).includes("application/octet-stream");
+
 const isContentTypeFormURLEncoded = (headers: any) =>
   getContentType(headers).includes("application/x-www-form-urlencoded");
 
@@ -98,6 +103,10 @@ export const transformRequestBody = (data: any, headers: any) => {
 
   if (isContentTypeFormURLEncoded(headers)) {
     return paramsSerializer(data);
+  }
+
+  if (isContentTypeOctetStream(headers)) {
+    return data;
   }
 
   if (isArray(data) || isObject(data)) {
