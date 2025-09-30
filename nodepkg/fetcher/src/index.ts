@@ -1,4 +1,4 @@
-export * from "./fetcher";
-export * from "./subject";
-export * from "./util";
 export * from "./fetchers/fetcher";
+export * from "./fetcher";
+export * from "./RequestSubject";
+export * from "./util";

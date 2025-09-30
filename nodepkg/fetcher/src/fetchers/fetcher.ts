@@ -1,4 +1,20 @@
 import type { Fetcher, FetcherCreatorOptions, FetcherErrorResponse, FetcherResponse, RequestConfig } from "../fetcher";
+import { xhrFetch } from "./xhr_fetch.ts";
+
+function xFetch(
+  url: string,
+  options: RequestInit & {
+    onUploadProgress?: (evt: ProgressEvent) => void,
+  }
+): Promise<Response> {
+  if (options.onUploadProgress) {
+    if (typeof XMLHttpRequest == "undefined") {
+      return xhrFetch(url, options);
+    }
+  }
+
+  return fetch(url, options);
+}
 
 export const createFetcher = ({
                                 paramsSerializer,
@@ -23,12 +39,16 @@ export const createFetcher = ({
     build: (c) => c,
     toRequestBody: toRequestBody,
     toHref: toHref,
-    request: <TInputs, TRespData>(requestConfig: RequestConfig<TInputs>) => {
-      return fetch(toHref(requestConfig), {
-        method: requestConfig.method,
-        headers: requestConfig.headers || {},
-        body: toRequestBody(requestConfig)
-      })
+    async request<TInputs, TRespData>(requestConfig: RequestConfig<TInputs>) {
+      const requestBody = toRequestBody(requestConfig);
+
+      return xFetch(
+        toHref(requestConfig), {
+          method: requestConfig.method,
+          headers: requestConfig.headers || {},
+          body: requestBody,
+          onUploadProgress: requestConfig.onUploadProgress
+        })
         .then(async (res) => {
           let body: any;
 

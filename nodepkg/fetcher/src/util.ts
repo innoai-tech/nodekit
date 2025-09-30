@@ -1,14 +1,16 @@
-import { forEach, isArray, isObject, isUndefined } from "@innoai-tech/lodash";
+import { isArray, isObject, isUndefined } from "@innoai-tech/lodash";
 
 export const stringifySearch = (query: {
   [k: string]: string | string[];
-}): string => {
+} = {}): string => {
   const p = new URLSearchParams();
-  forEach(query, (vv, k) => {
-    forEach(([] as string[]).concat(vv), (v) => {
+
+  for (const [k, vv] of Object.entries(query)) {
+    for (const v of ([] as string[]).concat(vv)) {
       p.append(k, v);
-    });
-  });
+    }
+  }
+
   const s = p.toString();
 
   return s ? `?${s}` : "";
@@ -55,9 +57,9 @@ export const paramsSerializer = (params: any): string => {
 
   const append = (k: string, v: any) => {
     if (isArray(v)) {
-      forEach(v, (vv) => {
-        append(k, vv);
-      });
+      for (const x of v) {
+        append(k, x);
+      }
       return;
     }
     if (isObject(v)) {
@@ -67,12 +69,16 @@ export const paramsSerializer = (params: any): string => {
     if (isUndefined(v) || `${v}`.length === 0) {
       return;
     }
+
     searchParams.append(k, `${v}`);
   };
 
-  forEach(params, (v, k) => {
-    append(k, v);
-  });
+  if (params) {
+    for (const [k, v] of Object.entries(params)) {
+      append(k, v);
+    }
+  }
+
 
   return searchParams.toString();
 };
@@ -88,7 +94,9 @@ export const transformRequestBody = (data: any, headers: any) => {
       if (v instanceof File || v instanceof Blob) {
         formData.append(k, v);
       } else if (isArray(v)) {
-        forEach(v, (item) => appendValue(k, item));
+        for (const item of v) {
+          appendValue(k, item);
+        }
       } else if (isObject(v)) {
         formData.append(k, JSON.stringify(v));
       } else {
@@ -96,7 +104,9 @@ export const transformRequestBody = (data: any, headers: any) => {
       }
     };
 
-    forEach(data, (v, k) => appendValue(k, v));
+    for (const [k, v] of data) {
+      appendValue(k, v);
+    }
 
     return formData;
   }

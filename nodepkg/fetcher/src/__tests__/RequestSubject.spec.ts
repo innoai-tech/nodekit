@@ -1,5 +1,5 @@
 import { describe, expect, it } from "bun:test";
-import { createRequestSubject } from "../subject";
+import { createRequestSubject } from "../RequestSubject.ts";
 
 describe("RequestSubject", () => {
   describe("#success", () => {

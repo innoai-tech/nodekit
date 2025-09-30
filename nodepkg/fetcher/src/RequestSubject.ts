@@ -1,7 +1,7 @@
-import { isFunction } from "@innoai-tech/lodash";
 import { BehaviorSubject, from, Observable, of, Subject } from "rxjs";
 import { catchError, ignoreElements, mergeMap, tap } from "rxjs/operators";
 import type { Fetcher, FetcherErrorResponse, FetcherResponse, RequestConfigCreator } from "./fetcher";
+import { isFunction } from "@innoai-tech/lodash";
 
 export interface RequestSubject<TInputs, TBody, TError>
   extends Observable<FetcherResponse<TInputs, TBody>> {
@@ -77,3 +77,5 @@ class ReqSubject<TInputs, TBody, TError>
     return this.fetcher.toHref(this.createConfig(value));
   };
 }
+
+

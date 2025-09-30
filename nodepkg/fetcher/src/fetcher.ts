@@ -1,36 +1,41 @@
-export interface RequestConfig<TInputs> {
+export type RequestConfig<TInputs> = {
   method: string;
   url: string;
-  inputs: TInputs;
   params?: { [k: string]: any };
   headers?: { [k: string]: any };
   body?: any;
+
+  inputs?: TInputs;
+  onUploadProgress?: (event: ProgressEvent) => void;
 }
 
 export interface RequestConfigCreator<TInputs, TRespData> {
   (input: TInputs): RequestConfig<TInputs>;
 
   operationID: string;
+
   TRespData: TRespData;
 }
 
 export interface FetcherResponse<TInputs, TData> {
-  config: RequestConfig<TInputs>;
+  config: RequestConfig<TInputs> & { inputs: TInputs };
   status: number;
   headers: { [k: string]: string };
   body: TData;
 }
 
-export interface FetcherErrorResponse<TInputs, TError>
-  extends FetcherResponse<TInputs, any> {
+export interface FetcherErrorResponse<TInputs, TError> extends FetcherResponse<TInputs, any> {
   error: TError;
 }
 
 export interface Fetcher {
-  build: (requestConfig: RequestConfig<any>) => RequestConfig<any>;
-  toHref: (requestConfig: RequestConfig<any>) => string;
-  toRequestBody: (requestConfig: RequestConfig<any>) => any;
-  request: <TInputs, TData>(requestConfig: RequestConfig<TInputs>) => Promise<FetcherResponse<TInputs, TData>>;
+  build(requestConfig: RequestConfig<any>): RequestConfig<any>;
+
+  toHref(requestConfig: RequestConfig<any>): string;
+
+  toRequestBody(requestConfig: RequestConfig<any>): any;
+
+  request<TInputs = undefined, TRespData = any>(requestConfig: RequestConfig<TInputs>): Promise<FetcherResponse<TInputs, TRespData>>;
 }
 
 export interface FetcherCreatorOptions {
@@ -59,10 +64,10 @@ export const applyRequestInterceptors =
       return {
         build,
         toRequestBody: fetcher.toRequestBody,
-        request: <TInputs, TRespData>(requestConfig: RequestConfig<TInputs>) => {
+        request<TInputs = undefined, TRespData = any>(requestConfig: RequestConfig<TInputs>) {
           return fetcher.request<TInputs, TRespData>(build(requestConfig));
         },
-        toHref: (requestConfig: RequestConfig<any>): string => {
+        toHref(requestConfig: RequestConfig<any>): string {
           return fetcher.toHref(build(requestConfig));
         }
       };

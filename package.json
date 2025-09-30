@@ -22,14 +22,14 @@
     "core-js": "^3.45.1",
     "jsdom": "^27.0.0",
     "prettier": "^3.6.2",
+    "rolldown-vite": "^7.1.14",
     "rxjs": "^7.8.2",
     "turbo": "^2.5.8",
-    "typescript": "^5.9.2",
-    "rolldown-vite": "^7.1.13"
+    "typescript": "^5.9.2"
   },
   "resolutions": {
     "rolldown": "^1.0.0-beta.41",
-    "rolldown-vite": "^7.1.13"
+    "rolldown-vite": "^7.1.14"
   },
   "prettier": {}
 }
