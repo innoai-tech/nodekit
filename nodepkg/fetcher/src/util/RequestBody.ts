@@ -1,34 +1,5 @@
-import { isArray, isObject, isUndefined } from "@innoai-tech/lodash";
-
-export const stringifySearch = (query: {
-  [k: string]: string | string[];
-} = {}): string => {
-  const p = new URLSearchParams();
-
-  for (const [k, vv] of Object.entries(query)) {
-    for (const v of ([] as string[]).concat(vv)) {
-      p.append(k, v);
-    }
-  }
-
-  const s = p.toString();
-
-  return s ? `?${s}` : "";
-};
-
-export const parseSearch = (search: string): { [k: string]: string[] } => {
-  let s = search;
-  if (s[0] === "?") {
-    s = s.slice(1);
-  }
-  const p = new URLSearchParams(s);
-
-  const labels: { [k: string]: string[] } = {};
-  for (const [k, v] of p) {
-    labels[k] = [...(labels[k] || []), v];
-  }
-  return labels;
-};
+import { paramsSerializer } from "./Search.ts";
+import { isArray, isObject } from "./Typed.ts";
 
 const getContentType = (headers: any = {}) =>
   headers["Content-Type"] || headers["content-type"] || "";
@@ -46,42 +17,16 @@ const isContentTypeMultipartFormData = (headers: any) =>
   getContentType(headers).includes("multipart/form-data");
 
 
+const isContentTypeApplicationJSON = (headers: any) =>
+  getContentType(headers).includes("application/json");
+
+
 const isContentTypeOctetStream = (headers: any) =>
   getContentType(headers).includes("application/octet-stream");
 
 const isContentTypeFormURLEncoded = (headers: any) =>
   getContentType(headers).includes("application/x-www-form-urlencoded");
 
-export const paramsSerializer = (params: any): string => {
-  const searchParams = new URLSearchParams();
-
-  const append = (k: string, v: any) => {
-    if (isArray(v)) {
-      for (const x of v) {
-        append(k, x);
-      }
-      return;
-    }
-    if (isObject(v)) {
-      append(k, JSON.stringify(v));
-      return;
-    }
-    if (isUndefined(v) || `${v}`.length === 0) {
-      return;
-    }
-
-    searchParams.append(k, `${v}`);
-  };
-
-  if (params) {
-    for (const [k, v] of Object.entries(params)) {
-      append(k, v);
-    }
-  }
-
-
-  return searchParams.toString();
-};
 
 export const transformRequestBody = (data: any, headers: any) => {
   if (isContentTypeMultipartFormData(headers)) {
@@ -117,6 +62,10 @@ export const transformRequestBody = (data: any, headers: any) => {
 
   if (isContentTypeOctetStream(headers)) {
     return data;
+  }
+
+  if (isContentTypeApplicationJSON(headers)) {
+    return JSON.stringify(data);
   }
 
   if (isArray(data) || isObject(data)) {

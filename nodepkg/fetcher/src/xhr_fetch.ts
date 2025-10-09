@@ -1,3 +1,5 @@
+import { isFunction } from "./util/Typed.ts";
+
 export function xhrFetch(
   url: string,
   options: RequestInit & {
@@ -15,24 +17,29 @@ export function xhrFetch(
       }
     }
 
-    if (xhr.upload && typeof options.onUploadProgress === "function") {
+    if (xhr.upload && isFunction(options.onUploadProgress)) {
       xhr.upload.addEventListener("progress", options.onUploadProgress);
     }
 
-    xhr.responseType = "blob";
+    xhr.responseType = "arraybuffer";
+
     xhr.onloadend = () => {
+      if (xhr.status == 0) {
+        return;
+      }
+
       const headers = parseHeaders(xhr.getAllResponseHeaders());
 
-      resolve(
-        new Response(
-          xhr.status != 204 && xhr.response ? new Blob([xhr.response]) : null,
-          {
-            status: xhr.status,
-            statusText: xhr.statusText,
-            headers: headers
-          }
-        )
+      const resp = new Response(
+        xhr.status != 204 && xhr.response ? new Blob(xhr.response) : null,
+        {
+          status: xhr.status,
+          statusText: xhr.statusText,
+          headers: headers
+        }
       );
+
+      resolve(resp);
     };
 
     xhr.onerror = () => reject(new TypeError("Network request failed"));
@@ -44,15 +51,16 @@ export function xhrFetch(
 }
 
 function parseHeaders(rawHeaders: string): Headers {
+  const headerRows = rawHeaders.trim().split(/[\r\n]+/);
+
   const headers = new Headers();
 
-  rawHeaders
-    .trim()
-    .split(/[\r\n]+/)
-    .forEach((line) => {
-      const parts = line.split(": ");
-      const key = parts.shift()!;
-      headers.set(key, parts.join(": "));
-    });
+  for (const line of headerRows) {
+    const parts = line.split(": ");
+    const key = parts.shift()!;
+
+    headers.set(key, parts.join(": "));
+  }
+
   return headers;
 }

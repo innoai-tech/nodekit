@@ -16,20 +16,21 @@
     "url": "ssh://git@github.com:innoai-tech/nodekit.git"
   },
   "devDependencies": {
+    "@happy-dom/global-registrator": "^19.0.2",
     "@innoai-tech/devconfig": "workspace:*",
     "@innoai-tech/monobundle": "workspace:*",
     "bun-types": "^1.2.23",
     "core-js": "^3.45.1",
     "jsdom": "^27.0.0",
     "prettier": "^3.6.2",
-    "rolldown-vite": "^7.1.14",
+    "rolldown-vite": "^7.1.16",
     "rxjs": "^7.8.2",
     "turbo": "^2.5.8",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.3"
   },
   "resolutions": {
-    "rolldown": "^1.0.0-beta.41",
-    "rolldown-vite": "^7.1.14"
+    "rolldown": "^1.0.0-beta.42",
+    "rolldown-vite": "^7.1.16"
   },
   "prettier": {}
 }

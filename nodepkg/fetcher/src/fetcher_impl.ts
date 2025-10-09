@@ -1,5 +1,12 @@
-import type { Fetcher, FetcherCreatorOptions, FetcherErrorResponse, FetcherResponse, RequestConfig } from "../fetcher";
+import type {
+  Fetcher,
+  FetcherCreatorOptions,
+  FetcherErrorResponse,
+  FetcherResponse,
+  RequestConfig
+} from "./fetcher.ts";
 import { xhrFetch } from "./xhr_fetch.ts";
+import { paramsSerializer, transformRequestBody } from "./util";
 
 function xFetch(
   url: string,
@@ -8,13 +15,17 @@ function xFetch(
   }
 ): Promise<Response> {
   if (options.onUploadProgress) {
-    if (typeof XMLHttpRequest == "undefined") {
+    if (typeof XMLHttpRequest !== "undefined") {
       return xhrFetch(url, options);
     }
   }
-
   return fetch(url, options);
 }
+
+export const createDefaultFetcher = () => createFetcher({
+  paramsSerializer: paramsSerializer,
+  transformRequestBody: transformRequestBody
+});
 
 export const createFetcher = ({
                                 paramsSerializer,

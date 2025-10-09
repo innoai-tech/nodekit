@@ -1,7 +1,7 @@
 import { BehaviorSubject, from, Observable, of, Subject } from "rxjs";
 import { catchError, ignoreElements, mergeMap, tap } from "rxjs/operators";
 import type { Fetcher, FetcherErrorResponse, FetcherResponse, RequestConfigCreator } from "./fetcher";
-import { isFunction } from "@innoai-tech/lodash";
+import { isFunction } from "./util/Typed.ts";
 
 export interface RequestSubject<TInputs, TBody, TError>
   extends Observable<FetcherResponse<TInputs, TBody>> {

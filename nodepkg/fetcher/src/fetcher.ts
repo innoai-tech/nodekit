@@ -6,7 +6,12 @@ export type RequestConfig<TInputs> = {
   body?: any;
 
   inputs?: TInputs;
-  onUploadProgress?: (event: ProgressEvent) => void;
+  onUploadProgress?: (uploadProgress: UploadProgress) => void;
+}
+
+export type UploadProgress = {
+  readonly loaded: number;
+  readonly total: number;
 }
 
 export interface RequestConfigCreator<TInputs, TRespData> {
