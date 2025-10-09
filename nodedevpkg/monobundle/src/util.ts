@@ -1,4 +1,4 @@
-import { startsWith, trimStart } from "@innoai-tech/lodash";
+import { startsWith, trimStart } from "es-toolkit/compat";
 import { writeFile } from "fs/promises";
 
 export const writeFormattedJsonFile = async (path: string, v: any) => {

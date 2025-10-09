@@ -1,6 +1,6 @@
 {
   "name": "@innoai-tech/monobundle",
-  "version": "0.16.1",
+  "version": "0.16.2",
   "monobundle": {
     "exports": {
       ".": "./src/index.ts",
@@ -11,9 +11,9 @@
     }
   },
   "dependencies": {
-    "@innoai-tech/lodash": "workspace:^",
     "@innoai-tech/purebundle": "workspace:^",
     "@innoai-tech/vuecomponentcompleter": "workspace:^",
+    "es-toolkit": "^1.40.0",
     "chalk": "^5.6.2",
     "globby": "^15.0.0",
     "js-yaml": "^4.1.0",

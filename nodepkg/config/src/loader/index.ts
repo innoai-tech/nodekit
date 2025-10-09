@@ -1,6 +1,6 @@
 import * as vm from "node:vm";
 import { createContext } from "node:vm";
-import { forEach, isFunction, kebabCase, mapValues, set, startsWith } from "@innoai-tech/lodash";
+import { isFunction, kebabCase, mapValues, toMerged } from "es-toolkit";
 import type { AppConfig, AppConfigMetadata, AppContext, ConfigBuilder } from "../config";
 import { rolldown } from "rolldown";
 
@@ -36,22 +36,30 @@ export const loadConfig = async (configFile: string) => {
         conf.CONFIG.config,
         (fnOrValue: ConfigBuilder | string, name: string) => {
           if (isFunction(fnOrValue)) {
-            const apiMetaData = {};
+            let apiMetaData = {};
 
             for (const apiPrefix of ["API_", "SRV_"]) {
-              if (startsWith(name, apiPrefix)) {
+              if (name.startsWith(apiPrefix)) {
                 const apiName = kebabCase(name.slice(apiPrefix.length));
 
-                set(apiMetaData, ["api", "id"], apiName);
-                set(apiMetaData, ["api", "openapi"], `/api/${apiName}`);
+                apiMetaData = toMerged(apiMetaData, {
+                  api: {
+                    id: apiName,
+                    openapi: `/api/${apiName}`
+                  }
+                });
                 break;
               }
             }
 
             if ((fnOrValue as any).api) {
-              forEach((fnOrValue as any).api, (v, k) => {
-                set(apiMetaData, ["api", k], v);
-              });
+              for (const [k, v] of Object.entries((fnOrValue as any).api)) {
+                apiMetaData = toMerged(apiMetaData, {
+                  "api": {
+                    [`${k}`]: v
+                  }
+                });
+              }
             }
 
             return apiMetaData;

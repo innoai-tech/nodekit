@@ -1,6 +1,6 @@
 {
   "name": "@innoai-tech/config",
-  "version": "0.6.4",
+  "version": "0.6.5",
   "monobundle": {
     "exports": {
       ".": "./src/index.ts",
@@ -9,7 +9,7 @@
     }
   },
   "dependencies": {
-    "@innoai-tech/lodash": "workspace:^"
+    "es-toolkit": "^1.40.0"
   },
   "peerDependencies": {
     "rolldown": "*"

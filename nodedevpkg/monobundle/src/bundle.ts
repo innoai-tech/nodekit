@@ -1,5 +1,5 @@
 import { basename, extname, join, relative } from "path";
-import { forEach, has, isEmpty, keys, mapKeys, mapValues, set, startsWith } from "@innoai-tech/lodash";
+import { forEach, has, isEmpty, keys, mapKeys, mapValues, set, startsWith } from "es-toolkit/compat";
 import { readFile, unlink } from "fs/promises";
 import { globby } from "globby";
 import { type OutputOptions, rolldown } from "rolldown";

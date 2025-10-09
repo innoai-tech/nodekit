@@ -1,6 +1,7 @@
 import { existsSync } from "fs";
 import { dirname, join, relative } from "path";
-import { get, pick } from "@innoai-tech/lodash";
+import { pick } from "es-toolkit";
+import { get } from "es-toolkit/compat";
 import { readFile, writeFile } from "fs/promises";
 import { globby } from "globby";
 import type { Project } from "./pm";
@@ -47,7 +48,7 @@ const orderKeys = <T extends {}>(o: T) => {
     ...Object.keys(o).sort()
   ];
 
-  return pick(o, orderedKeys);
+  return pick(o as any, orderedKeys);
 };
 
 const patchMonoPackage = async (
@@ -63,22 +64,13 @@ const patchMonoPackage = async (
     ...(pkg.scripts || {})
   };
 
-  if (get(pkg, ["monobundle"])) {
-    scripts.lint = get(
-      pkg,
-      ["monobundle", "pipeline", "lint"],
-      defaultScripts.lint
-    );
-    scripts.build =
-      get(pkg, ["monobundle", "pipeline", "build"], defaultScripts.build) ||
-      undefined;
-    scripts.test =
-      get(pkg, ["monobundle", "pipeline", "test"], defaultScripts.test) ||
-      undefined;
+  if (pkg.monobundle) {
+    scripts.lint = get(pkg, ["monobundle", "pipeline", "lint"]) ?? defaultScripts.lint;
+    scripts.build = get(pkg, ["monobundle", "pipeline", "build"]) ?? defaultScripts.build;
+    scripts.test = get(pkg, ["monobundle", "pipeline", "test"]) ?? defaultScripts.test;
     scripts.prepublishOnly = scripts.build
       ? `${project.pm.bin.run} build`
       : undefined;
-
 
     await writeFile(
       join(monoRoot, ".gitignore"),
