@@ -16,7 +16,7 @@
     "url": "ssh://git@github.com:innoai-tech/nodekit.git"
   },
   "devDependencies": {
-    "@happy-dom/global-registrator": "^19.0.2",
+    "@happy-dom/global-registrator": "^20.0.0",
     "@innoai-tech/devconfig": "workspace:*",
     "@innoai-tech/monobundle": "workspace:*",
     "bun-types": "^1.2.23",
