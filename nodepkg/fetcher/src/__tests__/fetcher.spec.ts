@@ -53,6 +53,7 @@ describe("GIVEN a server", () => {
       });
 
       expect(resp.status).toBe(200);
+      expect(resp.headers["content-type"] ?? "").toContain("application/json");
       expect(resp.body).toEqual({
         ready: true,
         params: { q: "s" }
