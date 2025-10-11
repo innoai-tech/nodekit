@@ -16,15 +16,13 @@ describe("GIVEN a server", () => {
       routes: {
         "/api/status": (req) => {
           const u = new URL(req.url);
-          return Response.json({ ready: true, params: u.searchParams });
+          return Response.json({ ready: true, params: u.searchParams }, { headers: CORS_HEADERS });
         },
         "/uploads": async (req) => {
           if (req.method === "OPTIONS") {
             return new Response(null, { headers: CORS_HEADERS });
           }
-
           const v = await req.text();
-
           return Response.json({ uploaded: v.length }, {
             headers: CORS_HEADERS
           });
