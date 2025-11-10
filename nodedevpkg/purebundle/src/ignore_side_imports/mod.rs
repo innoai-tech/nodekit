@@ -27,13 +27,13 @@ impl VisitMut for IgnoreSideImports {
 #[cfg(test)]
 mod test {
     use swc_core::common::Mark;
+    use swc_core::ecma::ast::Pass;
     use swc_core::ecma::transforms::base::resolver;
     use swc_core::ecma::transforms::testing::{test, Tester};
     use swc_core::ecma::{
         parser::{Syntax, TsSyntax},
-        visit::{visit_mut_pass},
+        visit::visit_mut_pass,
     };
-    use swc_core::ecma::ast::Pass;
 
     const SYNTAX: Syntax = Syntax::Typescript(TsSyntax {
         tsx: true,

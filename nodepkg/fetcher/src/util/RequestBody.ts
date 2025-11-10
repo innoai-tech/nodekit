@@ -16,17 +16,14 @@ const dropContentType = (headers: any = {}) => {
 const isContentTypeMultipartFormData = (headers: any) =>
   getContentType(headers).includes("multipart/form-data");
 
-
 const isContentTypeApplicationJSON = (headers: any) =>
   getContentType(headers).includes("application/json");
-
 
 const isContentTypeOctetStream = (headers: any) =>
   getContentType(headers).includes("application/octet-stream");
 
 const isContentTypeFormURLEncoded = (headers: any) =>
   getContentType(headers).includes("application/x-www-form-urlencoded");
-
 
 export const transformRequestBody = (data: any, headers: any) => {
   if (isContentTypeMultipartFormData(headers)) {

@@ -1,8 +1,10 @@
 import { isArray, isObject, isUndefined } from "./Typed.ts";
 
-export const stringifySearch = (query: {
-  [k: string]: string | string[];
-} = {}): string => {
+export const stringifySearch = (
+  query: {
+    [k: string]: string | string[];
+  } = {},
+): string => {
   const p = new URLSearchParams();
 
   for (const [k, vv] of Object.entries(query)) {
@@ -56,7 +58,6 @@ export const paramsSerializer = (params: any): string => {
       append(k, v);
     }
   }
-
 
   return searchParams.toString();
 };

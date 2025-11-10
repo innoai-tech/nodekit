@@ -53,8 +53,7 @@
   },
   "scripts": {
     "build": "bunx --bun @innoai-tech/monobundle",
-    "prepublishOnly": "bun run build",
-    "lint": "bunx --bun prettier --write . "
+    "prepublishOnly": "bun run build"
   },
   "sideEffects": false,
   "type": "module"

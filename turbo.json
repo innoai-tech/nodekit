@@ -1,7 +1,6 @@
 {
   "$schema": "https://turborepo.org/schema.json",
   "tasks": {
-    "lint": {},
     "build": {
       "dependsOn": [
         "^build"
@@ -18,6 +17,7 @@
       ]
     },
     "dev": {
+      "cache": false,
       "dependsOn": [
         "^build",
         "build"
@@ -27,6 +27,9 @@
         "package.json",
         "Cargo.toml"
       ]
+    },
+    "//#fmt": {
+      "cache": false
     }
   }
 }

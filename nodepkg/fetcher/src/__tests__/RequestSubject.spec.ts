@@ -9,8 +9,8 @@ describe("RequestSubject", () => {
         build: (c) => c,
         request: (c) => Promise.resolve(c.body),
         toHref: () => "",
-        toRequestBody: () => undefined
-      }
+        toRequestBody: () => undefined,
+      },
     );
 
     const rets: any[] = [];
@@ -37,8 +37,8 @@ describe("RequestSubject", () => {
         build: (c) => c,
         request: (_) => Promise.reject("err"),
         toHref: () => "",
-        toRequestBody: () => undefined
-      }
+        toRequestBody: () => undefined,
+      },
     );
 
     const rets: any[] = [];

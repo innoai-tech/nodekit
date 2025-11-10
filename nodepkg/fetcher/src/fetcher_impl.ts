@@ -3,7 +3,7 @@ import type {
   FetcherCreatorOptions,
   FetcherErrorResponse,
   FetcherResponse,
-  RequestConfig
+  RequestConfig,
 } from "./fetcher.ts";
 import { xhrFetch } from "./xhr_fetch.ts";
 import { paramsSerializer, transformRequestBody } from "./util";
@@ -11,8 +11,8 @@ import { paramsSerializer, transformRequestBody } from "./util";
 function xFetch(
   url: string,
   options: RequestInit & {
-    onUploadProgress?: (evt: ProgressEvent) => void,
-  }
+    onUploadProgress?: (evt: ProgressEvent) => void;
+  },
 ): Promise<Response> {
   if (options.onUploadProgress) {
     if (typeof XMLHttpRequest !== "undefined") {
@@ -22,16 +22,16 @@ function xFetch(
   return fetch(url, options);
 }
 
-export const createDefaultFetcher = () => createFetcher({
-  paramsSerializer: paramsSerializer,
-  transformRequestBody: transformRequestBody
-});
+export const createDefaultFetcher = () =>
+  createFetcher({
+    paramsSerializer: paramsSerializer,
+    transformRequestBody: transformRequestBody,
+  });
 
 export const createFetcher = ({
-                                paramsSerializer,
-                                transformRequestBody
-                              }: FetcherCreatorOptions): Fetcher => {
-
+  paramsSerializer,
+  transformRequestBody,
+}: FetcherCreatorOptions): Fetcher => {
   const toHref = (requestConfig: RequestConfig<any>) => {
     let search = paramsSerializer(requestConfig.params);
 
@@ -43,7 +43,10 @@ export const createFetcher = ({
   };
 
   const toRequestBody = (requestConfig: RequestConfig<any>) => {
-    return transformRequestBody(requestConfig.body, requestConfig.headers || {});
+    return transformRequestBody(
+      requestConfig.body,
+      requestConfig.headers || {},
+    );
   };
 
   return {
@@ -53,13 +56,12 @@ export const createFetcher = ({
     async request<TInputs, TRespData>(requestConfig: RequestConfig<TInputs>) {
       const requestBody = toRequestBody(requestConfig);
 
-      return xFetch(
-        toHref(requestConfig), {
-          method: requestConfig.method,
-          headers: requestConfig.headers || {},
-          body: requestBody,
-          onUploadProgress: requestConfig.onUploadProgress
-        })
+      return xFetch(toHref(requestConfig), {
+        method: requestConfig.method,
+        headers: requestConfig.headers || {},
+        body: requestBody,
+        onUploadProgress: requestConfig.onUploadProgress,
+      })
         .then(async (res) => {
           let body: any;
 
@@ -78,7 +80,7 @@ export const createFetcher = ({
           const resp: any = {
             config: requestConfig,
             status: res.status,
-            headers: {}
+            headers: {},
           };
 
           for (const [key, value] of res.headers.entries()) {
@@ -96,6 +98,6 @@ export const createFetcher = ({
           }
           return resp;
         });
-    }
+    },
   };
 };

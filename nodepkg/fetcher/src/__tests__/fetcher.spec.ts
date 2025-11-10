@@ -1,6 +1,11 @@
 import { afterAll, beforeAll, describe, expect, it } from "bun:test";
 import { serve } from "bun";
-import { applyRequestInterceptors, createDefaultFetcher, type RequestConfig, type UploadProgress } from "../";
+import {
+  applyRequestInterceptors,
+  createDefaultFetcher,
+  type RequestConfig,
+  type UploadProgress,
+} from "../";
 
 describe("GIVEN a server", () => {
   let server: ReturnType<typeof serve>;
@@ -8,7 +13,7 @@ describe("GIVEN a server", () => {
   const CORS_HEADERS = {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "OPTIONS, POST",
-    "Access-Control-Allow-Headers": "Content-Type"
+    "Access-Control-Allow-Headers": "Content-Type",
   };
 
   beforeAll(() => {
@@ -16,18 +21,24 @@ describe("GIVEN a server", () => {
       routes: {
         "/api/status": (req) => {
           const u = new URL(req.url);
-          return Response.json({ ready: true, params: u.searchParams }, { headers: CORS_HEADERS });
+          return Response.json(
+            { ready: true, params: u.searchParams },
+            { headers: CORS_HEADERS },
+          );
         },
         "/uploads": async (req) => {
           if (req.method === "OPTIONS") {
             return new Response(null, { headers: CORS_HEADERS });
           }
           const v = await req.text();
-          return Response.json({ uploaded: v.length }, {
-            headers: CORS_HEADERS
-          });
-        }
-      }
+          return Response.json(
+            { uploaded: v.length },
+            {
+              headers: CORS_HEADERS,
+            },
+          );
+        },
+      },
     });
   });
 
@@ -36,27 +47,29 @@ describe("GIVEN a server", () => {
   });
 
   describe("GIVEN create fetcher", () => {
-    const fetcher = applyRequestInterceptors((requestConfig: RequestConfig<any>) => {
-      const remoteURL = new URL(server.url);
+    const fetcher = applyRequestInterceptors(
+      (requestConfig: RequestConfig<any>) => {
+        const remoteURL = new URL(server.url);
 
-      requestConfig.url = `${remoteURL.origin}${requestConfig.url}`;
-      return requestConfig;
-    })(createDefaultFetcher());
+        requestConfig.url = `${remoteURL.origin}${requestConfig.url}`;
+        return requestConfig;
+      },
+    )(createDefaultFetcher());
 
     it("WHEN request to server", async () => {
       const resp = await fetcher.request({
         method: "GET",
         url: "/api/status",
         params: {
-          q: "s"
-        }
+          q: "s",
+        },
       });
 
       expect(resp.status).toBe(200);
       expect(resp.headers["content-type"] ?? "").toContain("application/json");
       expect(resp.body).toEqual({
         ready: true,
-        params: { q: "s" }
+        params: { q: "s" },
       });
     });
 
@@ -65,9 +78,9 @@ describe("GIVEN a server", () => {
         method: "POST",
         url: "/uploads",
         headers: {
-          "Content-Type": "application/octet-stream"
+          "Content-Type": "application/octet-stream",
         },
-        body: 123
+        body: 123,
       });
 
       expect(resp.status).toBe(200);
@@ -81,12 +94,12 @@ describe("GIVEN a server", () => {
         method: "POST",
         url: "/uploads",
         headers: {
-          "Content-Type": "application/octet-stream"
+          "Content-Type": "application/octet-stream",
         },
         body: new TextEncoder().encode(data),
         onUploadProgress: (p: UploadProgress) => {
           console.log(p.loaded, p.total);
-        }
+        },
       });
 
       expect(resp.status).toBe(200);

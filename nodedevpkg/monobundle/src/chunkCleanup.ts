@@ -11,7 +11,7 @@ export const chunkCleanup = (
       exclude?: string[];
       include?: string[];
     };
-  } = {}
+  } = {},
 ): Plugin => {
   return {
     name: "monobundle/chunk-cleanup",
@@ -20,11 +20,9 @@ export const chunkCleanup = (
       return (
         await transform(code, {
           minify: opt.minify ?? false,
-          plugins: [
-            usePlugin({})
-          ]
+          plugins: [usePlugin({})],
         })
       ).code;
-    }
+    },
   };
 };

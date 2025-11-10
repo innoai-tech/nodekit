@@ -3,8 +3,8 @@ import { isFunction } from "./util/Typed.ts";
 export function xhrFetch(
   url: string,
   options: RequestInit & {
-    onUploadProgress?: (evt: ProgressEvent) => void,
-  }
+    onUploadProgress?: (evt: ProgressEvent) => void;
+  },
 ): Promise<Response> {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
@@ -35,8 +35,8 @@ export function xhrFetch(
         {
           status: xhr.status,
           statusText: xhr.statusText,
-          headers: headers
-        }
+          headers: headers,
+        },
       );
 
       resolve(resp);

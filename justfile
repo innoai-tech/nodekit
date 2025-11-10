@@ -1,3 +1,5 @@
+export PRETTIER_EXPERIMENTAL_CLI := "1"
+
 monobundle := "bunx --bun ./nodedevpkg/monobundle/src/bin/index.ts"
 bunx := "bunx --bun"
 turbo := "bunx --bun turbo"
@@ -25,8 +27,8 @@ build-monobundle:
     {{ turbo }} run build --filter="@innoai-tech/monobundle" --force
     bun install
 
-lint:
-    {{ turbo }} run lint --filter="@innoai-tech/monobundle" --force
+fmt:
+    {{ turbo }} run fmt
 
 test:
     bun test
@@ -43,7 +45,6 @@ ship:
     TTY=0 piper do ship push
 
 clean:
-    rm -f bun.lock
     find . -type d \
          -name '.swc' \
          -o -name '.turbo' \

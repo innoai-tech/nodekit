@@ -7,12 +7,12 @@ export type RequestConfig<TInputs> = {
 
   inputs?: TInputs;
   onUploadProgress?: (uploadProgress: UploadProgress) => void;
-}
+};
 
 export type UploadProgress = {
   readonly loaded: number;
   readonly total: number;
-}
+};
 
 export interface RequestConfigCreator<TInputs, TRespData> {
   (input: TInputs): RequestConfig<TInputs>;
@@ -29,7 +29,8 @@ export interface FetcherResponse<TInputs, TData> {
   body: TData;
 }
 
-export interface FetcherErrorResponse<TInputs, TError> extends FetcherResponse<TInputs, any> {
+export interface FetcherErrorResponse<TInputs, TError>
+  extends FetcherResponse<TInputs, any> {
   error: TError;
 }
 
@@ -40,7 +41,9 @@ export interface Fetcher {
 
   toRequestBody(requestConfig: RequestConfig<any>): any;
 
-  request<TInputs = undefined, TRespData = any>(requestConfig: RequestConfig<TInputs>): Promise<FetcherResponse<TInputs, TRespData>>;
+  request<TInputs = undefined, TRespData = any>(
+    requestConfig: RequestConfig<TInputs>,
+  ): Promise<FetcherResponse<TInputs, TRespData>>;
 }
 
 export interface FetcherCreatorOptions {
@@ -50,30 +53,33 @@ export interface FetcherCreatorOptions {
 
 export type FetcherCreator = (options: FetcherCreatorOptions) => Fetcher;
 
-export type RequestInterceptor = (requestConfig: RequestConfig<any>) => RequestConfig<any>;
+export type RequestInterceptor = (
+  requestConfig: RequestConfig<any>,
+) => RequestConfig<any>;
 
 export const applyRequestInterceptors =
   (...requestInterceptors: RequestInterceptor[]) =>
-    (fetcher: Fetcher) => {
-      const build = (requestConfig: RequestConfig<any>): RequestConfig<any> => {
-        let config = fetcher.build(requestConfig);
+  (fetcher: Fetcher) => {
+    const build = (requestConfig: RequestConfig<any>): RequestConfig<any> => {
+      let config = fetcher.build(requestConfig);
 
-        for (const requestInterceptor of requestInterceptors) {
-          config = requestInterceptor(config);
-        }
+      for (const requestInterceptor of requestInterceptors) {
+        config = requestInterceptor(config);
+      }
 
-        return config;
-      };
-
-
-      return {
-        build,
-        toRequestBody: fetcher.toRequestBody,
-        request<TInputs = undefined, TRespData = any>(requestConfig: RequestConfig<TInputs>) {
-          return fetcher.request<TInputs, TRespData>(build(requestConfig));
-        },
-        toHref(requestConfig: RequestConfig<any>): string {
-          return fetcher.toHref(build(requestConfig));
-        }
-      };
+      return config;
     };
+
+    return {
+      build,
+      toRequestBody: fetcher.toRequestBody,
+      request<TInputs = undefined, TRespData = any>(
+        requestConfig: RequestConfig<TInputs>,
+      ) {
+        return fetcher.request<TInputs, TRespData>(build(requestConfig));
+      },
+      toHref(requestConfig: RequestConfig<any>): string {
+        return fetcher.toHref(build(requestConfig));
+      },
+    };
+  };

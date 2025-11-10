@@ -10,22 +10,21 @@ export const vueComponentComplete = ({}): Plugin => {
       const ext = extname(id);
 
       if (ext == ".tsx" || ext == ".ts") {
-
         const result = await transform(code, {
           filename: id,
           minify: false,
-          plugins: [usePlugin({})]
+          plugins: [usePlugin({})],
         });
 
         return (
           result.code && {
             code: result.code,
-            map: result.map || null
+            map: result.map || null,
           }
         );
       }
 
       return null;
-    }
+    },
   };
 };

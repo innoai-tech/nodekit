@@ -10,12 +10,10 @@ const getWebAppConfigValue = (key: string) => {
   );
 };
 
-
 const getAppBaseHref = () => {
   return (
-    (globalThis as any).document
-      ?.querySelector("base")
-      ?.getAttribute("href") || "/"
+    (globalThis as any).document?.querySelector("base")?.getAttribute("href") ||
+    "/"
   );
 };
 
@@ -29,7 +27,7 @@ export const confLoader = <TKeys extends string>() => {
     return {
       ...base,
       ...config,
-      baseHref: getAppBaseHref()
+      baseHref: getAppBaseHref(),
     };
   };
 };
@@ -64,7 +62,7 @@ export interface APIMetadata {
 export const api = (opt: APIMetadata = {}) => {
   return <T extends Function>(target: T) => {
     return Object.assign(target, {
-      api: opt
+      api: opt,
     });
   };
 };

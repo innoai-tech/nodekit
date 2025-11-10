@@ -1,8 +1,8 @@
 {
   "name": "@innoai-tech/vuecomponentcompleter",
-  "version": "0.3.12",
+  "version": "0.4.0",
   "dependencies": {
-    "@swc/core": "1.13.5"
+    "@swc/core": "1.14.0"
   },
   "exports": {
     ".": {
@@ -33,7 +33,7 @@
   "scripts": {
     "initial": "rustup target add wasm32-wasip1",
     "update": "cargo update",
-    "lint": "cargo fmt --all -- --emit files",
+    "fmt": "cargo fmt --all -- --emit files",
     "test": "cargo test",
     "build": "cargo build --target wasm32-wasip1 --release",
     "prepublishOnly": "bun run build"

@@ -5,7 +5,7 @@ describe("search", () => {
   it("#stringifySearch", () => {
     const c = stringifySearch({
       key1: "111",
-      key2: "a111,"
+      key2: "a111,",
     });
     expect(c).toEqual("?key1=111&key2=a111%2C");
   });
@@ -15,7 +15,7 @@ describe("search", () => {
 
     expect(c).toEqual({
       key1: ["111"],
-      key2: ["a111,"]
+      key2: ["a111,"],
     });
   });
 });

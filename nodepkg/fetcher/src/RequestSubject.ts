@@ -1,6 +1,11 @@
 import { BehaviorSubject, from, Observable, of, Subject } from "rxjs";
 import { catchError, ignoreElements, mergeMap, tap } from "rxjs/operators";
-import type { Fetcher, FetcherErrorResponse, FetcherResponse, RequestConfigCreator } from "./fetcher";
+import type {
+  Fetcher,
+  FetcherErrorResponse,
+  FetcherResponse,
+  RequestConfigCreator,
+} from "./fetcher";
 import { isFunction } from "./util/Typed.ts";
 
 export interface RequestSubject<TInputs, TBody, TError>
@@ -16,14 +21,15 @@ export interface RequestSubject<TInputs, TBody, TError>
 
 export const createRequestSubject = <TInputs, TBody, TError>(
   createConfig: RequestConfigCreator<TInputs, TBody>,
-  fetcher: Fetcher
+  fetcher: Fetcher,
 ): RequestSubject<TInputs, TBody, TError> => {
   return new ReqSubject(createConfig, fetcher);
 };
 
 class ReqSubject<TInputs, TBody, TError>
   extends Observable<FetcherResponse<TInputs, TBody>>
-  implements RequestSubject<TInputs, TBody, TError> {
+  implements RequestSubject<TInputs, TBody, TError>
+{
   requesting$ = new BehaviorSubject<boolean>(false);
   error$ = new Subject<FetcherErrorResponse<TInputs, TError>>();
 
@@ -32,7 +38,7 @@ class ReqSubject<TInputs, TBody, TError>
 
   constructor(
     private createConfig: RequestConfigCreator<TInputs, TBody>,
-    private fetcher: Fetcher
+    private fetcher: Fetcher,
   ) {
     super((subscriber) => {
       return this._success$.subscribe(subscriber);
@@ -49,19 +55,19 @@ class ReqSubject<TInputs, TBody, TError>
         this.requesting$.next(true);
 
         return from(
-          this.fetcher.request<TInputs, TBody>(this.createConfig(input))
+          this.fetcher.request<TInputs, TBody>(this.createConfig(input)),
         ).pipe(
           tap((resp) => this._success$.next(resp)),
           catchError((errorResp) => {
             this.error$.next(errorResp);
             return of(errorResp);
-          })
+          }),
         );
       }),
       tap(() => {
         this.requesting$.next(false);
       }),
-      ignoreElements()
+      ignoreElements(),
     )
     .subscribe();
 
@@ -77,5 +83,3 @@ class ReqSubject<TInputs, TBody, TError>
     return this.fetcher.toHref(this.createConfig(value));
   };
 }
-
-

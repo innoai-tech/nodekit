@@ -1,5 +1,14 @@
 import { basename, extname, join, relative } from "path";
-import { forEach, has, isEmpty, keys, mapKeys, mapValues, set, startsWith } from "es-toolkit/compat";
+import {
+  forEach,
+  has,
+  isEmpty,
+  keys,
+  mapKeys,
+  mapValues,
+  set,
+  startsWith,
+} from "es-toolkit/compat";
 import { readFile, unlink } from "fs/promises";
 import { globby } from "globby";
 import { type OutputOptions, rolldown } from "rolldown";
@@ -8,16 +17,20 @@ import { bootstrap } from "./bootstrap";
 import { createLogger } from "./log";
 import { patchShebang } from "./patchShebang";
 import { resolveProjectRoot } from "./pm";
-import { entryAlias, type MonoBundleOptions, writeFormattedJsonFile } from "./util";
+import {
+  entryAlias,
+  type MonoBundleOptions,
+  writeFormattedJsonFile,
+} from "./util";
 import { chunkCleanup } from "./chunkCleanup.ts";
 import { vueComponentComplete } from "./vueComponentComplete.ts";
 
 const tsconfigFile = "tsconfig.monobundle.json";
 
 export const bundle = async ({
-                               cwd = process.cwd(),
-                               dryRun
-                             }: {
+  cwd = process.cwd(),
+  dryRun,
+}: {
   cwd?: string;
   dryRun?: boolean;
 }) => {
@@ -51,22 +64,22 @@ export const bundle = async ({
     mapKeys(options.exports, (_, k) => {
       return entryAlias(k);
     }),
-    (entry, _) => join(cwd, entry)
+    (entry, _) => join(cwd, entry),
   );
 
   const outputBase: OutputOptions = {
     dir: cwd,
-    format: "es"
+    format: "es",
   };
 
   pkg["peerDependencies"] = {
     ...(pkg["peerDependencies"] ?? {}),
-    "core-js": "*"
+    "core-js": "*",
   };
 
   const autoExternal = await createAutoExternal(project, pkg as any, {
     logger,
-    sideDeps: options["sideDeps"] as any
+    sideDeps: options["sideDeps"] as any,
   });
 
   const rolldownOptions = [
@@ -76,10 +89,10 @@ export const bundle = async ({
         ...outputBase,
         dir: "./dist",
         entryFileNames: "[name].mjs",
-        chunkFileNames: "[name]-[hash].mjs"
+        chunkFileNames: "[name]-[hash].mjs",
       },
       resolve: {
-        extensions: [".ts", ".tsx", ".mjs", "", ".js", ".jsx"]
+        extensions: [".ts", ".tsx", ".mjs", "", ".js", ".jsx"],
       },
       tsconfig: tsconfigFile,
       plugins: [
@@ -88,11 +101,11 @@ export const bundle = async ({
         patchShebang((chunkName) => {
           return !!options.exports?.[
             `bin:${basename(chunkName, extname(chunkName))}`
-            ];
+          ];
         }, options.engine),
-        chunkCleanup()
-      ]
-    }
+        chunkCleanup(),
+      ],
+    },
   ];
 
   // cleanup
@@ -117,12 +130,12 @@ export const bundle = async ({
             return bundle.write(output).then((ret) => {
               if (output.dir) {
                 return (ret.output || []).map((o) =>
-                  join(relative(cwd, output.dir ?? ""), o.fileName)
+                  join(relative(cwd, output.dir ?? ""), o.fileName),
                 );
               }
               return relative(cwd, output.file ?? "");
             });
-          })
+          }),
       );
     });
 
@@ -159,7 +172,7 @@ export const bundle = async ({
     // FIXME remote all old entries
     types: undefined,
     main: undefined,
-    module: undefined
+    module: undefined,
   });
 
   return;
@@ -167,7 +180,7 @@ export const bundle = async ({
 
 const genExportsAndBin = (options?: MonoBundleOptions) => {
   const pkg = {
-    type: "module"
+    type: "module",
   } as { bin?: {}; exports?: {} };
 
   forEach(options?.exports, (entryFile, e) => {
@@ -182,8 +195,8 @@ const genExportsAndBin = (options?: MonoBundleOptions) => {
       bun: `${entryFile}`,
       import: {
         types: `${entryFile}`,
-        default: `./dist/${distName}.mjs`
-      }
+        default: `./dist/${distName}.mjs`,
+      },
     });
   });
 

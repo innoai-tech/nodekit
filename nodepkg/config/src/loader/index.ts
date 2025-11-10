@@ -1,12 +1,17 @@
 import * as vm from "node:vm";
 import { createContext } from "node:vm";
 import { isFunction, kebabCase, mapValues, toMerged } from "es-toolkit";
-import type { AppConfig, AppConfigMetadata, AppContext, ConfigBuilder } from "../config";
+import type {
+  AppConfig,
+  AppConfigMetadata,
+  AppContext,
+  ConfigBuilder,
+} from "../config";
 import { rolldown } from "rolldown";
 
 export const loadConfig = async (configFile: string) => {
   const rd = await rolldown({
-    input: [configFile]
+    input: [configFile],
   });
 
   const ret = await rd.generate({ format: "cjs", exports: "named" });
@@ -15,7 +20,7 @@ export const loadConfig = async (configFile: string) => {
 
   const ctx = {
     exports: {},
-    process: process
+    process: process,
   };
 
   script.runInContext(createContext(ctx));
@@ -23,14 +28,14 @@ export const loadConfig = async (configFile: string) => {
   const conf = ctx.exports as { CONFIG: any };
 
   return (
-    configCtx: AppContext
+    configCtx: AppContext,
   ): AppContext & AppConfig & AppConfigMetadata => {
     return {
       ...conf.CONFIG,
       config: mapValues(
         conf.CONFIG.config,
         (fnOrValue: ConfigBuilder | string) =>
-          isFunction(fnOrValue) ? fnOrValue(configCtx) : fnOrValue
+          isFunction(fnOrValue) ? fnOrValue(configCtx) : fnOrValue,
       ),
       metadata: mapValues(
         conf.CONFIG.config,
@@ -45,8 +50,8 @@ export const loadConfig = async (configFile: string) => {
                 apiMetaData = toMerged(apiMetaData, {
                   api: {
                     id: apiName,
-                    openapi: `/api/${apiName}`
-                  }
+                    openapi: `/api/${apiName}`,
+                  },
                 });
                 break;
               }
@@ -55,9 +60,9 @@ export const loadConfig = async (configFile: string) => {
             if ((fnOrValue as any).api) {
               for (const [k, v] of Object.entries((fnOrValue as any).api)) {
                 apiMetaData = toMerged(apiMetaData, {
-                  "api": {
-                    [`${k}`]: v
-                  }
+                  api: {
+                    [`${k}`]: v,
+                  },
                 });
               }
             }
@@ -65,10 +70,10 @@ export const loadConfig = async (configFile: string) => {
             return apiMetaData;
           }
           return {};
-        }
+        },
       ),
       env: configCtx.env,
-      feature: configCtx.feature
+      feature: configCtx.feature,
     };
   };
 };

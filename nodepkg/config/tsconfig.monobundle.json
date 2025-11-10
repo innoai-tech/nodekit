@@ -1,6 +1,6 @@
 {
-	"extends": "@innoai-tech/devconfig/tsconfig.json",
-	"compilerOptions": {
-		"rootDir": "./src"
-	}
+  "extends": "@innoai-tech/devconfig/tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "./src"
+  }
 }
