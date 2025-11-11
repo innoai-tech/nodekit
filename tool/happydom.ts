@@ -5,11 +5,9 @@ const global = {
   console: console,
   Blob: Blob,
   Response: Response,
-  fetch: fetch
+  fetch: fetch,
 };
-
 
 GlobalRegistrator.register();
 
 Object.assign(window, global);
-
