@@ -3,6 +3,7 @@ export PRETTIER_EXPERIMENTAL_CLI := "1"
 monobundle := "bunx --bun ./nodedevpkg/monobundle/src/bin/index.ts"
 bunx := "bunx --bun"
 turbo := "bunx --bun turbo"
+vitest := "bunx --bun vitest"
 
 serve:
     go run ./cmd/webappserve serve --help
@@ -31,7 +32,7 @@ fmt:
     {{ turbo }} run fmt
 
 test:
-    bun test
+    {{ vitest }} --run
 
 build:
     {{ turbo }} run build --filter="!@innoai-tech/monobundle" --force --concurrency=1

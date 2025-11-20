@@ -1,5 +1,4 @@
-import { afterAll, beforeAll, describe, expect, it } from "bun:test";
-import { serve } from "bun";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import {
   applyRequestInterceptors,
   createDefaultFetcher,
@@ -8,7 +7,7 @@ import {
 } from "../";
 
 describe("GIVEN a server", () => {
-  let server: ReturnType<typeof serve>;
+  let server: ReturnType<typeof Bun.serve>;
 
   const CORS_HEADERS = {
     "Access-Control-Allow-Origin": "*",
@@ -17,7 +16,7 @@ describe("GIVEN a server", () => {
   };
 
   beforeAll(() => {
-    server = serve({
+    server = Bun.serve({
       routes: {
         "/api/status": (req) => {
           const u = new URL(req.url);
