@@ -1,8 +1,0 @@
-[test]
-preload = "./tool/happydom.ts"
-
-[install]
-registry = "https://registry.npmjs.org"
-
-[install.scopes]
-"@innoai-tech" = { url = "https://npm.pkg.github.com", token = "$INNOAI_TECH_REGISTRY_AUTH_TOKEN" }

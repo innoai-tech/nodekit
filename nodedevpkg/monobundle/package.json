@@ -1,6 +1,6 @@
 {
   "name": "@innoai-tech/monobundle",
-  "version": "0.17.0",
+  "version": "0.17.1",
   "monobundle": {
     "exports": {
       ".": "./src/index.ts",
@@ -14,17 +14,17 @@
     "@innoai-tech/purebundle": "workspace:^",
     "@innoai-tech/vuecomponentcompleter": "workspace:^",
     "chalk": "^5.6.2",
-    "es-toolkit": "^1.41.0",
-    "globby": "^15.0.0",
-    "js-yaml": "^4.1.0",
+    "es-toolkit": "^1.42.0",
+    "globby": "^16.0.0",
+    "js-yaml": "^4.1.1",
     "minimatch": "^10.1.1",
-    "rolldown": "^1.0.0-beta.49",
+    "rolldown": "^1.0.0-beta.51",
     "yargs": "^18.0.0"
   },
   "peerDependencies": {},
   "devDependencies": {
     "@types/js-yaml": "^4.0.9",
-    "@types/yargs": "^17.0.34"
+    "@types/yargs": "^17.0.35"
   },
   "bin": {
     "monobundle": "./dist/monobundle.mjs"

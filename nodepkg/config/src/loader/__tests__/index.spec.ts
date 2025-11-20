@@ -1,4 +1,4 @@
-import { describe, expect, it } from "bun:test";
+import { describe, expect, it } from "vitest";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 import { loadConfig } from "../index";
