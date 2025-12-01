@@ -1,8 +1,8 @@
 {
   "name": "@innoai-tech/purebundle",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "dependencies": {
-    "@swc/core": "1.14.0"
+    "@swc/core": "1.15.3"
   },
   "exports": {
     ".": {

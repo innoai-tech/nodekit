@@ -18,7 +18,7 @@
     "globby": "^16.0.0",
     "js-yaml": "^4.1.1",
     "minimatch": "^10.1.1",
-    "rolldown": "^1.0.0-beta.51",
+    "rolldown": "^1.0.0-beta.52",
     "yargs": "^18.0.0"
   },
   "peerDependencies": {},
