@@ -1,5 +1,5 @@
 import { join } from "path";
-import type { Plugin, UserConfig } from "rolldown-vite";
+import type { Plugin, UserConfig } from "vite";
 import {
   type AppConfig,
   type AppConfigMetadata,
