@@ -8,8 +8,9 @@ import type {
 } from "./fetcher";
 import { isFunction } from "./util/Typed.ts";
 
-export interface RequestSubject<TInputs, TBody, TError>
-  extends Observable<FetcherResponse<TInputs, TBody>> {
+export interface RequestSubject<TInputs, TBody, TError> extends Observable<
+  FetcherResponse<TInputs, TBody>
+> {
   operationID: string;
   requesting$: BehaviorSubject<boolean>;
   error$: Subject<FetcherErrorResponse<TInputs, TError>>;
@@ -54,9 +55,7 @@ class ReqSubject<TInputs, TBody, TError>
       mergeMap((input) => {
         this.requesting$.next(true);
 
-        return from(
-          this.fetcher.request<TInputs, TBody>(this.createConfig(input)),
-        ).pipe(
+        return from(this.fetcher.request<TInputs, TBody>(this.createConfig(input))).pipe(
           tap((resp) => this._success$.next(resp)),
           catchError((errorResp) => {
             this.error$.next(errorResp);

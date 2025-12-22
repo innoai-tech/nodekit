@@ -3,11 +3,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@innoai-tech/*": [
-        "nodedevpkg/*/src/index.ts",
-        "nodepkg/*/src/index.ts",
-        "*"
-      ]
+      "@innoai-tech/*": ["nodedevpkg/*/src/index.ts", "nodepkg/*/src/index.ts", "*"]
     }
   }
 }

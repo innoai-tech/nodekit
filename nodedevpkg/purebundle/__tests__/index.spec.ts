@@ -65,8 +65,7 @@ const B = /*#__PURE__*/String("b");`,
     dest: "const b = 1; const a = /*#__PURE__*/setInterval(() => { console.log(b) }, 1000)",
   },
   {
-    title:
-      "Annotated #__PURE__ when with variable used in param callback in assignment expression",
+    title: "Annotated #__PURE__ when with variable used in param callback in assignment expression",
     src: "let a; a = /*#__PURE__*/setInterval(() => { console.log(a) }, 1000)",
     dest: "let a; a = /*#__PURE__*/setInterval(() => { console.log(a) }, 1000)",
   },

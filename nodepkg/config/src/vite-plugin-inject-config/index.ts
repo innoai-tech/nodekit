@@ -1,19 +1,11 @@
 import { join } from "path";
 import type { Plugin, UserConfig } from "vite";
-import {
-  type AppConfig,
-  type AppConfigMetadata,
-  type AppContext,
-  stringify,
-} from "../";
+import { type AppConfig, type AppConfigMetadata, type AppContext, stringify } from "../";
 import { loadConfig } from "../loader";
 
 export type HandleConfig =
   | ((c: UserConfig, ctx: AppConfig & AppContext & AppConfigMetadata) => void)
-  | ((
-      c: UserConfig,
-      ctx: AppConfig & AppContext & AppConfigMetadata,
-    ) => Promise<void>);
+  | ((c: UserConfig, ctx: AppConfig & AppContext & AppConfigMetadata) => Promise<void>);
 
 export const injectWebAppConfig = (onConfig?: HandleConfig): Plugin => {
   let injectEnabled = false;

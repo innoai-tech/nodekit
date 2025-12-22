@@ -53,9 +53,7 @@ export const collectDeps = async (project: Project, localPkg: Package) => {
     );
 
     for (const f of packageJSONs) {
-      let pkg = JSON.parse(
-        String(await readFile(join(`${project.root}`, f))),
-      ) as Package;
+      let pkg = JSON.parse(String(await readFile(join(`${project.root}`, f)))) as Package;
 
       // localPkg may be changed
       if (localPkg.name === pkg.name) {
@@ -89,9 +87,7 @@ export const createAutoExternal = async (
     if (sideDeps.length === 0) {
       return false;
     }
-    return sideDeps.some(
-      (glob) => pkgName === glob || minimatch(pkgName, glob),
-    );
+    return sideDeps.some((glob) => pkgName === glob || minimatch(pkgName, glob));
   };
 
   const usedPkgs = new Set<string>();
@@ -149,15 +145,8 @@ export const createAutoExternal = async (
       options(opts: InputOptions) {
         return {
           ...opts,
-          external(
-            id: string,
-            importer: string | undefined,
-            isResolved: boolean,
-          ) {
-            if (
-              typeof opts.external === "function" &&
-              opts.external(id, importer, isResolved)
-            ) {
+          external(id: string, importer: string | undefined, isResolved: boolean) {
+            if (typeof opts.external === "function" && opts.external(id, importer, isResolved)) {
               return true;
             }
 
@@ -172,8 +161,7 @@ export const createAutoExternal = async (
             if (!(id.startsWith(".") || id.startsWith("/"))) {
               const isDep = [...dep.keys()].some((d) => id.startsWith(d));
               const isBuiltIn =
-                id.startsWith("@nodelib/") ||
-                builtins.some((b) => id.startsWith(b));
+                id.startsWith("@nodelib/") || builtins.some((b) => id.startsWith(b));
 
               if (isDep) {
                 usedPkgs.add(id);

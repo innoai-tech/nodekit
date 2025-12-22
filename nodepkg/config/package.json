@@ -1,22 +1,14 @@
 {
   "name": "@innoai-tech/config",
   "version": "0.7.0",
-  "monobundle": {
-    "exports": {
-      ".": "./src/index.ts",
-      "./loader": "./src/loader/index.ts",
-      "./vite-plugin-inject-config": "./src/vite-plugin-inject-config/index.ts"
-    }
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@github.com:innoai-tech/nodekit.git",
+    "directory": "nodepkg/config"
   },
-  "dependencies": {
-    "es-toolkit": "^1.42.0"
-  },
-  "peerDependencies": {
-    "rolldown": "*"
-  },
-  "browserslist": [
-    "defaults"
-  ],
+  "license": "MIT",
+  "sideEffects": false,
+  "type": "module",
   "exports": {
     ".": {
       "bun": "./src/index.ts",
@@ -41,20 +33,28 @@
     }
   },
   "files": [
+    "!/**/__tests__",
     "dist/*",
-    "src/*",
-    "!/**/__tests__"
+    "src/*"
   ],
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "ssh://git@github.com:innoai-tech/nodekit.git",
-    "directory": "nodepkg/config"
-  },
   "scripts": {
     "build": "bunx --bun @innoai-tech/monobundle",
     "prepublishOnly": "bun run build"
   },
-  "sideEffects": false,
-  "type": "module"
+  "dependencies": {
+    "es-toolkit": "^1.43.0"
+  },
+  "peerDependencies": {
+    "rolldown": "*"
+  },
+  "browserslist": [
+    "defaults"
+  ],
+  "monobundle": {
+    "exports": {
+      ".": "./src/index.ts",
+      "./loader": "./src/loader/index.ts",
+      "./vite-plugin-inject-config": "./src/vite-plugin-inject-config/index.ts"
+    }
+  }
 }

@@ -30,14 +30,11 @@ export function xhrFetch(
 
       const headers = parseHeaders(xhr.getAllResponseHeaders());
 
-      const resp = new Response(
-        xhr.status != 204 && xhr.response ? new Blob(xhr.response) : null,
-        {
-          status: xhr.status,
-          statusText: xhr.statusText,
-          headers: headers,
-        },
-      );
+      const resp = new Response(xhr.status != 204 && xhr.response ? new Blob(xhr.response) : null, {
+        status: xhr.status,
+        statusText: xhr.statusText,
+        headers: headers,
+      });
 
       resolve(resp);
     };

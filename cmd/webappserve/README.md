@@ -29,5 +29,5 @@ in html could use `base` tag: https://developer.mozilla.org/zh-CN/docs/Web/HTML/
 
 be used to replace `__APP_CONFIG__` in `index.html`
 
-* format: `key1=value1,key2=value2`
-* `APP_CONFIG__*` will join to `APP_CONFIG`
+- format: `key1=value1,key2=value2`
+- `APP_CONFIG__*` will join to `APP_CONFIG`

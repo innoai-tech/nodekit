@@ -1,9 +1,13 @@
 {
   "name": "@innoai-tech/purebundle",
   "version": "0.8.1",
-  "dependencies": {
-    "@swc/core": "1.15.3"
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@github.com:innoai-tech/nodekit.git",
+    "directory": "nodedevpkg/purebundle"
   },
+  "license": "MIT",
+  "type": "module",
   "exports": {
     ".": {
       "import": {
@@ -24,12 +28,6 @@
     "index.mjs",
     "target/wasm32-wasip1/release/purebundle.wasm"
   ],
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "ssh://git@github.com:innoai-tech/nodekit.git",
-    "directory": "nodedevpkg/purebundle"
-  },
   "scripts": {
     "initial": "rustup target add wasm32-wasip1",
     "update": "cargo update",
@@ -38,5 +36,7 @@
     "build": "cargo build --target wasm32-wasip1 --release",
     "prepublishOnly": "bun run build"
   },
-  "type": "module"
+  "dependencies": {
+    "@swc/core": "1.15.3"
+  }
 }

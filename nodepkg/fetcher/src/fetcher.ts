@@ -29,8 +29,7 @@ export interface FetcherResponse<TInputs, TData> {
   body: TData;
 }
 
-export interface FetcherErrorResponse<TInputs, TError>
-  extends FetcherResponse<TInputs, any> {
+export interface FetcherErrorResponse<TInputs, TError> extends FetcherResponse<TInputs, any> {
   error: TError;
 }
 
@@ -53,9 +52,7 @@ export interface FetcherCreatorOptions {
 
 export type FetcherCreator = (options: FetcherCreatorOptions) => Fetcher;
 
-export type RequestInterceptor = (
-  requestConfig: RequestConfig<any>,
-) => RequestConfig<any>;
+export type RequestInterceptor = (requestConfig: RequestConfig<any>) => RequestConfig<any>;
 
 export const applyRequestInterceptors =
   (...requestInterceptors: RequestInterceptor[]) =>
@@ -73,9 +70,7 @@ export const applyRequestInterceptors =
     return {
       build,
       toRequestBody: fetcher.toRequestBody,
-      request<TInputs = undefined, TRespData = any>(
-        requestConfig: RequestConfig<TInputs>,
-      ) {
+      request<TInputs = undefined, TRespData = any>(requestConfig: RequestConfig<TInputs>) {
         return fetcher.request<TInputs, TRespData>(build(requestConfig));
       },
       toHref(requestConfig: RequestConfig<any>): string {

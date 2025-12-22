@@ -3,15 +3,12 @@ import { createRequestSubject } from "../RequestSubject.ts";
 
 describe("RequestSubject", () => {
   describe("#success", () => {
-    const rs$ = createRequestSubject(
-      ((input: any) => ({ body: input })) as any,
-      {
-        build: (c) => c,
-        request: (c) => Promise.resolve(c.body),
-        toHref: () => "",
-        toRequestBody: () => undefined,
-      },
-    );
+    const rs$ = createRequestSubject(((input: any) => ({ body: input })) as any, {
+      build: (c) => c,
+      request: (c) => Promise.resolve(c.body),
+      toHref: () => "",
+      toRequestBody: () => undefined,
+    });
 
     const rets: any[] = [];
 
@@ -31,15 +28,12 @@ describe("RequestSubject", () => {
   });
 
   describe("#failed", () => {
-    const rs$ = createRequestSubject(
-      ((input: any) => ({ body: input })) as any,
-      {
-        build: (c) => c,
-        request: (_) => Promise.reject("err"),
-        toHref: () => "",
-        toRequestBody: () => undefined,
-      },
-    );
+    const rs$ = createRequestSubject(((input: any) => ({ body: input })) as any, {
+      build: (c) => c,
+      request: (_) => Promise.reject("err"),
+      toHref: () => "",
+      toRequestBody: () => undefined,
+    });
 
     const rets: any[] = [];
 

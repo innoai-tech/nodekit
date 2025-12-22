@@ -12,15 +12,11 @@ import init, {
 import wasmURL from "./pkg/crypto_bg.wasm?url";
 
 export const generate_aes_256_key = (mode = "CFB") => {
-  return init({ module_or_path: wasmURL }).then(() =>
-    _generate_aes_256_key(mode),
-  );
+  return init({ module_or_path: wasmURL }).then(() => _generate_aes_256_key(mode));
 };
 
 export const generate_chacha20_key = () => {
-  return init({ module_or_path: wasmURL }).then(() =>
-    _generate_chacha20_key(""),
-  );
+  return init({ module_or_path: wasmURL }).then(() => _generate_chacha20_key(""));
 };
 
 export const rsa_oaep_encrypt = (payload, key) => {
@@ -30,27 +26,19 @@ export const rsa_oaep_encrypt = (payload, key) => {
 };
 
 export const aes_256_decrypt = (payload, key) => {
-  return init({ module_or_path: wasmURL }).then(() =>
-    _aes_256_decrypt(payload, key),
-  );
+  return init({ module_or_path: wasmURL }).then(() => _aes_256_decrypt(payload, key));
 };
 
 export const aes_256_encrypt = (payload, key) => {
-  return init({ module_or_path: wasmURL }).then(() =>
-    _aes_256_encrypt(payload, key),
-  );
+  return init({ module_or_path: wasmURL }).then(() => _aes_256_encrypt(payload, key));
 };
 
 export const chacha20_encrypt = (payload, key) => {
-  return init({ module_or_path: wasmURL }).then(() =>
-    _chacha20_encrypt(payload, key),
-  );
+  return init({ module_or_path: wasmURL }).then(() => _chacha20_encrypt(payload, key));
 };
 
 export const chacha20_decrypt = (payload, key) => {
-  return init({ module_or_path: wasmURL }).then(() =>
-    _chacha20_decrypt(payload, key),
-  );
+  return init({ module_or_path: wasmURL }).then(() => _chacha20_decrypt(payload, key));
 };
 
 // aliases

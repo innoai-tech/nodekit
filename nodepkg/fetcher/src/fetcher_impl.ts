@@ -43,10 +43,7 @@ export const createFetcher = ({
   };
 
   const toRequestBody = (requestConfig: RequestConfig<any>) => {
-    return transformRequestBody(
-      requestConfig.body,
-      requestConfig.headers || {},
-    );
+    return transformRequestBody(requestConfig.body, requestConfig.headers || {});
   };
 
   return {
@@ -67,11 +64,7 @@ export const createFetcher = ({
 
           if (res.headers.get("Content-Type")?.includes("application/json")) {
             body = await res.json();
-          } else if (
-            res.headers
-              .get("Content-Type")
-              ?.includes("application/octet-stream")
-          ) {
+          } else if (res.headers.get("Content-Type")?.includes("application/octet-stream")) {
             body = await res.blob();
           } else {
             body = await res.text();

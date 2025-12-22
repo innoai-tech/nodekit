@@ -1,6 +1,13 @@
 {
   "name": "@innoai-tech/crypto",
   "version": "0.2.1",
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@github.com:innoai-tech/nodekit.git",
+    "directory": "nodepkg/crypto"
+  },
+  "license": "MIT",
+  "type": "module",
   "exports": {
     ".": {
       "import": {
@@ -10,22 +17,15 @@
     }
   },
   "files": [
+    "index.d.ts",
+    "index.mjs",
     "pkg/crypto.d.ts",
     "pkg/crypto.js",
-    "pkg/crypto_bg.wasm",
-    "index.d.ts",
-    "index.mjs"
+    "pkg/crypto_bg.wasm"
   ],
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "ssh://git@github.com:innoai-tech/nodekit.git",
-    "directory": "nodepkg/crypto"
-  },
   "scripts": {
     "test:rust": "cargo test -- --nocapture",
     "build": "bunx wasm-pack build --release --target web --no-pack",
     "prepublishOnly": "bun run build"
-  },
-  "type": "module"
+  }
 }

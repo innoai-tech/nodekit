@@ -17,11 +17,7 @@ import { bootstrap } from "./bootstrap";
 import { createLogger } from "./log";
 import { patchShebang } from "./patchShebang";
 import { resolveProjectRoot } from "./pm";
-import {
-  entryAlias,
-  type MonoBundleOptions,
-  writeFormattedJsonFile,
-} from "./util";
+import { entryAlias, type MonoBundleOptions, writeFormattedJsonFile } from "./util";
 import { chunkCleanup } from "./chunkCleanup.ts";
 import { vueComponentComplete } from "./vueComponentComplete.ts";
 
@@ -99,9 +95,7 @@ export const bundle = async ({
         autoExternal(),
         vueComponentComplete({}),
         patchShebang((chunkName) => {
-          return !!options.exports?.[
-            `bin:${basename(chunkName, extname(chunkName))}`
-          ];
+          return !!options.exports?.[`bin:${basename(chunkName, extname(chunkName))}`];
         }, options.engine),
         chunkCleanup(),
       ],
@@ -121,21 +115,19 @@ export const bundle = async ({
   for (const rolldownOption of rolldownOptions) {
     const files = await rolldown(rolldownOption).then((bundle) => {
       return Promise.all(
-        ([] as OutputOptions[])
-          .concat(rolldownOption.output ?? [])
-          .map((output) => {
-            if (dryRun) {
-              return [];
+        ([] as OutputOptions[]).concat(rolldownOption.output ?? []).map((output) => {
+          if (dryRun) {
+            return [];
+          }
+          return bundle.write(output).then((ret) => {
+            if (output.dir) {
+              return (ret.output || []).map((o) =>
+                join(relative(cwd, output.dir ?? ""), o.fileName),
+              );
             }
-            return bundle.write(output).then((ret) => {
-              if (output.dir) {
-                return (ret.output || []).map((o) =>
-                  join(relative(cwd, output.dir ?? ""), o.fileName),
-                );
-              }
-              return relative(cwd, output.file ?? "");
-            });
-          }),
+            return relative(cwd, output.file ?? "");
+          });
+        }),
       );
     });
 
