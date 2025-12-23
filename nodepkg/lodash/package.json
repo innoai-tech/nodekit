@@ -1,14 +1,19 @@
 {
   "name": "@innoai-tech/lodash",
   "version": "0.2.5",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "ssh://git@github.com:innoai-tech/nodekit.git",
     "directory": "nodepkg/lodash"
   },
-  "license": "MIT",
-  "sideEffects": false,
+  "files": [
+    "index.cjs",
+    "index.d.ts",
+    "index.mjs"
+  ],
   "type": "module",
+  "sideEffects": false,
   "exports": {
     ".": {
       "import": {
@@ -21,11 +26,6 @@
       }
     }
   },
-  "files": [
-    "index.cjs",
-    "index.d.ts",
-    "index.mjs"
-  ],
   "scripts": {},
   "dependencies": {
     "@types/lodash-es": "^4.17.12",

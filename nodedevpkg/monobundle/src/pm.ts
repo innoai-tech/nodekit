@@ -26,10 +26,15 @@ const projectManagers: { [name: string]: ProjectManager } = {
       exec: "bunx",
     },
     isProjectRoot: (p: string) => {
-      return existsSync(join(p, "./bun.lock")) || existsSync(join(p, "./bunfig.toml"));
+      return (
+        existsSync(join(p, "./bun.lock")) ||
+        existsSync(join(p, "./bunfig.toml"))
+      );
     },
     workspaces: async (root: string) => {
-      const packageJSON = JSON.parse(String(await readFile(join(root, "./package.json")))) as {
+      const packageJSON = JSON.parse(
+        String(await readFile(join(root, "./package.json"))),
+      ) as {
         workspaces?: string[];
       };
 

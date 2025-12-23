@@ -22,11 +22,11 @@ to
 
 ```typescript
 export const call = (s) => {
-    return "call" + s
-}
+  return "call" + s;
+};
 
-export const stringA = /*#__PURE__*/call("a")
-export const stringB = /*#__PURE__*/(() => call("b"))()
+export const stringA = /*#__PURE__*/ call("a");
+export const stringB = /*#__PURE__*/ (() => call("b"))();
 ```
 
 Notice:

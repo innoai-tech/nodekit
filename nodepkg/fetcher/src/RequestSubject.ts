@@ -55,7 +55,9 @@ class ReqSubject<TInputs, TBody, TError>
       mergeMap((input) => {
         this.requesting$.next(true);
 
-        return from(this.fetcher.request<TInputs, TBody>(this.createConfig(input))).pipe(
+        return from(
+          this.fetcher.request<TInputs, TBody>(this.createConfig(input)),
+        ).pipe(
           tap((resp) => this._success$.next(resp)),
           catchError((errorResp) => {
             this.error$.next(errorResp);

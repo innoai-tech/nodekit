@@ -20,7 +20,10 @@ describe("GIVEN a server", () => {
       routes: {
         "/api/status": (req) => {
           const u = new URL(req.url);
-          return Response.json({ ready: true, params: u.searchParams }, { headers: CORS_HEADERS });
+          return Response.json(
+            { ready: true, params: u.searchParams },
+            { headers: CORS_HEADERS },
+          );
         },
         "/uploads": async (req) => {
           if (req.method === "OPTIONS") {
@@ -43,12 +46,14 @@ describe("GIVEN a server", () => {
   });
 
   describe("GIVEN create fetcher", () => {
-    const fetcher = applyRequestInterceptors((requestConfig: RequestConfig<any>) => {
-      const remoteURL = new URL(server.url);
+    const fetcher = applyRequestInterceptors(
+      (requestConfig: RequestConfig<any>) => {
+        const remoteURL = new URL(server.url);
 
-      requestConfig.url = `${remoteURL.origin}${requestConfig.url}`;
-      return requestConfig;
-    })(createDefaultFetcher());
+        requestConfig.url = `${remoteURL.origin}${requestConfig.url}`;
+        return requestConfig;
+      },
+    )(createDefaultFetcher());
 
     it("WHEN request to server", async () => {
       const resp = await fetcher.request({

@@ -11,7 +11,10 @@ const getWebAppConfigValue = (key: string) => {
 };
 
 const getAppBaseHref = () => {
-  return (globalThis as any).document?.querySelector("base")?.getAttribute("href") || "/";
+  return (
+    (globalThis as any).document?.querySelector("base")?.getAttribute("href") ||
+    "/"
+  );
 };
 
 export const confLoader = <TKeys extends string>() => {

@@ -11,7 +11,10 @@ const imlFromPackageJSON = (rpath: string, pkg: any) => {
   return join(rpath, `${pkg.name.replace("/", "__")}.iml`);
 };
 
-const patchRootPackage = async (project: Project, pkgs: { [k: string]: any }) => {
+const patchRootPackage = async (
+  project: Project,
+  pkgs: { [k: string]: any },
+) => {
   await writeFile(
     join(project.root, ".idea/modules.xml"),
     `<?xml version="1.0" encoding="UTF-8"?>
@@ -20,7 +23,10 @@ const patchRootPackage = async (project: Project, pkgs: { [k: string]: any }) =>
     <modules>
 ${Object.entries(pkgs)
   .map(([dir, pkg]) => {
-    const filename = join("$PROJECT_DIR$", imlFromPackageJSON(relative(project.root, dir), pkg));
+    const filename = join(
+      "$PROJECT_DIR$",
+      imlFromPackageJSON(relative(project.root, dir), pkg),
+    );
     return `<module fileurl="file://${filename}" filepath="${filename}" />`;
   })
   .join("\n")}
@@ -59,10 +65,15 @@ const patchMonoPackage = async (
   };
 
   if (pkg.monobundle) {
-    scripts.lint = get(pkg, ["monobundle", "pipeline", "lint"]) ?? defaultScripts.lint;
-    scripts.build = get(pkg, ["monobundle", "pipeline", "build"]) ?? defaultScripts.build;
-    scripts.test = get(pkg, ["monobundle", "pipeline", "test"]) ?? defaultScripts.test;
-    scripts.prepublishOnly = scripts.build ? `${project.pm.bin.run} build` : undefined;
+    scripts.lint =
+      get(pkg, ["monobundle", "pipeline", "lint"]) ?? defaultScripts.lint;
+    scripts.build =
+      get(pkg, ["monobundle", "pipeline", "build"]) ?? defaultScripts.build;
+    scripts.test =
+      get(pkg, ["monobundle", "pipeline", "test"]) ?? defaultScripts.test;
+    scripts.prepublishOnly = scripts.build
+      ? `${project.pm.bin.run} build`
+      : undefined;
 
     await writeFile(
       join(monoRoot, ".gitignore"),
@@ -139,7 +150,10 @@ export const bootstrap = async (project: Project) => {
   const workspaces = await project.pm.workspaces(project.root);
 
   const packageJsonFiles = await globby(
-    [`${project.root}/package.json`, ...workspaces.map((p) => `${p}/package.json`)],
+    [
+      `${project.root}/package.json`,
+      ...workspaces.map((p) => `${p}/package.json`),
+    ],
     {
       cwd: project.root,
       absolute: true,
@@ -157,7 +171,13 @@ export const bootstrap = async (project: Project) => {
     packages[rpath] = packageJSON;
 
     if (rpath) {
-      await patchMonoPackage(project, monoRoot, rpath, packageJSON, packages[""]);
+      await patchMonoPackage(
+        project,
+        monoRoot,
+        rpath,
+        packageJSON,
+        packages[""],
+      );
     }
 
     await addImiFile(monoRoot, packageJSON);

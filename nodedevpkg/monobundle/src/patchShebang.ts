@@ -1,6 +1,9 @@
 import type { Plugin } from "rolldown";
 
-export const patchShebang = (isBin: (fileName: string) => boolean, engine = "node"): Plugin => {
+export const patchShebang = (
+  isBin: (fileName: string) => boolean,
+  engine = "node",
+): Plugin => {
   return {
     name: "monobundle/patch-shebang",
     async renderChunk(code: string, c) {
