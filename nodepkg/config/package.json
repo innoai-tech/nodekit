@@ -1,14 +1,19 @@
 {
   "name": "@innoai-tech/config",
   "version": "0.7.0",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "ssh://git@github.com:innoai-tech/nodekit.git",
     "directory": "nodepkg/config"
   },
-  "license": "MIT",
-  "sideEffects": false,
+  "files": [
+    "dist/*",
+    "src/*",
+    "!/**/__tests__"
+  ],
   "type": "module",
+  "sideEffects": false,
   "exports": {
     ".": {
       "bun": "./src/index.ts",
@@ -32,11 +37,6 @@
       }
     }
   },
-  "files": [
-    "!/**/__tests__",
-    "dist/*",
-    "src/*"
-  ],
   "scripts": {
     "build": "bunx --bun @innoai-tech/monobundle",
     "prepublishOnly": "bun run build"

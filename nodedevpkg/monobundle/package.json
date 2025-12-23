@@ -1,12 +1,20 @@
 {
   "name": "@innoai-tech/monobundle",
   "version": "0.17.1",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "ssh://git@github.com:innoai-tech/nodekit.git",
     "directory": "nodedevpkg/monobundle"
   },
-  "license": "MIT",
+  "bin": {
+    "monobundle": "./dist/monobundle.mjs"
+  },
+  "files": [
+    "dist/*",
+    "src/*",
+    "!/**/__tests__"
+  ],
   "type": "module",
   "exports": {
     ".": {
@@ -17,14 +25,6 @@
       }
     }
   },
-  "bin": {
-    "monobundle": "./dist/monobundle.mjs"
-  },
-  "files": [
-    "!/**/__tests__",
-    "dist/*",
-    "src/*"
-  ],
   "scripts": {
     "build": "bun ./src/bin/index.ts",
     "prepublishOnly": "bun run build"
@@ -37,7 +37,7 @@
     "globby": "^16.1.0",
     "js-yaml": "^4.1.1",
     "minimatch": "^10.1.1",
-    "rolldown": "^1.0.0-beta.55",
+    "rolldown": "^1.0.0-beta.56",
     "yargs": "^18.0.0"
   },
   "devDependencies": {

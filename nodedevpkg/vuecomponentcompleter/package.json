@@ -1,12 +1,17 @@
 {
   "name": "@innoai-tech/vuecomponentcompleter",
   "version": "0.5.1",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "ssh://git@github.com:innoai-tech/nodekit.git",
     "directory": "nodedevpkg/vuecomponentcompleter"
   },
-  "license": "MIT",
+  "files": [
+    "index.d.ts",
+    "index.mjs",
+    "target/wasm32-wasip1/release/vuecomponentcompleter.wasm"
+  ],
   "type": "module",
   "exports": {
     ".": {
@@ -23,11 +28,6 @@
       }
     }
   },
-  "files": [
-    "index.d.ts",
-    "index.mjs",
-    "target/wasm32-wasip1/release/vuecomponentcompleter.wasm"
-  ],
   "scripts": {
     "initial": "rustup target add wasm32-wasip1",
     "update": "cargo update",
